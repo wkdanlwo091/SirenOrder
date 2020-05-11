@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mapper namespace="com.example.sirenorder.UserMapper">
+    <select id="select" parameterType="String" resultType="user">
+		select * 
+		from users
+		where users_id = #{users_id}
+    </select>
+    <select id="selectall" resultType="user">
+    	select * 
+		from users
+    </select>
+    <update id="update" parameterType="user">
+        UPDATE 
+       	SET USERS_PASSWORD = #{users_password}
+        WHERE USERS_ID = #{users_id}
+    </update>
+    <delete id="delete" parameterType="String">
+		DELETE USERS 
+		WHERE USERS_ID = #{users_id}
+    </delete>
+    <insert id = "insert" parameterType="user">
+    	INSERT INTO USERS
+    	 VALUES(#{users_id}, #{users_password}, #{users_name},
+    	  #{sex}, #{orders_id}, #{point_id})
+    </insert>
+</mapper>
