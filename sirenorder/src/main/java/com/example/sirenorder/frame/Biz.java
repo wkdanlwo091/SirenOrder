@@ -13,13 +13,10 @@ public interface Biz<Id, Model> {
 	default public void update(Model id) throws Exception{
 	}
 	@Transactional 
-	default public ArrayList<Model> getuser(Id id) throws Exception{
-		return null;
+	default public void delete(Id id) throws Exception{
 	}
-	@Transactional 
-	default public ArrayList<Model> gethq(Id id) throws Exception{
-		return null;
-	}
+	
 	public Model get(Id id);
 	public ArrayList<Model> get();
+	
 }
