@@ -18,21 +18,15 @@
 'use strict';
 
 $(function() {
-
 	// author badge :)
-	var author = '<div style="position: fixed;bottom: 0;right: 20px;background-color: #fff;box-shadow: 0 4px 8px rgba(0,0,0,.05);border-radius: 3px 3px 0 0;font-size: 12px;padding: 5px 10px;">By <a href="https://twitter.com/mhdnauvalazhar">@mhdnauvalazhar</a> &nbsp;&bull;&nbsp; <a href="https://www.buymeacoffee.com/mhdnauvalazhar">Buy me a Coffee</a></div>';
-	$("body").append(author);
-
 	$("input[type='password'][data-eye]").each(function(i) {
 		var $this = $(this),
 			id = 'eye-password-' + i,
 			el = $('#' + id);
-
 		$this.wrap($("<div/>", {
 			style: 'position:relative',
 			id: id
 		}));
-
 		$this.css({
 			paddingRight: 60
 		});
@@ -55,11 +49,9 @@ $(function() {
 		}));
 
 		var invalid_feedback = $this.parent().parent().find('.invalid-feedback');
-
 		if(invalid_feedback.length) {
 			$this.after(invalid_feedback.clone());
 		}
-
 		$this.on("keyup paste", function() {
 			$("#passeye-"+i).val($(this).val());
 		});
@@ -76,7 +68,6 @@ $(function() {
 			}
 		});
 	});
-
 	$(".my-login-validation").submit(function() {
 		var form = $(this);
         if (form[0].checkValidity() === false) {

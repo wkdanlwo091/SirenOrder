@@ -6,7 +6,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("user")
+@Alias("user")	
 public class UserVO {
 	String users_id;
 	String users_password;
