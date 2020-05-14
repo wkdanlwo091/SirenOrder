@@ -18,12 +18,12 @@
 'use strict';
 
 $(function() {
-	// author badge :)
+	// author badge :)	
 	$("input[type='password'][data-eye]").each(function(i) {
 		var $this = $(this),
 			id = 'eye-password-' + i,
 			el = $('#' + id);
-		$this.wrap($("<div/>", {
+		$this.wrap($("<div/>", {//부모요소를 div/	로 감싸준다. 
 			style: 'position:relative',
 			id: id
 		}));
@@ -52,9 +52,11 @@ $(function() {
 		if(invalid_feedback.length) {
 			$this.after(invalid_feedback.clone());
 		}
+		
 		$this.on("keyup paste", function() {
 			$("#passeye-"+i).val($(this).val());
 		});
+		
 		$("#passeye-toggle-"+i).on("click", function() {
 			if($this.hasClass("show")) {
 				$this.attr('type', 'password');
@@ -69,11 +71,11 @@ $(function() {
 		});
 	});
 	$(".my-login-validation").submit(function() {
-		var form = $(this);
+		var form = $(this);//
         if (form[0].checkValidity() === false) {
-          event.preventDefault();
-          event.stopPropagation();
+          event.preventDefault();// 고유 동작 중지 시킨다. 
+          event.stopPropagation();// 상위 엘리먼트로의 이벤트 전파 중단 
         }
-		form.addClass('was-validated');
+		form.addClass('was-validated');//버튼 클릭후 클래스를 더해준다. 
 	});
 });

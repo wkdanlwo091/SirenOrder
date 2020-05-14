@@ -3,7 +3,8 @@ package com.example.sirenorder.vo;
 
 import org.apache.ibatis.type.Alias;
 
-import lombok.Data;
+import lombok.*;
+
 
 @Data
 @Alias("user")	

@@ -16,8 +16,8 @@ public class UserDao implements Dao<String, UserVO> {
 	UserMapper usermapper;
 
 	@Override
-	public UserVO select(String userID) {
-		return usermapper.select(userID);
+	public UserVO select(String users_id) {
+		return usermapper.select(users_id);
 	}
 
 	@Override
