@@ -21,7 +21,7 @@ public class UserController {
 	// login 
 	@RequestMapping("/login.html")
 	public String login(@ModelAttribute UserVO user, HttpSession session) {
-		System.out.println(user.getOrders_id());
+		System.out.println(user.getUsers_id());
 		UserVO result = userbiz.get(user.getUsers_id());//디비에서 사용자 이름 가져오기
 		if(result.getUsers_id() != null) {
 			//main 화면으로 
