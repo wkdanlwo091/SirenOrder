@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.sirenorder.mapper.UserMapper">
-    <select id="select" parameterType="string" resultType="user">
+    <select id="select" resultType="users">
 		SELECT * 
 		FROM USERS
 		WHERE USERS_ID = #{users_id}
     </select>
-    <select id="selectall" resultType="user">
-    	select * 
-		from users
+    <select id="selectall" resultType="users">
+    	SELECT * 
+		FROM USERS
     </select>
-    <update id="update" parameterType="user">
+    <update id="update" parameterType="users">
         UPDATE 
        	SET USERS_PASSWORD = #{users_password}
         WHERE USERS_ID = #{users_id}
@@ -24,9 +23,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		DELETE USERS 
 		WHERE USERS_ID = #{users_id}
     </delete>
-    <insert id = "insert" parameterType="user">
+    <insert id = "insert"><!-- 가능하다 parameterType이 없어도  -->
     	INSERT INTO USERS
     	 VALUES(#{users_id}, #{users_password}, #{users_name},
-    	  #{sex}, #{orders_id}, #{point_id})
+    	  #{users_address}, #{sex}, #{role})
     </insert>
 </mapper>

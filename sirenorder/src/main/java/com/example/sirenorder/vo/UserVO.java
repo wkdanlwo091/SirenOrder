@@ -7,12 +7,12 @@ import lombok.*;
 
 
 @Data
-@Alias("user")	
-public class UserVO {
+@Alias("users")	
+public class UserVO {//대소
 	String users_id;
 	String users_password;
 	String users_name;
+	String users_address;
 	String sex;
-	String orders_id;
-	String point_id;
+	String role;
 }

@@ -15,10 +15,12 @@ import com.example.sirenorder.vo.UserVO;
 public class UserBiz implements Biz<String, UserVO> {
 	@Resource(name = "userdao")
 	Dao<String, UserVO> dao;
+	
 	@Override
 	public UserVO get(String userID) {
 		return dao.select(userID);
 	}
+	
 	@Override
 	public ArrayList<UserVO> get() {
 		return dao.selectall();

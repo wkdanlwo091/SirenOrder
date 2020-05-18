@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
@@ -8,7 +8,6 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/my-login.css">
 </head>
-
 <body class="my-login-page">
 	<section class="h-100">
 		<div class="container h-100">
@@ -22,21 +21,21 @@
 							<h4 class="card-title">Login</h4>
 							<form method="POST" class="my-login-validation" novalidate="" action="/login.html">
 								<div class="form-group">
-									<label for="email">E-Mail Address</label>
-									<input id="email" type="email" class="form-control" name="users_id" th:value="${UserVO.users_id}" required autofocus>
-									<div class="invalid-feedback">
-										Email is invalid
+									<label for="email">전화번호(-없이 입력)</label>
+									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" th:value="${UserVO.users_id}" required autofocus>
+									<div class="invalid-feedback"> <!-- 패턴에 맞지 않으면 보여진다. html 처리  -->
+										올바른 형식을 입력하세요
 									</div>
 								</div>								
 								<div class="form-group">
-									<label for="password">Password
+									<label for="password">비밀번호
 										<a href="forgot.html" class="float-right">
-											Forgot Password?
+											비밀번호 찾기
 										</a>
 									</label>
 									<input id="password" type="password" class="form-control" name="users_password" required data-eye>
 								    <div class="invalid-feedback">
-								    	Password is required
+								  	  	Password is required
 							    	</div>
 								</div>
 								<div class="form-group">
