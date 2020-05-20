@@ -22,29 +22,32 @@
 							<form method="POST" class="my-login-validation" novalidate="" action = "/register.html">
 								<div class="form-group">
 									<label for="name">이름</label>
-									<input id="name" type="text" class="form-control" name="name" required autofocus>
+									<input id="name" type="text" class="form-control" name="users_name" required autofocus>
 									<div class="invalid-feedback">
 										이름을 입력하세요
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="email">ID</label>
-									<input id="email" type="email" class="form-control" name="email" required>
+									<label for="id" style = "width:10%;	display:inline-block">ID</label>
+									<button  type="submit" class = "btn"  style = "font-size:14px;background-color:#007bff;color:white;border-color:#007bff">
+											ID 중복확인 
+									</button>
+									
+									<input id="id" pattern="[0-9]{11}" class="form-control" name="users_id" required>
 									<div class="invalid-feedback">
 										ID는 핸드폰 번호 11자리 입니다.
 									</div>
 								</div>
-								
 								<div class = "password-check">
 									<div class="form-group">
-										<label for="password">Password</label>
-										<input id="password1" type="password" class="form-control" name="password" required data-eye>
+										<label for="password">비밀번호 </label>
+										<input id="password1" type="password" class="form-control" name="users_password" required data-eye>
 										<div class="invalid-feedback">
 											비밀번호를 입력하세요
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="password">Password check</label>
+										<label for="password">비밀번호 확인</label>
 										<input id="password2" type="password" class="form-control" name="password" required data-eye>
 										<div class="invalid-feedback">
 											비밀번호를 입력하세요
@@ -52,7 +55,19 @@
 									</div>
 									<div id="passwordDifferent"></div>
 								</div>
-								
+								<div class="form-group">
+								  <input type="radio" id="male" name="gender" value="male" checked="checked">
+								  <label for="male">Male</label>
+								  <input type="radio" id="female" name="gender" value="female">
+								  <label for="female">Female</label><br>
+								</div>
+								<div class="form-group">
+									<label for="address">주소지 </label>
+									<input id="address" type="text" name="address" class="form-control"  required data-eye>
+									<div class="invalid-feedback">
+										주소를 입력하세요
+									</div>
+								</div>
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="agree" id="agree" class="custom-control-input" required="">
@@ -62,7 +77,6 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="form-group m-0">
 									<button type="submit" class="btn btn-primary btn-block">
 										가입하기

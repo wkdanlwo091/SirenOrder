@@ -72,6 +72,9 @@ $(function() {
 		});
 	});
 	
+	
+	
+	//비밀번호와 비밀번호 확인이 같은지 다른지를 체크해준다. 
     $('.password-check').focusout(function () {
         var pwd1 = $("#password1").val();
         var pwd2 = $("#password2").val();
@@ -83,7 +86,7 @@ $(function() {
                 // 비밀번호 일치 이벤트 실행
             	password_different = 0;
             	$("#passwordDifferent").html("");
-            	$('form').submit(true);//form을 가능하게 만든다. 
+            	$('form').unbind( 'submit', false );//아래서 submit(false)한 것을 풀어준다. 
 
             	//div로 비밀번호 불일치를 없애준다. 
             } else {
@@ -109,5 +112,24 @@ $(function() {
 	        }	
 	    	form.addClass('was-validated');//버튼 클릭후 클래스를 더해준다. 
 		});
-	
+		
+		
+	//ajax로 아이디 중복 확인 파트
+        $.ajax({
+	        type		: "POST",
+	        url 		: "register.html",
+	        data		:  JSON.stringify(data), 
+	        contentType : "application/json",
+	        success 	: function(data) {
+	        	if(data == 1){
+	        		//아이디 중복 아님
+	        	}else{
+	        		//아이디 중복 
+	        	}
+	        },
+	        error		: function(error) {
+	        	console.log(error);
+	        }
+	    });
+		
 });

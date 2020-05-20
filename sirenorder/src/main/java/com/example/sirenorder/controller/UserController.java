@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -98,10 +99,20 @@ public class UserController {
 		
 		return "redirect:/?login=fail";//id 없다. 
 	}
-
-	@RequestMapping("/register.html")//별 문제 없다. 
+	
+    @ResponseBody	
+	@RequestMapping(value = "/register.html", method=RequestMethod.POST) 
 	public String register(UserVO user) {
-		System.out.println("entered login.top");
+		//아이디 중복 체크 검사하고 정상이면 넣는다.
+		UserVO result = userbiz.get(user.getUsers_id());//디비에서 사용자 이름 가져오기
+		if(result != null) {
+			System.out.println("중복입니다.");
+		}
+		return "thymeleaf/register";
+	}
+	
+    @RequestMapping(value = "/register.html", method=RequestMethod.GET)
+	public String register() {
 		return "thymeleaf/register";
 	}
 	
