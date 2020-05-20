@@ -8,7 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.UserVO;
 @Controller
@@ -16,31 +19,45 @@ public class UserController {
 
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
-	// login 
-	//@GetMapping("login")
 	
-	@RequestMapping("/")
-	public String home(HttpServletRequest request) {
-		if(request.getParameter("login").equals("fail")) {
-			System.out.println("login fail");
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String login(HttpServletRequest request, Model model, UserVO vo) {
+		
+		HttpSession httpSession = request.getSession();
+		try {
+			if(request.getParameter("login").equals("fail")) {
+				System.out.println("로그인 실패 ");
+				model.addAttribute("login", "fail");
+			}
+		}catch(Exception e) {
 		}
-		System.out.println("login page");
-		return "index.html";//thymeleaf/index하면 에러가 나네 왠지 몰라도
+		
+		if(httpSession.getAttribute("id") == null) { 
+			System.out.println("세션이 없습니다.1");
+		}else {
+			System.out.println("세션이 있습니다.2");
+			return "redirect:main";
+		}
+		
+		vo.setUsers_id("");
+		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 	}
-	@RequestMapping("/login.html")
-	public String login(@ModelAttribute UserVO user, HttpSession session, Model model) {
+	
+	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
+	public String loginView(@ModelAttribute UserVO user, HttpServletRequest request ,RedirectAttributes redirect) {//
 		String users_id = user.getUsers_id();
-		System.out.println("id의 값은 " + users_id);
-		UserVO result = userbiz.get(users_id);//디비에서 사용자 이름 가져오기
+		System.out.println("id의 값은 " + users_id);	
+		System.out.println("post 방식 ");
 
+		UserVO result = userbiz.get(users_id);//디비에서 사용자 이름 가져오기
 		if(result == null) {
-			model.addAttribute("login", "failed");
+			System.out.println("아이디 없습니다.");
 		}
-		else if(result != null) {
-			//main 화면으로 
-			session.setAttribute("userId", result.getUsers_id());
-			session.setAttribute("userName", result.getUsers_name());
-			return "thymeleaf/hello";
+		else if(result != null) {//세션에 아이디 비밀번호 저장 후 메인 페이지로 이동한다.
+			HttpSession httpSession = request.getSession();
+			httpSession.setAttribute("userId", result.getUsers_id());
+			httpSession.setAttribute("userName", result.getUsers_name());
+			return "thymeleaf/main";
 		}
 		
 		/*
@@ -79,15 +96,26 @@ public class UserController {
 		*/
 			//login fail t login page로
 		
-		//아이디 비번이 틀렸다고하면 이 값을 model에 넘겨줘야 한다. 희안하게 thymeleaf/index하면 에러가 나더라  아마도 thymeleaf 입력부분이 이상한듯 
-		return "redirect:index.html?login=fail";
+		return "redirect:/?login=fail";//id 없다. 
 	}
 
 	@RequestMapping("/register.html")//별 문제 없다. 
-	public String register(HttpServletRequest request) {
+	public String register(UserVO user) {
 		System.out.println("entered login.top");
 		return "thymeleaf/register";
 	}
+	
+	@RequestMapping("/logout.html")//별 문제 없다. 
+	public String logout(HttpServletRequest request) {
+		System.out.println("entered login.top");
+		return "thymeleaf/register";
+	}
+	
+	@RequestMapping("/forgot.html")//별 문제 없다. 
+	public String forgot(HttpServletRequest request) {
+		return "thymeleaf/forgot";
+	}
+	
 	@RequestMapping("/hello")
 	public String hello() {
 		System.out.println("haha");

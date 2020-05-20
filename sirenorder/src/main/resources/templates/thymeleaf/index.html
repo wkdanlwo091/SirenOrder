@@ -20,10 +20,11 @@
 					<div class="card fat">
 						<div class="card-body">
 							<h4 class="card-title">Login</h4>
-							<form method="POST" class="my-login-validation" novalidate="" action="/login.html">
+							<form method="POST" class="my-login-validation" novalidate="" action="/">
 								<div class="form-group">
 									<label for="email">전화번호(-없이 입력)</label>
-									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" th:value="${UserVO.users_id}" required autofocus>
+									<!--  바로 아래의 th:value를 userVO로 바꾸니 에러가 사라졌다.-->
+									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" th:value="${userVO.users_id}" required autofocus>
 									<div class="invalid-feedback"> <!-- 패턴에 맞지 않으면 보여진다. html 처리  -->
 										올바른 형식을 입력하세요
 									</div>
@@ -39,6 +40,15 @@
 								  	  	Password is required
 							    	</div>
 								</div>
+								
+								
+								<div th:if="${login != null}">
+								   <div>아이디 혹은 비밀번호가 잘못 되었습니다.</div>
+								</div>
+								<div th:unless="${login != null}">
+								   <div></div>
+								</div>
+								
 								<div class="form-group">
 									<div class="custom-checkbox custom-control">
 										<input type="checkbox" name="remember" id="remember" class="custom-control-input">
@@ -57,7 +67,7 @@
 						</div>
 					</div>
 					<div class="footer">
-						Copyright &copy; 2017 &mdash; Your Company 
+						Copyright &copy; 2020 &mdash; Made By Jang Minjae
 					</div>
 				</div>
 			</div>
