@@ -24,7 +24,7 @@
 								<div class="form-group">
 									<label for="email">전화번호(-없이 입력)</label>
 									<!--  바로 아래의 th:value를 userVO로 바꾸니 에러가 사라졌다.-->
-									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" th:value="${userVO.users_id}" required autofocus>
+									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" required autofocus>
 									<div class="invalid-feedback"> <!-- 패턴에 맞지 않으면 보여진다. html 처리  -->
 										올바른 형식을 입력하세요
 									</div>

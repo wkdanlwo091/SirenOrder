@@ -17,9 +17,37 @@
 
 'use strict';
 
-
-
+function idOverlap() {
+	if($('#id').val() == ''){
+		$('#wrongOrNot').text("");
+		return;
+	}//아이디에 아무 값이 없으면 함수 종료한다. 그리고 wrongOrNot에 적혀진 값이 있으면 이를 없앤다.
+	var data = { users_id : $('#id').val()};
+	console.log(data);
+	//ajax로 아이디 중복 확인 파트
+    $.ajax({//여기서 에러 낫던 것은 slim min js를 사용해서 그렇다. 
+        type		: "POST",
+        url 		: "idCheck",
+        data: JSON.stringify(data),//JSON.stringify( )는 자바스크립트의 값을 JSON 문자열로 변환한다.
+        contentType: "application/json; charset=utf-8;",
+        success 	: function(data) {
+        	console.log("data is " + data);
+        	if(data == 1){
+        		//아이디 중복 
+        		$('#wrongOrNot').text("사용 가능한 아이디 입니다");
+        	}else{
+        		//아이디 중복 아님
+        		$('#wrongOrNot').text("사용중인 아이디입니다");
+        	}
+        },
+        error: function(error) {
+        	console.log(error);
+        }
+    });
+}
 $(function() {
+    console.log($.ajax);
+
 	var password_different = 1;
 	// author badge :)	
 	$("input[type='password'][data-eye]").each(function(i) {
@@ -101,7 +129,6 @@ $(function() {
             }
         }
     });
-    
 		$(".my-login-validation").submit(function() {
 	        var pwd1 = $("#password1").val();
 	        var pwd2 = $("#password2").val();
@@ -112,24 +139,5 @@ $(function() {
 	        }	
 	    	form.addClass('was-validated');//버튼 클릭후 클래스를 더해준다. 
 		});
-		
-		
-	//ajax로 아이디 중복 확인 파트
-        $.ajax({
-	        type		: "POST",
-	        url 		: "register.html",
-	        data		:  JSON.stringify(data), 
-	        contentType : "application/json",
-	        success 	: function(data) {
-	        	if(data == 1){
-	        		//아이디 중복 아님
-	        	}else{
-	        		//아이디 중복 
-	        	}
-	        },
-	        error		: function(error) {
-	        	console.log(error);
-	        }
-	    });
-		
+	
 });

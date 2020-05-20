@@ -22,7 +22,7 @@
 							<form method="POST" class="my-login-validation" novalidate="" action="/">
 								<div class="form-group">
 									<label for="email">전화번호(-없이 입력)</label>
-									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" th:value="${UserVO.users_id}" required autofocus>
+									<input id="email" class="form-control"  type="tel" pattern="[0-9]{11}" name="users_id" required autofocus>
 									<div class="invalid-feedback"> <!-- 패턴에 맞지 않으면 보여진다. html 처리  -->
 										올바른 형식을 입력하세요
 									</div>

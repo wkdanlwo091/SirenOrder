@@ -29,10 +29,10 @@
 								</div>
 								<div class="form-group">
 									<label for="id" style = "width:10%;	display:inline-block">ID</label>
-									<button  type="submit" class = "btn"  style = "font-size:14px;background-color:#007bff;color:white;border-color:#007bff">
+									<button id="buttonId" onclick="idOverlap()" type="submit" class = "btn"  style = "font-size:14px;background-color:#007bff;color:white;border-color:#007bff">
 											ID 중복확인 
 									</button>
-									
+									<div id = "wrongOrNot"></div>
 									<input id="id" pattern="[0-9]{11}" class="form-control" name="users_id" required>
 									<div class="invalid-feedback">
 										ID는 핸드폰 번호 11자리 입니다.
@@ -56,14 +56,14 @@
 									<div id="passwordDifferent"></div>
 								</div>
 								<div class="form-group">
-								  <input type="radio" id="male" name="gender" value="male" checked="checked">
+								  <input type="radio" id="male" name="sex" value="male" checked="checked">
 								  <label for="male">Male</label>
-								  <input type="radio" id="female" name="gender" value="female">
+								  <input type="radio" id="female" name="sex" value="female">
 								  <label for="female">Female</label><br>
 								</div>
 								<div class="form-group">
 									<label for="address">주소지 </label>
-									<input id="address" type="text" name="address" class="form-control"  required data-eye>
+									<input id="address" type="text" name="users_address" class="form-control"  required data-eye>
 									<div class="invalid-feedback">
 										주소를 입력하세요
 									</div>
@@ -95,8 +95,8 @@
 			</div>
 		</div>
 	</section>
-
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+<!-- 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	<script src="js/my-login.js"></script>
 </body>
