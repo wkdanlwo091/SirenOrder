@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.UserVO;
@@ -29,35 +30,45 @@ public class UserController {
 //	}
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String login() {
+	public String login(HttpServletRequest request) {
+		HttpSession temp = request.getSession();
+		if(temp.getAttribute("userId") == null) {
+			System.out.println("session null");
+		}else {
+			System.out.println("session not null");
+			return "redirect:/main.html";
+		}
 		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
-	public ModelAndView loginFail(ModelAndView model, UserVO user, HttpServletRequest request) {//
+	public ModelAndView loginFail(UserVO user, HttpServletRequest request) {//
 		String users_id = user.getUsers_id();
 		System.out.println("id의 값은 " + users_id);	
 		UserVO result = userbiz.get(users_id);//디비에서 사용자 이름 가져오기
-		
+		ModelAndView model = new ModelAndView();
 		if(result == null) {
-			System.out.println("아이디 없습니다.");
-			model.setViewName("thymeleaf/index");
-			model.addObject("login", "fail");
 		}
 		else if(result != null) {//세션에 아이디 비밀번호 저장 후 메인 페이지로 이동한다.
-			HttpSession httpSession = request.getSession();
-			httpSession.setAttribute("userId", result.getUsers_id());
-			httpSession.setAttribute("userName", result.getUsers_name());
-			model.setViewName("thymeleaf/main");
-			return model;
+			//아이디는 있는데 비밀번호 틀린경우
+			if(user.getUsers_password().equals(result.getUsers_password())) {
+				System.out.println("비번 맞습니다.");
+				//아래 값은 계속 유지된다. 
+				HttpSession httpSession = request.getSession();
+				httpSession.setAttribute("userId", result.getUsers_id());
+				httpSession.setAttribute("userName", result.getUsers_name());
+				//model.setViewName("thymeleaf/main");
+				model.setViewName("redirect:/main.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
+				return model;
+			}else{
+				System.out.println("비번이 틀립니다.");
+				System.out.println(result.getUsers_password());
+			}
 		}
-		
-		
+		model.setViewName("thymeleaf/index");
+		model.addObject("login", "fail");
 		return model;//id 없다. 
 	}
-
-	
-	
 //	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
 //	public String loginView(UserVO user, HttpServletRequest request ,RedirectAttributes redirect) {//
 //		String users_id = user.getUsers_id();
@@ -155,8 +166,13 @@ public class UserController {
 	@RequestMapping("/logout.html")//별 문제 없다. 
 	public String logout(HttpServletRequest request) {
 		System.out.println("entered login.top");
-		return "thymeleaf/register";
+        
+		HttpSession session = request.getSession();
+        session.invalidate();
+
+        return "redirect:/";
 	}
+	
 	@RequestMapping("/forgot.html")// 비밀번호 잊어버렸을 때 실행 하는 함수 , 별 문제 없다. 
 	public String forgot(HttpServletRequest request) {
 		return "thymeleaf/forgot";
