@@ -4,9 +4,7 @@
 
 ## description
 
-
-
-##   <img width="581" alt="erd_pic" src="https://user-images.githubusercontent.com/12855243/82557680-24f37480-9ba7-11ea-8184-cfad9784224f.PNG">
+<img width="576" alt="erd_pic" src="https://user-images.githubusercontent.com/12855243/82558589-f4acd580-9ba8-11ea-9b29-6ad8ce9d7e63.PNG">
 
 
 
