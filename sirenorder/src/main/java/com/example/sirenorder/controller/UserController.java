@@ -34,7 +34,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
-	public ModelAndView loginFail(ModelAndView model, UserVO user, HttpServletRequest request ,RedirectAttributes redirect) {//
+	public ModelAndView loginFail(ModelAndView model, UserVO user, HttpServletRequest request) {//
 		String users_id = user.getUsers_id();
 		System.out.println("id의 값은 " + users_id);	
 		UserVO result = userbiz.get(users_id);//디비에서 사용자 이름 가져오기
