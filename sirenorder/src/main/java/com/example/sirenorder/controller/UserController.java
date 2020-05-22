@@ -21,14 +21,11 @@ public class UserController {
 
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
-	
-	
 //아래거 작동한다. 	
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
 //	public String login() {
 //		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 //	}
-
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
@@ -124,7 +121,6 @@ public class UserController {
 //		
 //		return "redirect:/?login=fail";//id 없다. 
 //	}
-	
     @ResponseBody	
 	@RequestMapping(value = "/idCheck", method=RequestMethod.POST) 
 	public int idCheck(@RequestBody UserVO user) {
@@ -140,8 +136,6 @@ public class UserController {
 		}
 		return 0;//0을 돌려주면 중복이 아니다. 
 	}
-
-	
 	@RequestMapping(value = "/register.html", method=RequestMethod.POST) 
 	public String register(UserVO user) throws Exception {
     	UserVO m = new UserVO();
@@ -157,12 +151,10 @@ public class UserController {
     	*/
     	return "redirect:/";//여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로 msg값을 줘도 된
 	}
-    
     @RequestMapping(value = "/register.html", method=RequestMethod.GET)
 	public String register() {
 		return "thymeleaf/register";
 	}
-	
 	@RequestMapping("/logout.html")//별 문제 없다. 
 	public String logout(HttpServletRequest request) {
 		System.out.println("entered login.top");
@@ -172,12 +164,18 @@ public class UserController {
 
         return "redirect:/";
 	}
-	
 	@RequestMapping("/forgot.html")// 비밀번호 잊어버렸을 때 실행 하는 함수 , 별 문제 없다. 
 	public String forgot(HttpServletRequest request) {
 		return "thymeleaf/forgot";
 	}
-	
+	@RequestMapping("/profile.html")// 내 정보 보기 
+	public ModelAndView profile(HttpServletRequest request) {
+		System.out.println("hello profile");
+		ModelAndView model = new ModelAndView();
+		model.addObject("profile", "clicked");
+		model.setViewName("thymeleaf/main");
+		return model;
+	}
     @RequestMapping(value="/requestObject", method=RequestMethod.POST)// simpleWithObject는 연습을 위한 function이다.
     @ResponseBody
     public String simpleWithObject(UserVO user) {
