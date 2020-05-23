@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<script>script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<meta charset="utf-8">
 <title>Insert title here</title>
 <style>
 body {
@@ -2487,38 +2489,131 @@ body {
 	color: #fff
 }
 .portlet
+
+
+
+
+
+
 .box
+
+
+
+
+
+
 .grey-cararra
 >
 .portlet-title
 >
 .actions
+
+
+
  
+
+
+
 .btn-default
+
+
+
+
+
+
 .active
 ,
 .portlet
+
+
+
+
+
+
 .box
+
+
+
+
+
+
 .grey-cararra
 >
 .portlet-title
 >
 .actions
+
+
+
  
+
+
+
 .btn-default
+
+
+
+
+
+
 :active
 ,
 .portlet
+
+
+
+
+
+
 .box
+
+
+
+
+
+
 .grey-cararra
 >
 .portlet-title
 >
 .actions
+
+
+
  
+
+
+
 .btn-defau
 </style>
 </head>
+<script>
+	
+	
+	$('#profileId').on("click",function(){
+		alert("gas");
+		})
+
+	document.getElementById('profileId').onclick = function() {
+		getProfile(){
+			alert("clicked");
+			$.ajax({
+	            url: "getProfile",
+	            type: "POST",
+	            success: function(data){
+					alert(data);
+	            },
+	            error: function(){
+	                alert("simpleWithObject err");
+	            }
+			});
+		}
+	}​;
+	​
+		//자바 스크립트로 ajax를 통하여 profile의 정보를 spring 컨트롤러에서 가져온다.
+	</script>
+
+
 <body>
 	<div th:fragment="profile">
 		<br>
@@ -2528,65 +2623,165 @@ body {
 					<div class="portlet-title tabbable-line">
 						<div class="caption caption-md">
 							<i class="icon-globe theme-font hide"></i> <span
-								class="caption-subject font-blue-madison bold uppercase">Your
-								info</span>
+								class="caption-subject font-blue-madison bold uppercase">
+								유저 정보</span>
 						</div>
 					</div>
 					<div class="portlet-body">
 						<div>
-
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs" role="tablist">
 								<li role="presentation" class="active"><a href="#home"
 									aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
-								<li role="presentation"><a href="#profile"
-									aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+								<li role="presentation"><a href="#profile" id="profileId"
+									aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+								</li>
 							</ul>
 
 							<!-- Tab panes -->
 							<div class="tab-content">
 								<div role="tabpanel" class="tab-pane active" id="home">
-									<form>
+									<form name="updateForm">
 										<div class="form-group">
-											<label for="inputName">Name</label> <input type="text"
-												class="form-control" id="inputName" placeholder="Name">
+											<label for="name">name</label> <input type="text"
+												class="form-control" id="users_name" placeholder="name">
 										</div>
 										<div class="form-group">
-											<label for="inputLastName">address</label> <input
-												type="text" class="form-control" id="inputLastName"
-												placeholder="address">
+											<label for="address">address</label> <input type="text"
+												class="form-control" id="address" placeholder="address">
 										</div>
 										<div class="form-group">
-											<label for="exampleInputPassword1">new Password</label> <input
-												type="password" class="form-control"
-												id="exampleInputPassword1" placeholder="Password">
+											<label for="newPassword">new Password</label> <input
+												type="password" class="form-control" id="newPassword"
+												placeholder="Password">
 										</div>
 										<div class="form-group">
-											<label for="inputLastName">new Password check</label> <input
-												type="text" class="form-control" id="inputLastName"
+											<label for="newPasswordCheck">new Password check</label> <input
+												type="password" class="form-control" id="newPasswordCheck"
+												placeholder="password">
+										</div>
+										<div class="form-group">
+											<label for="currentPassword">current Password</label> <input
+												type="text" class="form-control" id="currentPassword"
 												placeholder="Last Name">
 										</div>
-										<div class="form-group">
-											<label for="inputLastName">new Password check</label> <input
-												type="text" class="form-control" id="inputLastName"
-												placeholder="Last Name">
-										</div>
-										
-										<button type="submit" class="btn btn-default">Submit</button>
 									</form>
-								</div>
-								<div role="tabpanel" class="tab-pane" id="profile">Profile</div>
-							</div>
+									<button type="submit" class="btn btn-default" id="updateId">제출하기</button>
+									<button type="submit" class="btn btn-default" id="quitId">탈퇴하기</button>
 
+								</div>
+								<div role="tabpanel" class="tab-pane" id="profile">
+									<div class="form-group">
+										<label for="Name">Name : </label>
+									</div>
+									<div class="form-group">
+										<label for="address">address: </label>
+									</div>
+									<div class="form-group">
+										<label for="sex">sex : </label>
+									</div>
+									<div class="form-group">
+										<label for="role">role : </label>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script
+			src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+		<script>
+		profileIdClicked = 0;
+		///below is when you clicked profile, then it gets profile from usercontroller
+			console.log("profileClicked는 " + profileIdClicked);
+			$("#profileId").on("click", function(){
+				if(profileIdClicked == 0){//한번 클릭하면 다음번에 다시 ajax 통신 할 필요 없다. 
+			        $.ajax({
+			            url: "getProfile",
+			            type: "POST",
+			            success: function(data){
+							console.log(" data is " + data);
+							var mydata = JSON.parse(data);
+							$('#profile > div:nth-child(1) > label').text("Name : " + mydata["users_name"]);
+							$('#profile > div:nth-child(2) > label').text("Address : " + mydata["users_address"]);
+							$('#profile > div:nth-child(3) > label').text("Sex : " + mydata["sex"]);
+							$('#profile > div:nth-child(4) > label').text("Role : " + mydata["role"]);
+			            },
+			            error: function(){
+			                alert("simpleWithObject err");
+			            }
+			        });
+					profileIdClicked++;
+				}
+			});
+		///below is when you update user info, then it updates user info in usercontroller
+		$("#updateId").on("click", function(){
+			if(document.forms['updateForm'].elements[0].value == ''
+				|| document.forms['updateForm'].elements[1].value == ''
+				|| document.forms['updateForm'].elements[2].value == ''	 
+				|| document.forms['updateForm'].elements[3].value == ''
+				|| document.forms['updateForm'].elements[4].value == ''
+				){//공백인 경우 
+				if(!$("#pTag").length){
+					$("#updateId").before( "<p id = \"pTag\" style=\"color:red\">공백이 있습니다.</p>");
+				}
+			}else{
+				$("#pTag").remove();
+				if(//비번 다른경우 
+					document.forms['updateForm'].elements[2].value !=
+					document.forms['updateForm'].elements[3].value 
+					//비번 다르다고 표시
+				){
+					if(!$("#pTag2").length){
+						$("#updateId").before( "<p id = \"pTag2\" style=\"color:red\">새 비밀번호가 일치 하지 않습니다.</p>");
+					}
+				}else{//비번 같은 경우 
+					//비밀번호 체크 후 업데이트 하기 
+					alert("updateProfile started");
+					password = document.forms['updateForm'].elements[4].value;
+					newUsers_address = document.forms['updateForm'].elements[1].value;
+					newPassword = document.forms['updateForm'].elements[2].value;
+					newUsers_name = document.forms['updateForm'].elements[0].value;
+					sendData = {
+							users_password: password,
+							users_adderss: newUsers_address,
+							users_name: newUsers_name,
+							users_new_password: newPassword
+					};
+			        $.ajax({
+			            url: "updateProfile",
+			            type: "POST",
+			            data: sendData,
+			            success: function(data){
+			            	alert("정보 수정되었습니다.");
+			            },
+			            error: function(){
+			                alert("simpleWithObject err");
+			            }
+			        });
+				}
+			}
+		});
+		
+		$("#quitId").on("click", function(){
+			alert("about to quit");
+	        $.ajax({
+	            url: "quitProfile",
+	            type: "POST",
+	            success: function(data){
+					//여기서 탈퇴 후 로그아웃 한다. 
+	            },
+	            error: function(){
+	                alert("simpleWithObject err");
+	            }
+	        });
+		});
+
+		
+		</script>
 	</div>
-
-
-
 </body>
 </html>

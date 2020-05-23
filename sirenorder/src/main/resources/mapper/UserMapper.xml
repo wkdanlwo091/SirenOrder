@@ -14,9 +14,12 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT * 
 		FROM USERS
     </select>
-    <update id="update" parameterType="users">
-        UPDATE 
-       	SET USERS_PASSWORD = #{users_password}
+    <update id="update">
+        UPDATE USERS
+       	SET 
+       	USERS_PASSWORD = #{users_password},
+       	USERS_ADDRESS = #{users_address},
+       	USERS_NAME = #{users_name}
         WHERE USERS_ID = #{users_id}
     </update>
     <delete id="delete" parameterType="String">

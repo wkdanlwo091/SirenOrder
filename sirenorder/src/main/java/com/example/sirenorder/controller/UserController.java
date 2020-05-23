@@ -3,6 +3,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -176,6 +177,69 @@ public class UserController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
+	
+    @RequestMapping(value="/getProfile", method=RequestMethod.POST)
+    @ResponseBody
+    public String getProfile(HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+        //필요한 로직 처리   
+    	System.out.println("getting profile");
+    	HttpSession session = request.getSession();
+    	String users_id = (String)session.getAttribute("userId");
+    	System.out.println(users_id);
+    	UserVO user = userbiz.get(users_id); 
+    	
+    	jsonObject.put("users_name", user.getUsers_name());
+    	jsonObject.put("sex", user.getSex());
+    	jsonObject.put("users_address", user.getUsers_address());
+    	jsonObject.put("role", user.getRole());
+        return jsonObject.toString();
+    }
+
+    @RequestMapping(value="updateProfile", method=RequestMethod.POST)
+    @ResponseBody
+    public String updateProfile(HttpServletRequest request) throws Exception {
+    	System.out.println("update profile started");
+    	String users_password = request.getParameter("users_password");
+    	HttpSession httpSession = request.getSession();
+    	String users_id = (String) httpSession.getAttribute("userId");
+    	UserVO userVO = userbiz.get(users_id);
+    	
+    	if(userVO.getUsers_password().equals(users_password)) {
+    		//update한다. 
+        	String users_new_address = request.getParameter("users_adderss");
+        	System.out.println(users_new_address);
+        	String users_new_name = request.getParameter("users_name");
+        	String users_new_password = request.getParameter("users_new_password");
+
+        	UserVO newUserVO = new UserVO();
+        	
+        	newUserVO.setUsers_address(users_new_address);
+        	newUserVO.setUsers_password(users_new_password);
+        	newUserVO.setUsers_name(users_new_name);
+        	newUserVO.setUsers_id(users_id);
+    		
+        	System.out.println("newUserVO란" + newUserVO);
+        	userbiz.update(newUserVO);
+    		
+    		return "success";
+    	}else {
+    		
+    	}
+    	
+        return "fail";
+    }
+
+    @RequestMapping(value="quitProfile", method=RequestMethod.POST)
+    public void quitProfile(HttpServletRequest request) throws Exception {
+    	HttpSession httpSession = request.getSession();
+    	String users_id = (String)httpSession.getAttribute("userId");
+    	System.out.println("userId 는 " + users_id);
+    	userbiz.delete(users_id);
+    }
+
+    
+    
     @RequestMapping(value="/requestObject", method=RequestMethod.POST)// simpleWithObject는 연습을 위한 function이다.
     @ResponseBody
     public String simpleWithObject(UserVO user) {
