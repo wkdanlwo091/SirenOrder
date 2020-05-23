@@ -13,6 +13,7 @@ import com.example.sirenorder.vo.UserVO;
 
 @Service("userbiz")
 public class UserBiz implements Biz<String, UserVO> {
+	
 	@Resource(name = "userdao")
 	Dao<String, UserVO> dao;
 	

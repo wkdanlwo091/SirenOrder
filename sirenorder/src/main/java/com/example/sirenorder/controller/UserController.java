@@ -236,6 +236,10 @@ public class UserController {
     	String users_id = (String)httpSession.getAttribute("userId");
     	System.out.println("userId 는 " + users_id);
     	userbiz.delete(users_id);
+    	
+    	//아이디  지울 때는 포인트 정보 부터 지워야 한다. 아니면 ORA-02292 에러가 난다. 
+    	//포인트 지우기 아직 미완
+    	//포인트에는 외래키가 걸려있어서 지우는게 복잡하다.
     }
 
     
