@@ -34,12 +34,17 @@
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>
+				
+				<!-- 
 				<form class="navbar-form navbar-left">
 					<div class="input-group">
 						<input type="text" value="" class="form-control" placeholder="매장검색">
 						<span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
 					</div>
 				</form>
+				 -->
+				
+				
 				<div class="navbar-btn navbar-btn-right">
 				</div>
 				<div id="navbar-menu">
@@ -96,7 +101,9 @@
 		<div th:if="${profile != null}">
 			<div th:replace="/thymeleaf/profile :: profile"> </div>
 		</div>
-		
+		<div th:unless = "">
+			<div th:replace="/thymeleaf/profile :: profile"> </div>
+		</div>
 		
 		
 		</div>
