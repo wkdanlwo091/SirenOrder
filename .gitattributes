@@ -1,2 +1,4 @@
-public/*.java linguist-vendored
+* linguist-vendored
+*.js linguist-vendored=false
+
 
