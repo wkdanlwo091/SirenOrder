@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("users")	
+@Alias("point")	
 public class PointVO {
 	String point_id;
 	String users_id;

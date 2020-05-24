@@ -11,7 +11,6 @@ import com.example.sirenorder.vo.PointVO;
 
 @Repository("pointdao")
 public class PointDao implements Dao<String, PointVO>{
-
 	
 	@Autowired
 	PointMapper pointmapper;
@@ -19,13 +18,13 @@ public class PointDao implements Dao<String, PointVO>{
 	@Override
 	public PointVO select(String id) {
 		// TODO Auto-generated method stub
-		return null;
+		return pointmapper.select(id);
 	}
 
 	@Override
 	public ArrayList<PointVO> selectall() {
 		// TODO Auto-generated method stub
-		return null;
+		return pointmapper.selectall();
 	}
 
 }

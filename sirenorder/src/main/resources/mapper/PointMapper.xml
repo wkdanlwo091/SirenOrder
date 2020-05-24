@@ -5,19 +5,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.sirenorder.mapper.PointMapper">
-    <select id="select" resultType="users">
+    <select id="select" resultType="point">
 		SELECT * 
 		FROM POINT
 		WHERE POINT_ID = #{point_id}
     </select>
-    <select id="selectall" resultType="users">
+    <select id="selectall" resultType="point">
     	SELECT * 
 		FROM POINT
     </select>
-    <update id="update">
-    </update>
-    <delete id="delete" parameterType="String">
-    </delete>
-    <insert id = "insert"><!-- 가능하다 parameterType이 없어도  -->
-    </insert>
 </mapper>

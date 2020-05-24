@@ -10,5 +10,9 @@
 
 ##  개발환경 및 기술
 
-react, spring boot 등 
+react, spring boot , android (web view) ,  aws , oracle db 등 
+
+
+
+## 시스템 구성도 
 
