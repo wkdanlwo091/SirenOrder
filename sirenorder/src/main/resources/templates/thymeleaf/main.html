@@ -20,6 +20,7 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<script>script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -43,7 +44,6 @@
 					</div>
 				</form>
 				 -->
-				
 				
 				<div class="navbar-btn navbar-btn-right">
 				</div>
@@ -98,11 +98,12 @@
 		<div class="main">
 		<!-- 기본으로 주문하기가 들어가있다. -->
 		<!-- profile에 나의정보가 있다. -->
+		
 		<div th:if="${profile != null}">
 			<div th:replace="/thymeleaf/profile :: profile"> </div>
 		</div>
-		<div th:unless = "">
-			<div th:replace="/thymeleaf/profile :: profile"> </div>
+		<div th:unless = "${profile != null}">
+			<div th:replace="/thymeleaf/order"> </div>
 		</div>
 		
 		

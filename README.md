@@ -10,7 +10,7 @@
 
 ##  개발환경 및 기술
 
-react, spring boot , android (web view) ,  aws , oracle db , ajax polling 등 
+react, spring boot , android (web view) ,  aws , oracle db , web socket등 
 
 
 
