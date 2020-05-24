@@ -10,9 +10,10 @@
 
 ##  개발환경 및 기술
 
-react, spring boot , android (web view) ,  aws , oracle db 등 
+react, spring boot , android (web view) ,  aws , oracle db , ajax polling 등 
 
 
 
 ## 시스템 구성도 
 
+<img width="442" alt="system architecture" src="https://user-images.githubusercontent.com/12855243/82747453-d840b100-9dd3-11ea-8b36-b7174e016f94.PNG">
