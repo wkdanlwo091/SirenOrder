@@ -141,7 +141,6 @@ public class UserController {
 	public String register(UserVO user) throws Exception {
     	UserVO m = new UserVO();
     	System.out.println(user);
-    	/*
     	m.setUsers_id(user.getUsers_id());
     	m.setUsers_name(user.getUsers_name());
     	m.setUsers_password(user.getUsers_password());
@@ -149,7 +148,6 @@ public class UserController {
     	m.setSex(user.getSex());
     	m.setRole("user");
     	userbiz.register(m);
-    	*/
     	return "redirect:/";//여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로 msg값을 줘도 된
 	}
     @RequestMapping(value = "/register.html", method=RequestMethod.GET)

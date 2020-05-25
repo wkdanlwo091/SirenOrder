@@ -2667,7 +2667,7 @@ body {
 									</form>
 									<button type="submit" class="btn btn-default" id="updateId">제출하기</button>
 									<button type="submit" class="btn btn-default" id="quitId">탈퇴하기</button>
-
+									<form id = "returnToIndexId" action = "index.html" method = "get"></form>
 								</div>
 								<div role="tabpanel" class="tab-pane" id="profile">
 									<div class="form-group">
@@ -2770,8 +2770,10 @@ body {
 	            url: "quitProfile",
 	            type: "POST",
 	            success: function(data){
-					//여기서 탈퇴 후 로그아웃 하고 index.html 로그인 페이지로 넘어간다.  
+					//여기서 탈퇴 후 로그아웃 하고 index.html 로그인 페이지로 넘어간다. 
+					
 					console.log(data);
+					document.getElementById("returnToIndexId").submit();//아이디 탈퇴하고 로그인 페이지로 이동 
 	            },
 	            error: function(data){
 	            	console.log(data);

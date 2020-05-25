@@ -18,12 +18,11 @@
 'use strict';
 
 function idOverlap() {
-	if($('#id').val() == ''){
-		$('#wrongOrNot').text("");
+	if($('#id').val() == '' || $('#id').val().length < 11){
+		$('#wrongOrNot').text("사용불가");
 		return;
 	}//아이디에 아무 값이 없으면 함수 종료한다. 그리고 wrongOrNot에 적혀진 값이 있으면 이를 없앤다.
 	var data = { users_id : $('#id').val()};
-	console.log(data);
 	//ajax로 아이디 중복 확인 파트
     $.ajax({//여기서 에러 낫던 것은 slim min js를 사용해서 그렇다. 
         type		: "POST",
@@ -45,8 +44,8 @@ function idOverlap() {
         }
     });
 }
+
 $(function() {
-    console.log($.ajax);
 
 	var password_different = 1;
 	// author badge :)	
@@ -129,15 +128,15 @@ $(function() {
             }
         }
     });
-		$(".my-login-validation").submit(function() {
-	        var pwd1 = $("#password1").val();
-	        var pwd2 = $("#password2").val();
-	    	var form = $(this);//
-	        if (form[0].checkValidity() === false) {
-	              event.preventDefault();// 고유 동작 중지 시킨다. 
-	              event.stopPropagation();// 상위 엘리먼트로의 이벤트 전파 중단 
-	        }	
-	    	form.addClass('was-validated');//버튼 클릭후 클래스를 더해준다. 
-		});
+	$(".my-login-validation").submit(function() {
+	    var pwd1 = $("#password1").val();
+	    var pwd2 = $("#password2").val();
+	    var form = $(this);//
+	    if (form[0].checkValidity() === false) {
+	    	event.preventDefault();// 고유 동작 중지 시킨다. 
+	        event.stopPropagation();// 상위 엘리먼트로의 이벤트 전파 중단 
+	    }	
+	    form.addClass('was-validated');//버튼 클릭후 클래스를 더해준다. 
+	});
 	
 });
