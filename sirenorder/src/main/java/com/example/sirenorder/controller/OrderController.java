@@ -19,8 +19,7 @@ public class OrderController {
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
 	
-	
-	@RequestMapping(value = "/searchStore.html", method = RequestMethod.POST)
+	@RequestMapping(value = "searchStore", method = RequestMethod.POST)
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
 		System.out.println("searchStore 들어왔다");

@@ -12,17 +12,12 @@
 
 	<script>
 	$("#searchId").on("click", function(){
-		myChain = $('#searchStoreId').val();
-		chains =  {
-				chain: myChain
-		};
+		data = "chain=" + $('#searchStoreId').val();
 		$.ajax({
             url: "searchStore",
             type: "POST",
-            data: chains,
-			dataType : 'JSON',
+            data: data,
             success: function(data){
-				alert(data);
             },
             error: function(data){
 				console.log("에러는" + data);
