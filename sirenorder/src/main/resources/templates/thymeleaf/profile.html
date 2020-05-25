@@ -2689,7 +2689,6 @@ body {
 				</div>
 			</div>
 		</div>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 		<script>
 		profileIdClicked = 0;
@@ -2763,7 +2762,6 @@ body {
 				}
 			}
 		});
-		
 		$("#quitId").on("click", function(){
 			alert("about to quit");	        
 			$.ajax({
@@ -2771,7 +2769,6 @@ body {
 	            type: "POST",
 	            success: function(data){
 					//여기서 탈퇴 후 로그아웃 하고 index.html 로그인 페이지로 넘어간다. 
-					
 					console.log(data);
 					document.getElementById("returnToIndexId").submit();//아이디 탈퇴하고 로그인 페이지로 이동 
 	            },
@@ -2779,10 +2776,7 @@ body {
 	            	console.log(data);
 	            }
 	        });
-
 		});
-
-		
 		</script>
 	</div>
 </body>

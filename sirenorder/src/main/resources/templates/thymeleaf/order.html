@@ -9,22 +9,23 @@
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색">
 		<span class="input-group-btn"><button id="searchId" type="button" class="btn btn-primary">Go</button></span>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	
+
 	<script>
 	$("#searchId").on("click", function(){
-
-		data = "chain=" + $('#searchStoreId').val();
-		console.log(data);
+		myChain = $('#searchStoreId').val();
+		chains =  {
+				chain: myChain
+		};
 		$.ajax({
             url: "searchStore",
             type: "POST",
-            data: data,
+            data: chains,
+			dataType : 'JSON',
             success: function(data){
 				alert(data);
             },
             error: function(data){
-				console.log(data);
+				console.log("에러는" + data);
             }
         });
 

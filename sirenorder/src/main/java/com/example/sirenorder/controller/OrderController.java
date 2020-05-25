@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -12,13 +13,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.StoreVO;
 
+@Controller
 public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
 	
 	
-	@RequestMapping(value = "searchStore", method = RequestMethod.POST)
+	@RequestMapping(value = "/searchStore.html", method = RequestMethod.POST)
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
 		System.out.println("searchStore 들어왔다");
