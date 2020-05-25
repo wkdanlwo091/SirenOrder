@@ -3,7 +3,8 @@ package com.example.sirenorder.frame;
 import java.util.ArrayList;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
+
+import com.example.sirenorder.vo.StoreVO;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -16,7 +17,11 @@ public interface Biz<Id, Model> {
 	default public void delete(Id id) throws Exception{
 	}
 	
+	@Transactional 
+	default public ArrayList<Model> getChain(Id id) throws Exception{
+		return null;
+	}
+	
 	public Model get(Id id);
 	public ArrayList<Model> get();
-	
 }

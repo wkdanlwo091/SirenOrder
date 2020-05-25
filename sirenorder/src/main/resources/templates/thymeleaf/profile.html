@@ -2689,8 +2689,7 @@ body {
 				</div>
 			</div>
 		</div>
-		<script
-			src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 		<script>
 		profileIdClicked = 0;
@@ -2771,10 +2770,11 @@ body {
 	            url: "quitProfile",
 	            type: "POST",
 	            success: function(data){
-					//여기서 탈퇴 후 로그아웃 한다. 
+					//여기서 탈퇴 후 로그아웃 하고 index.html 로그인 페이지로 넘어간다.  
+					console.log(data);
 	            },
-	            error: function(){
-	                alert("simpleWithObject err");
+	            error: function(data){
+	            	console.log(data);
 	            }
 	        });
 
