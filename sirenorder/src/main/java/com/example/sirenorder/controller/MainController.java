@@ -28,4 +28,8 @@ public class MainController {
 	public String example() {
 		return "thymeleaf/notifications";//로그인 첫 페이지로 /index.html
 	}
+	@RequestMapping(value = "table_index", method = RequestMethod.GET)
+	public String table_index() {
+		return "/table_index.html";
+	}
 }

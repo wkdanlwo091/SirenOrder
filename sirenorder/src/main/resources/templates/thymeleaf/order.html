@@ -9,7 +9,12 @@
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색">
 		<span class="input-group-btn"><button id="searchId" type="button" class="btn btn-primary">Go</button></span>
 	</div>
-
+		<div .table-responsive>
+	  		<table border="1" class = "table table-bordered table-hover">
+				<th>매장명</th>
+	    	</table>
+		</div>
+	</div>
 	<script>
 	$("#searchId").on("click", function(){
 		data = "chain=" + $('#searchStoreId').val();
@@ -17,15 +22,19 @@
             url: "searchStore",
             type: "POST",
             data: data,
+            dataType: "json",
             success: function(data){
+                for(var i=0; i<data.length; i++){
+                	$('th').append("<tr><td>"+ data[i].store_name + "</td></tr>");
+                }
+                console.log(data[0]);
             },
             error: function(data){
 				console.log("에러는" + data);
             }
         });
-
 	});
-
 	</script>
+	
 </body>
 </html>
