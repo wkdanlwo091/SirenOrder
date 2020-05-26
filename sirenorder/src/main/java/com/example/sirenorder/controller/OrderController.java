@@ -39,4 +39,27 @@ public class OrderController {
 		
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
+	
+	
+	
+	//가게의 판매 물건을 가져오는 컨트롤러이다. 
+	@RequestMapping(value = "sendStore", method = RequestMethod.POST)
+	@ResponseBody
+	public Object sendStore(HttpServletRequest request) throws Exception {
+		System.out.println("searchStore 들어왔다");
+		String store_name = request.getParameter("store_name");
+		ArrayList<StoreVO> arrList = storebiz.getChain(store_name);
+		if(arrList.size() == 0) {
+			System.out.println("찾는 가게가 없습니다.");
+		}
+		else {
+			for(StoreVO u: arrList) {
+				System.out.println("체인 이름은 " + u.getStore_name());
+			}
+			return arrList;
+		}
+		
+		return "fail";//로그인 첫 페이지로 /index.html
+	}
+
 }

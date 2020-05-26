@@ -5,12 +5,50 @@
 <title>Insert title here</title>
 </head>
 <body>
+<script>
+
+	function sendStore(store_name){
+		$("#sendStoreId").on("click", function(){
+			data = "store_name=" + store_name;
+			$.ajax({
+		        url: "sendStore",
+		        type: "POST",
+		        data: data,
+		        dataType: "json",
+		        success: function(data){
+		        	
+		        },
+		        error: function(data){
+					console.log("에러는" + data);
+		        }
+		    });
+		});
+	}
+	/*
+		$("#sendStoreId").on("click", function(){
+			data = "chain=" + $('#searchStoreId').val();
+			$.ajax({
+		        url: "sendStore",
+		        type: "POST",
+		        data: data,
+		        dataType: "json",
+		        success: function(data){
+		        	
+		        },
+		        error: function(data){
+					console.log("에러는" + data);
+		        }
+		    });
+		});
+		*/
+	</script>
+
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색">
 		<span class="input-group-btn"><button id="searchId" type="button" class="btn btn-primary">Go</button></span>
 	</div>
-		<div .table-responsive>
-	  		<table border="1" class = "table table-bordered table-hover">
+		<div .table-responsive style = "width:50%">
+	  		<table border="1" class = "table table-bordered table-hover" >
 				<th>매장명</th>
 	    	</table>
 		</div>
@@ -25,7 +63,8 @@
             dataType: "json",
             success: function(data){
                 for(var i=0; i<data.length; i++){
-                	$('th').append("<tr><td>"+ data[i].store_name + "</td></tr>");
+                	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
+                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"sendStore(" +  "'"  + data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
                 }
                 console.log(data[0]);
             },
@@ -34,6 +73,8 @@
             }
         });
 	});
+	
+	
 	</script>
 	
 </body>
