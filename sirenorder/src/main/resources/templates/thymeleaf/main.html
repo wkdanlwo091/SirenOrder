@@ -24,7 +24,9 @@
 </head>
 
 <body>
-
+<script>//script for product list 
+var myProduct;
+</script>
 	<!-- WRAPPER -->
 	<div id="wrapper">
 		<!-- NAVBAR -->
@@ -100,22 +102,15 @@
 		<!-- 기본으로 주문하기가 들어가있다. -->
 		<!-- profile에 나의정보가 있다. -->
 		
-		<div th:if="${profile != null}">
-			<div th:replace="/thymeleaf/profile :: profile"> </div>
-		</div>
-		<div th:unless = "${profile != null}">
-			<div th:replace="/thymeleaf/order"> </div>
-		</div>
+		<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
+		<div th:if = "${product != null}"><div th:replace="/thymeleaf/product"></div></div>
+		<div th:if = "${order != null}"><div th:replace="/thymeleaf/order"></div></div>
+		
 		
 		
 		</div>
 		<!-- END MAIN -->
 		<div class="clearfix"></div>
-		<footer>
-			<div class="container-fluid">
-				<p class="copyright">&copy; 2017 <a href="https://www.themeineed.com" target="_blank">Theme I Need</a>. All Rights Reserved.</p>
-			</div>
-		</footer>
 	</div>
 	<!-- END WRAPPER -->
 	<!-- Javascript -->

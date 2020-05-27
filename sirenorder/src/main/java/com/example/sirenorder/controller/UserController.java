@@ -169,6 +169,12 @@ public class UserController {
 	}
 	@RequestMapping("/profile.html")// 내 정보 보기 
 	public ModelAndView profile(HttpServletRequest request) {
+		HttpSession httpSession = request.getSession();
+		if(httpSession.getAttribute("userId") == null) {//아이디 로그인 안 했을 시 로그인 해라로 간다. 
+			ModelAndView model = new ModelAndView();
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
 		System.out.println("hello profile");
 		ModelAndView model = new ModelAndView();
 		model.addObject("profile", "clicked");

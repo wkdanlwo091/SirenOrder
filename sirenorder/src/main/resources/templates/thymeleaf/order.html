@@ -5,9 +5,9 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<form id = "toOrderPageId" action = "product.html"></form>
 <script>
 	function sendStore(store_name){
-		console.log("sendStore came in "+ store_name);
 			data = "chain_name=" + store_name;
 			$.ajax({
 		        url: "sendStore",
@@ -16,6 +16,9 @@
 		        dataType: "json",
 		        success: function(data){
 		        	console.log(data);
+		        	myProduct = data;
+		        	document.getElementById("toOrderPageId").submit();
+		        	//여기서 order로 redirect 해준다. 
 		        },
 		        error: function(data){
 					console.log("에러는" + data);
@@ -40,7 +43,6 @@
 		});
 		*/
 	</script>
-
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색">
 		<span class="input-group-btn"><button id="searchId" type="button" class="btn btn-primary">Go</button></span>
@@ -71,9 +73,6 @@
             }
         });
 	});
-	
-	
 	</script>
-	
 </body>
 </html>
