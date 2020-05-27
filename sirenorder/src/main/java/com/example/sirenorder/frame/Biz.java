@@ -21,7 +21,7 @@ public interface Biz<Id, Model> {
 		return null;
 	}
 	@Transactional 
-	default public Model getProduct(Model m) throws Exception{
+	default public ArrayList<Model> getProduct(String name) throws Exception{
 		return null;
 	}
 	@Transactional 

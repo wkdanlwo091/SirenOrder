@@ -11,15 +11,12 @@ import com.example.sirenorder.vo.ProductVO;
 
 @Repository("productdao")
 public class ProductDao implements Dao<String,ProductVO>{
-	
 	@Autowired
 	ProductMapper productmapper;
-
 	@Override
-	public ProductVO selectProduct(ProductVO product) {
+	public ArrayList<ProductVO> selectProduct(String product) {
 		return productmapper.selectProduct(product);
 	}
-
 	@Override
 	public void deleteProduct(ProductVO product) {
 	}

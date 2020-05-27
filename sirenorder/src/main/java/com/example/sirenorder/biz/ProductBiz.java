@@ -7,19 +7,17 @@ import org.springframework.stereotype.Service;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.ProductVO;
-import com.example.sirenorder.vo.StoreVO;
 
 @Service("productbiz")
 public class ProductBiz implements Biz<String, ProductVO>{
-
 	
 	@Resource(name = "productdao")
 	Dao<String, ProductVO> dao;
 	
 	@Override
-	public ProductVO getProduct(ProductVO m) throws Exception {
+	public ArrayList<ProductVO> getProduct(String name) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.selectProduct(m);
+		return dao.selectProduct(name);
 	}
 	@Override
 	public void deleteProduct(ProductVO m) throws Exception {
@@ -31,7 +29,6 @@ public class ProductBiz implements Biz<String, ProductVO>{
 		// TODO Auto-generated method stub
 		dao.insert(m);
 	}
-	
 	
 	@Override
 	public ProductVO get(String id) {

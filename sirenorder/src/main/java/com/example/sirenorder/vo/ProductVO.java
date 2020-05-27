@@ -9,5 +9,5 @@ import lombok.Data;
 public class ProductVO {
 	String product_id;
 	String product_name;
-	String store_name;
+	String chain_name;
 }

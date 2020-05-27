@@ -6,23 +6,21 @@
 </head>
 <body>
 <script>
-
 	function sendStore(store_name){
-		$("#sendStoreId").on("click", function(){
-			data = "store_name=" + store_name;
+		console.log("sendStore came in "+ store_name);
+			data = "chain_name=" + store_name;
 			$.ajax({
 		        url: "sendStore",
 		        type: "POST",
 		        data: data,
 		        dataType: "json",
 		        success: function(data){
-		        	
+		        	console.log(data);
 		        },
 		        error: function(data){
 					console.log("에러는" + data);
 		        }
 		    });
-		});
 	}
 	/*
 		$("#sendStoreId").on("click", function(){
@@ -64,7 +62,7 @@
             success: function(data){
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"sendStore(" +  "'"  + data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"sendStore(" +  "'"  + data[i].chain_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
                 }
                 console.log(data[0]);
             },
