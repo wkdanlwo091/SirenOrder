@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <select id="selectProduct" resultType="product">
 		SELECT * 
 		FROM PRODUCT
-		WHERE CHAIN_NAME = #{chain_name}
+		WHERE (CHAIN_NAME = #{chain_name}) AND (ROWNUM &lt; 1 + #{number}*6) AND (ROWNUM &gt; (#{number}-1)*6)
     </select>
     <select id="deleteProduct">
 		SELECT * 
@@ -19,6 +19,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	<selectKey keyProperty="seq" resultType="int">
     		select product_seq.nextval as seq from dual
     	</selectKey>
-    	INSERT INTO PRODUCT VALUES( #{product_id}||#{seq}, #{product_name}, #{chain_name})
+    	INSERT INTO PRODUCT VALUES( #{product_id}||#{seq}, #{product_name}, #{chain_name}, #{price})
     </insert>
 </mapper>

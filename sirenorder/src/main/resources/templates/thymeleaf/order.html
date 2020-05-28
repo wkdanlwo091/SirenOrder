@@ -5,18 +5,26 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form id = "toOrderPageId" action = "product.html"></form>
+	<form id = "toOrderPageId" action = "product.html">
+		<input type='hidden' name='chain_name' value='hidden' />
+		<input type='hidden' name='number' value='1' />
+	</form>
 <script>
-	function sendStore(store_name){
-			data = "chain_name=" + store_name;
-			$.ajax({
-		        url: "sendStore",
+	var tmp;
+	function getProduct(store_name){
+    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = store_name;
+    	document.getElementById("toOrderPageId").submit();
+			/*
+			data = "chain_name=" + store_name + "&number=1";
+			$.ajax({		        
+				url: "getProduct",
 		        type: "POST",
 		        data: data,
 		        dataType: "json",
 		        success: function(data){
-		        	console.log(data);
-		        	myProduct = data;
+		        	myProduct = data;//상품 데이터 
+		        	tmp = data;
+		        	alert(myProduct);
 		        	document.getElementById("toOrderPageId").submit();
 		        	//여기서 order로 redirect 해준다. 
 		        },
@@ -24,6 +32,7 @@
 					console.log("에러는" + data);
 		        }
 		    });
+			*/
 	}
 	/*
 		$("#sendStoreId").on("click", function(){
@@ -52,7 +61,6 @@
 				<th>매장명</th>
 	    	</table>
 		</div>
-	</div>
 	<script>
 	$("#searchId").on("click", function(){
 		data = "chain=" + $('#searchStoreId').val();
@@ -64,7 +72,7 @@
             success: function(data){
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"sendStore(" +  "'"  + data[i].chain_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
                 }
                 console.log(data[0]);
             },

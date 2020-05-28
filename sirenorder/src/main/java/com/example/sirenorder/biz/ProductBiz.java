@@ -15,9 +15,9 @@ public class ProductBiz implements Biz<String, ProductVO>{
 	Dao<String, ProductVO> dao;
 	
 	@Override
-	public ArrayList<ProductVO> getProduct(String name) throws Exception {
+	public ArrayList<ProductVO> getProduct(String name, int num) throws Exception {
 		// TODO Auto-generated method stub
-		return dao.selectProduct(name);
+		return dao.selectProduct(name, num);
 	}
 	@Override
 	public void deleteProduct(ProductVO m) throws Exception {
@@ -29,7 +29,6 @@ public class ProductBiz implements Biz<String, ProductVO>{
 		// TODO Auto-generated method stub
 		dao.insert(m);
 	}
-	
 	@Override
 	public ProductVO get(String id) {
 		// TODO Auto-generated method stub

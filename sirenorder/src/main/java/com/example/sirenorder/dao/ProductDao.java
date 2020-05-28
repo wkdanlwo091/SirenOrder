@@ -14,8 +14,8 @@ public class ProductDao implements Dao<String,ProductVO>{
 	@Autowired
 	ProductMapper productmapper;
 	@Override
-	public ArrayList<ProductVO> selectProduct(String product) {
-		return productmapper.selectProduct(product);
+	public ArrayList<ProductVO> selectProduct(String name, int num) {
+		return productmapper.selectProduct(name, num);
 	}
 	@Override
 	public void deleteProduct(ProductVO product) {

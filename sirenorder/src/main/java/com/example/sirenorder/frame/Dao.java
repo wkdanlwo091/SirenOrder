@@ -16,7 +16,7 @@ public interface Dao<Id, Model> {
 		return null;
 	}
 
-	default public ArrayList<Model> selectProduct(String  name) throws Exception {
+	default public ArrayList<Model> selectProduct(String  name, int num) throws Exception {
 		return null;
 	}
 

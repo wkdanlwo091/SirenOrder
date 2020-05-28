@@ -17,8 +17,6 @@ public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
-	@Resource(name = "productbiz")	
-	Biz<String, ProductVO> productbiz;
 	
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST)
 	@ResponseBody
@@ -35,19 +33,4 @@ public class OrderController {
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
 	
-	//가게의 판매 물건을 가져오는 컨트롤러이다. 
-	@RequestMapping(value = "sendStore", method = RequestMethod.POST)
-	@ResponseBody
-	public Object sendStore(HttpServletRequest request) throws Exception {
-		String chain_name = request.getParameter("chain_name");
-		ArrayList<ProductVO> arrList = productbiz.getProduct(chain_name);
-		if(arrList.size() == 0) {
-			System.out.println("가게에 물건이 없습니다.");
-		}
-		else {
-			return arrList;
-		}
-		return "fail";//로그인 첫 페이지로 /index.html
-	}
-
 }
