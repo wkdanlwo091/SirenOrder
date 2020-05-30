@@ -58,7 +58,8 @@ var myProduct= 5;
 								<span class="badge bg-danger">5</span>
 							</a>
 							<ul class="dropdown-menu notifications">
-								<li><a href="#" class="notification-item" th:each="item: ${session.cart}" th:value="${item['key']}" th:text="${ item['key']  +  ' ' +  item['value'] + '개'}"><span class="dot bg-warning"></span>System space is almost full</a></li>
+								<li><a href="#" class="notification-item" th:each="item: ${session.cartProductName}" th:value="${item['key']}" th:text="${ item['key']  +  ' ' +  item['value'] + '개'}"><span class="dot bg-warning"></span>System space is almost full</a></li>
+								<li><a href="#" class="notification-item" th:each="item: ${session.cart}" th:text="${ item['key'].product_name  +  ' ' +  item['key'].price + '개' + item['value'] + '개'}"><span class="dot bg-warning"></span>System space is almost full</a></li>
 								<li><a href="/checkOut.html" class="more">장바구니 계산하기</a></li>
 							</ul>
 						</li>
