@@ -137,7 +137,7 @@ public class UserController {
 		}
 		return 0;//0을 돌려주면 중복이 아니다. 
 	}
-	@RequestMapping(value = "/register.html", method=RequestMethod.POST) 
+	@RequestMapping(value = "/register.html", method=RequestMethod.POST) //가입 신청 했을 때
 	public String register(UserVO user) throws Exception {
     	UserVO m = new UserVO();
     	System.out.println(user);
@@ -150,17 +150,15 @@ public class UserController {
     	userbiz.register(m);
     	return "redirect:/";//여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로 msg값을 줘도 된
 	}
-    @RequestMapping(value = "/register.html", method=RequestMethod.GET)
+    @RequestMapping(value = "/register.html", method=RequestMethod.GET)//register 페이지 왔을 때
 	public String register() {
 		return "thymeleaf/register";
 	}
 	@RequestMapping("/logout.html")//별 문제 없다. 
 	public String logout(HttpServletRequest request) {
 		System.out.println("entered login.top");
-        
 		HttpSession session = request.getSession();
-        session.invalidate();
-
+        session.invalidate();//로그인 정보 , 장바구니 세션 정보 등 모든 정보 없앤다
         return "redirect:/";
 	}
 	@RequestMapping("/forgot.html")// 비밀번호 잊어버렸을 때 실행 하는 함수 , 별 문제 없다. 

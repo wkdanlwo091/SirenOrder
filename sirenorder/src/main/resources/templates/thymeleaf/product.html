@@ -19,14 +19,26 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- swiper CSS -->
     <link rel="stylesheet" href="css/slick.css">
-    <!--  <link rel="stylesheet" href="css/price_rangs.css">-->
     <!-- style CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <script>
+	var totalNum = 0;
 	function addToCart(product_name, price){
-		console.log(product_name + " " + price);
+		alert("addToCart");
+		data = "product_name=" + product_name + "&price=" + price ;
+		$.ajax({//세션 만들어서 return 한다. 
+			  url: "cartProduct",
+			  method: "POST", 
+			  data : data,
+	          dataType: "json",
+			  success: function(result){
+			  	console.log("addToCart success !! " + result);
+			  }
+		});
 	}
+	
+	//#navbar-menu > ul > li:nth-child(1) > a > span              -----> 이는 장바구니 갯수를 나타낸다. 
 </script>
 <body>
     <!--================Category Product Area =================-->
@@ -52,8 +64,8 @@
                                 <div class="single_product_text">
                                     <h4 th:text="${list.product_name}"></h4>
                                     <h3 th:text="${list.price}"></h3>
-                                    <a onclick= "" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                </div>
+                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}', '${list.price}')|" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -84,7 +96,6 @@
                 </div>
             </div>
         </div>
-        
     <!-- jquery plugins here-->
     <script src="js/jquery-1.12.1.min.js"></script>
     <!-- popper js -->
