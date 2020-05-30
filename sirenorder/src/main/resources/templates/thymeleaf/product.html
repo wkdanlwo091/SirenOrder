@@ -19,10 +19,15 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- swiper CSS -->
     <link rel="stylesheet" href="css/slick.css">
-    <link rel="stylesheet" href="css/price_rangs.css">
+    <!--  <link rel="stylesheet" href="css/price_rangs.css">-->
     <!-- style CSS -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+<script>
+	function addToCart(product_name, price){
+		console.log(product_name + " " + price);
+	}
+</script>
 <body>
     <!--================Category Product Area =================-->
         <div class="container">
@@ -30,16 +35,6 @@
                 <div class="col-lg-9">
                     <div class="row align-items-center latest_product_inner">
                     
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="single_product_item">
-                                <img src="img/product/product_8.png" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
                         <!--  
 						<tr th:each="data, iterstat: ${mois}">
 						     <td th:text="${data}" th:id="|td${iterstat.index}|"></td>
@@ -55,13 +50,12 @@
                             <div class="single_product_item">
                                 <img th:src="${list.image}" alt="">
                                 <div class="single_product_text">
-                                    <h4 th:text="${list.product_name}">Quartz Belt Watch</h4>
-                                    <h3 th:text="${list.price}">$150.00</h3>
-                                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                    <h4 th:text="${list.product_name}"></h4>
+                                    <h3 th:text="${list.price}"></h3>
+                                    <a onclick= "" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-lg-12">
                             <div class="pageination">
                                 <nav aria-label="Page navigation example">
@@ -91,32 +85,6 @@
             </div>
         </div>
         
-	<script>
-	//상품을 받아서 뿌리는 곳
-	/*
-	                    <div class="col-lg-4 col-sm-6">
-                            <div class="single_product_item">
-                                <img src="img/product/product_8.png" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        */
-	//상품의 정보가 myProduct(from main.html의 전역변수)에 저장되어 있다. 
-	console.log(myProduct);
-    alert(myProduct);
-	var productHtml = "<div class=\"col-lg-4 col-sm-6\"><div class=\"single_product_item\">";
-	productHtml += "<img src=\"img/product/product_2.png\" alt=\"\"><div class=\"single_product_text\">";
-	productHtml += "<h4>Quartz Belt Watch</h4>";
-	productHtml += "<h3>$150.00</h3>";
-	productHtml += "<a href=\"#\" class=\"add_cart\">+ add to cart<i class=\"ti-heart\"></i></a>";
-	productHtml += "</div></div></div>";
-
-	</script>
-
     <!-- jquery plugins here-->
     <script src="js/jquery-1.12.1.min.js"></script>
     <!-- popper js -->
