@@ -19,7 +19,6 @@ public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
-	
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST)
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {

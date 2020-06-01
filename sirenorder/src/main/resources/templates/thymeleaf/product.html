@@ -23,21 +23,60 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <script>
+
 	var totalNum = 0;
 	function addToCart(product_name, price){
-		alert("addToCart");
-		data = "product_name=" + product_name + "&price=" + price ;
+		data = "product_name=" + product_name + "&price=" + price + "&sign=plus";
 		$.ajax({//세션 만들어서 return 한다. 
 			  url: "cartProduct",
 			  method: "POST", 
 			  data : data,
-	          dataType: "json",
 			  success: function(result){
-			  	console.log("addToCart success !! " + result);
-			  }
+				var array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				console.log(array.length);
+				console.log("kaka" + JSON.parse(result)[0]["price"]);
+				console.log("haha" + array[0]["product_name"]);
+				console.log("jaja" + array[0]["number"]);
+			  	var cartHistory = document.getElementById("cartList");
+			  	document.getElementById("cartList").innerHTML = '<p>haha</p>';
+				for(var i in array){//iteration을 한다. 
+				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+					tmp += array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"</a></li>";
+				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+				  	totalPrice += array[i]["price"] * array[i]["number"];
+				}
+				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+			  },
+	            error: function(result){
+	            	alert("error 는" + result);
+	            }
 		});
 	}
-	
+	function minusToCart(product_name, price){
+		data = "product_name=" + product_name + "&price=" + price + "&sign=minus";
+		$.ajax({//세션 만들어서 return 한다. 
+			  url: "cartProduct",
+			  method: "POST", 
+			  data : data,
+			  dataType : 'json', 
+			  success: function(result){
+			  	if(result == "noData"){
+			  		alert("이미 수량이 0입니다.");
+			  	}else{
+					console.log("실패 returned 된 value는 " + result +  result.toString());
+			  	}
+			  },
+	          error: function(result){
+	          }
+		});
+}
+$(function(){//페이지 로드되면 ajax를 이용해서  장바구니 정보 가져온다. 세션 필요 없다?
+
+});
+
 	//#navbar-menu > ul > li:nth-child(1) > a > span              -----> 이는 장바구니 갯수를 나타낸다. 
 </script>
 <body>
@@ -64,7 +103,8 @@
                                 <div class="single_product_text">
                                     <h4 th:text="${list.product_name}"></h4>
                                     <h3 th:text="${list.price}"></h3>
-                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}', '${list.price}')|" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}', '${list.price}')|" class="add_cart">+ 물건 담기</a>
+                                    <a href="#"  th:attr="onclick=|minusToCart('${list.product_name}', '${list.price}')|" class="add_cart">- 물건 빼기</a>
                                 </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>

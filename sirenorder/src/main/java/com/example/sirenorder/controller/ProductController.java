@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,11 +46,11 @@ public class ProductController {
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");
 		if(List.size() == 0) {
-			System.out.println("가게에 물건이 없습니다.");
+			//System.out.println("가게에 물건이 없습니다.");
 			model.addObject("List", List);
 		}
 		else {
-			System.out.println("가게에 물건이 있습니다.");
+			//System.out.println("가게에 물건이 있습니다.");
 			model.addObject("List", List);
 		}
 		return model;
@@ -61,10 +63,10 @@ public class ProductController {
 		String chain_name = request.getParameter("chain_name");
 		String  numberString = request.getParameter("number");
 		int number = Integer.parseInt(numberString);
-		System.out.println("chain name 은 "+ chain_name + "number 은" + number);
+		//System.out.println("chain name 은 "+ chain_name + "number 은" + number);
 		ArrayList<ProductVO> arrList = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
 		if(arrList.size() == 0) {
-			System.out.println("가게에 물건이 없습니다.");
+			//System.out.println("가게에 물건이 없습니다.");
 		}
 		else {
 			return arrList;
@@ -78,72 +80,73 @@ public class ProductController {
 	public String carProduct(HttpServletRequest request) throws Exception {
 		String product_name = request.getParameter("product_name");
 		String price = request.getParameter("price");
+		String sign = request.getParameter("sign");
 		HttpSession httpSession = request.getSession();
 		System.out.println(product_name + " " + price);
-		if(httpSession.getAttribute("cartTotalNum") == null) { 
+		HashMap<CartVO, Integer> cartProduct = new HashMap<CartVO, Integer>();
+
+		if(httpSession.getAttribute("cartProduct") == null) { 
+			if(sign.equals("minus")) {
+				return "noData";
+			}
 			int num = 1;
-			
 			CartVO cartVO = new CartVO();//작업 중인 것 
 			cartVO.setPrice(Integer.parseInt(price));
 			cartVO.setProduct_name(product_name);
 			cartVO.setNumber(num);
-			HashMap<CartVO, Integer> cartProduct = new HashMap<CartVO, Integer>();
+			cartProduct.put(cartVO, 1);
 			httpSession.setAttribute("cartProduct", cartProduct);
-			
-			
- 			HashMap<String, Integer> cartProductName = new HashMap<String, Integer>();
-			HashMap<String, Integer> cartPrice = new HashMap<String, Integer>();
-			cartProductName.put(product_name, num);
-			cartPrice.put(product_name, Integer.parseInt(price));
-			httpSession.setAttribute("cartTotalNum", num);
-			httpSession.setAttribute("cartPrice", cartPrice);
-			httpSession.setAttribute("cartProductName", cartProductName);
-			System.out.println("first hashmap 들어왔다.");
-			Iterator<String> itr = cartProductName.keySet().iterator();
-			while (itr.hasNext()) {
-				System.out.println(itr.next());
-			}
-			
-			
-			
+			System.out.println("첫번 째 cart 생성하였다.");
 		}else {
-			
-			
-			int num = (int)httpSession.getAttribute("cartTotalNum");
-			HashMap<String, Integer> cartProductName = (HashMap<String, Integer>)httpSession.getAttribute("cartProductName");
-			HashMap<String, Integer> cartPrice = (HashMap<String, Integer>)httpSession.getAttribute("cartPrice");
-			// 1. using Iterator
-			Iterator<String> itr = cartProductName.keySet().iterator();
-			while (itr.hasNext()) {
-				System.out.println(itr.next());
-			}
-			System.out.println(product_name +" 의 개수는 " + cartProductName.get(product_name));
-			cartProductName.put(product_name ,cartProductName.get(product_name)+1);
-			if(cartPrice.get(product_name) == null) {
-				cartPrice.put(product_name , Integer.parseInt(price));
-			}
-			httpSession.setAttribute("cartProductName", cartProductName);//상품 갯수 한개 증가 
-			httpSession.setAttribute("cartTotalNum", num + 1);//총 카트 개수 1증가 
-
-			
-			
-			
-			
-			
 			CartVO cartVO = new CartVO();//작업 중인 것 
 			cartVO.setPrice(Integer.parseInt(price));
 			cartVO.setProduct_name(product_name);
 			cartVO.setNumber(1);//일단은 1로 잡는다. 나중에 db 설정할 때는 최신화 한다. 
-			HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
+			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
 			if(cartProduct.get(cartVO) == null) {//새로운 아이템이 들어온 장바구니 
+				if(sign.equals("minus")) {//데이터가 없는데 - 이면 noData라고 return 
+					return "noData";
+				}
 				cartProduct.put(cartVO, 1);//수량 한개 늘리기 
+				System.out.println("새 카트다.");
 			}else {//이미 있던 장바구니 아이템
-				cartProduct.put(cartVO, cartProduct.get(cartVO)+1);//수량 한개 늘리기 
+				if(sign.equals("plus")) {//카트 수량 늘리기 
+					System.out.println("카트의수량을 늘렸다. ");
+					cartProduct.put(cartVO, cartProduct.get(cartVO)+1);//수량 한개 늘리기 
+				}else {//카트 수량 줄이기 
+					System.out.println("카트의 수량을 줄였다.");
+					if(cartProduct.get(cartVO) == 1) {
+						cartProduct.remove(cartVO);
+					}else {
+						cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 한개 늘리기 
+					}
+				}
 			}
-			
-			
+			httpSession.setAttribute("cartProduct", cartProduct);
 		}
-		System.out.println("addTocart fhinised");
-		return "cartReturned";
+		
+		System.out.println("addTocart finished");
+		JSONArray ja = new JSONArray();
+		Iterator<CartVO> itr = cartProduct.keySet().iterator();
+		int index = 0;
+		int totalPrice = 0;
+		
+		while (itr.hasNext()) {
+			System.out.println("created" + index);
+			CartVO tmp = itr.next();
+			
+			JSONObject jo = new JSONObject();
+			jo.put("product_name", tmp.getProduct_name());
+			jo.put("price", tmp.getPrice());
+			jo.put("number", cartProduct.get(tmp));//물건 개수
+			ja.add(jo);
+			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
+		}
+		
+		httpSession.setAttribute("totalPrice", totalPrice);
+		System.out.println("ja size" + ja.size());
+		//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
+
+		return ja.toString();
 	}
 }
