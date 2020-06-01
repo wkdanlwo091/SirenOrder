@@ -77,9 +77,9 @@ $(function() {
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
 								<i class="lnr lnr-cart"></i>
-								<span class="badge bg-danger">5</span>
+								<span class="badge bg-danger">0</span>
 							</a>
-							<ul class="dropdown-menu notifications" id = "cartList">
+							<ul class="dropdown-menu notifications" id = "cartList" style= "background-color:#FFFFFF !important;">
 								<li><a href="#" class="notification-item" th:each="item: ${session.cartProduct}" th:text="${ item['key'].getProduct_name() + ' ' + item['key'].number + ' ' + item['key'].number*item['key'].price }"><span class="dot bg-warning"></span>System space is almost full</a></li>
 								<li><a href="/checkOut.html" class="more"  th:text = "${session.totalPrice + ' 원'}">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>
 							</ul>
@@ -88,7 +88,7 @@ $(function() {
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							    <span class="badge bg-danger" th:text="${session.userId}" th:unless="${session == null}">[...]</span>
 							  <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu" style= "background-color:#FFFFFF !important;"> 
 								<li><a href="/profile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
 								<li><a href="/logout.html"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
 							</ul>

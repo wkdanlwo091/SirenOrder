@@ -96,7 +96,6 @@ public class ProductController {
 			cartVO.setNumber(num);
 			cartProduct.put(cartVO, 1);
 			httpSession.setAttribute("cartProduct", cartProduct);
-			System.out.println("첫번 째 cart 생성하였다.");
 		}else {
 			CartVO cartVO = new CartVO();//작업 중인 것 
 			cartVO.setPrice(Integer.parseInt(price));
@@ -105,34 +104,31 @@ public class ProductController {
 			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
 			if(cartProduct.get(cartVO) == null) {//새로운 아이템이 들어온 장바구니 
 				if(sign.equals("minus")) {//데이터가 없는데 - 이면 noData라고 return 
-					return "noData";
+					return "notExisting";
 				}
 				cartProduct.put(cartVO, 1);//수량 한개 늘리기 
-				System.out.println("새 카트다.");
 			}else {//이미 있던 장바구니 아이템
 				if(sign.equals("plus")) {//카트 수량 늘리기 
-					System.out.println("카트의수량을 늘렸다. ");
 					cartProduct.put(cartVO, cartProduct.get(cartVO)+1);//수량 한개 늘리기 
 				}else {//카트 수량 줄이기 
-					System.out.println("카트의 수량을 줄였다.");
 					if(cartProduct.get(cartVO) == 1) {
 						cartProduct.remove(cartVO);
+						System.out.println("카트 파괴");
 					}else {
-						cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 한개 늘리기 
+						cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 줄이기
 					}
 				}
 			}
 			httpSession.setAttribute("cartProduct", cartProduct);
 		}
 		
-		System.out.println("addTocart finished");
 		JSONArray ja = new JSONArray();
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
 		int index = 0;
 		int totalPrice = 0;
-		
+		int totalIndex = 0;
 		while (itr.hasNext()) {
-			System.out.println("created" + index);
+			System.out.println("created" + index++);
 			CartVO tmp = itr.next();
 			
 			JSONObject jo = new JSONObject();
@@ -140,10 +136,16 @@ public class ProductController {
 			jo.put("price", tmp.getPrice());
 			jo.put("number", cartProduct.get(tmp));//물건 개수
 			ja.add(jo);
+			totalIndex += (cartProduct.get(tmp));
 			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
 		}
-		
 		httpSession.setAttribute("totalPrice", totalPrice);
+		httpSession.setAttribute("totalIndex", totalIndex);
+
+		if(index == 0) {
+			System.out.println("noData");
+			return "noData";
+		}
 		System.out.println("ja size" + ja.size());
 		//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
 

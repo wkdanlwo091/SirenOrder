@@ -20,6 +20,7 @@
     <!-- swiper CSS -->
     <link rel="stylesheet" href="css/slick.css">
     <!-- style CSS -->
+    <!--  -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <script>
@@ -36,19 +37,24 @@
 				var number = array[0]["number"];
 				var numOfArrays = array.length;
 				var totalPrice = 0;
+				var totalIndex = 0;
 				console.log(array.length);
 				console.log("kaka" + JSON.parse(result)[0]["price"]);
 				console.log("haha" + array[0]["product_name"]);
 				console.log("jaja" + array[0]["number"]);
+				
 			  	var cartHistory = document.getElementById("cartList");
-			  	document.getElementById("cartList").innerHTML = '<p>haha</p>';
+			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+			  	
 				for(var i in array){//iteration을 한다. 
 				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-					tmp += array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"</a></li>";
+					tmp += array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] +"',"+array[i]["price"] +")\">-</button></a></li>";
 				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 				  	totalPrice += array[i]["price"] * array[i]["number"];
+				  	totalIndex += array[i]["number"];
 				}
 				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+			  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
 			  },
 	            error: function(result){
 	            	alert("error 는" + result);
@@ -61,13 +67,40 @@
 			  url: "cartProduct",
 			  method: "POST", 
 			  data : data,
-			  dataType : 'json', 
 			  success: function(result){
-			  	if(result == "noData"){
-			  		alert("이미 수량이 0입니다.");
-			  	}else{
-					console.log("실패 returned 된 value는 " + result +  result.toString());
-			  	}
+				  alert(result);
+				  	if(result == "notExisting"){
+						return;	
+				  	}else if(result == "noData"){// 모든 데이터 삭제한 경우 
+					  	document.getElementById("cartList").innerHTML = "<li><a href=\"/checkOut.html\" class=\"more\" >장바구니</a></li>";//먼저 있던 내용을 다 지운다 
+					  	return;
+				  	}
+				  	var array = JSON.parse(result);
+					var number = array[0]["number"];
+					var numOfArrays = array.length;
+					var totalPrice = 0;
+					var totalIndex = 0;
+					console.log(array.length);
+					console.log("kaka" + JSON.parse(result)[0]["price"]);
+					console.log("haha" + array[0]["product_name"]);
+					console.log("jaja" + array[0]["number"]);
+					
+				  	var cartHistory = document.getElementById("cartList");
+				  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+				  	
+					for(var i in array){//iteration을 한다. 
+					  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+						tmp += array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] +"',"+array[i]["price"] +")\">-</button></a></li>";
+					  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+					  	totalPrice += array[i]["price"] * array[i]["number"];
+					  	totalIndex += array[i]["number"];
+					}
+					cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+				  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
+
+				  
+				  
+				  
 			  },
 	          error: function(result){
 	          }
