@@ -39,6 +39,12 @@ $(function() {
 				alert("noCart");
 				return;
 			}
+			
+			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
+				alert("hidden");
+				return;
+			}else{alert("visible")}
+			
 			var array = JSON.parse(result);
 			var number = array[0]["number"];
 			var numOfArrays = array.length;
@@ -58,7 +64,7 @@ $(function() {
 			  	totalIndex += array[i]["number"];
 			}
 			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
-		  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
+		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;
 		  },
             error: function(result){
             	alert("error 는" + result);

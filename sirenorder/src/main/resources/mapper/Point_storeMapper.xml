@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.sirenorder.mapper.PointMapper">
+    <select id="select" resultType="point">
+		SELECT * 
+		FROM POINT
+		WHERE POINT_ID = #{point_id}
+    </select>
+    <select id="selectall" resultType="point">
+    	SELECT * 
+		FROM POINT
+    </select>
+</mapper>

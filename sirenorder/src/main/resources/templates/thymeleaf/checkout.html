@@ -6,6 +6,91 @@
 </head>
 
 <script>
+function addToCartCheckout(product_name,store_name,price){//체크아웃 전용 
+	alert(product_name + " " + store_name + " " + price);
+	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name;
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProduct",
+		  method: "POST", 
+		  data : data,
+		  success: function(result){
+			var array = JSON.parse(result);
+			var number = array[0]["number"];
+			var numOfArrays = array.length;
+			var totalPrice = 0;
+			
+			$('#checkOutCartId').text("");
+			for(var i in array){//iteration을 한다. 
+			  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
+			  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
+	              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
+	                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
+	                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
+	                item += "";
+				  	$('#checkOutCartId').prepend(item);
+					totalPrice += array[i]["price"] * array[i]["number"];
+			}
+			
+			var totalPriceElement = "<li class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
+				totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\">&nbsp;주문하기</button></li>";
+            
+            
+          
+			
+			$('#checkOutCartId').append(totalPriceElement);
+		  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
+		  },
+            error: function(result){
+            	alert("error 는" + result);
+            }
+	});
+}
+function minusToCartCheckout(product_name,store_name, price){
+	alert(store_name);
+	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name;
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProduct",
+		  method: "POST", 
+		  data : data,
+		  success: function(result){
+			  	if(result == "notExisting"){
+			  		alert("notExistgin");
+					return;	
+			  	}else if(result == "noData"){// 모든 데이터 삭제한 경우 
+				  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = 0;
+				  	document.getElementById("cartList").innerHTML = "<li><a href=\"/checkOut.html\" class=\"more\" >장바구니</a></li>";//먼저 있던 내용을 다 지운다 
+				  	return;
+			  	}
+			  	var array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				$('#checkOutCartId').text("");//원래있던 엘리먼트 지우기 
+
+				for(var i in array){//iteration을 한다. 
+				  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
+				  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
+		              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
+		                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
+		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
+		                item += "";
+					  	$('#checkOutCartId').prepend(item);
+						totalPrice += array[i]["price"] * array[i]["number"];
+				}
+				var totalPriceElement = "<li class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
+					totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\">&nbsp;주문하기</button></li>";
+	            
+	            
+	          
+				
+				$('#checkOutCartId').append(totalPriceElement);
+
+			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
+		  },
+          error: function(result){
+          }
+	});
+}
 	//이 function에서 sub 장바구니 ( 로그인정보 옆에 있는 장바구니) 를 hide 시킨다. 
 	$(function(){
 		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
@@ -25,26 +110,18 @@
 				var totalPrice = 0;
 				var totalIndex = 0;
 				
-				
-			  	var cartHistory = document.getElementById("cartList");
-			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
 				for(var i in array){//iteration을 한다. 
-				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-					tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></a></li>";
-				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
-				  	
-					  
 				  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
 				  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
 		              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
-		                item += "<span class=\"text-muted\">" + array[i]["price"] + "</span>";
-		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "</span></li>";
-					  	$('.list-group, .mb-3').append(item);
-					totalPrice += array[i]["price"] * array[i]["number"];
-
-
+		                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
+		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
+		                item += "";
+					  	$('#checkOutCartId').prepend(item);
+						totalPrice += array[i]["price"] * array[i]["number"];
+						console.log(totalPrice);
 				}
-			  	document.querySelector("#wrapper > div.main > div > div > ul > li:nth-child(4) > strong").innerHTML = totalPrice;
+			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
 				
 	                //
 	               
@@ -63,39 +140,13 @@
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">장바구니</span>
           </h4>
-          <ul class="list-group mb-3">
+          <ul class="list-group mb-3" id = "checkOutCartId">
           
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Second product</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$8</span>
-            </li>
-            
-            
-            <li class="list-group-item d-flex justify-content-between lh-condensed">
-              <div>
-                <h6 class="my-0">Third item</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$5</span>
-            </li>
-            
-            
-            <li class="list-group-item d-flex justify-content-between bg-light">
-              <div class="text-success">
-                <h6 class="my-0">Promo code</h6>
-                <small>EXAMPLECODE</small>
-              </div>
-              <span class="text-success">-$5</span>
-            </li>
-            
             
             <li class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
-              <strong>$20</strong>
-              <button id = "checkOutId" >주문하기</button>
+              <strong id = "strongTotalId">$20</strong>
+              <button id = "checkOutId" >&nbsp주문하기</button>
             </li>
           </ul>
 
