@@ -19,7 +19,8 @@ public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
-	@RequestMapping(value = "searchStore", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "searchStore", method = RequestMethod.POST)//가게 이름을 return 한다. 
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
 		String chain = request.getParameter("chain");
@@ -30,7 +31,6 @@ public class OrderController {
 		else {
 			return arrList;
 		}
-		
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
 	//checkout 장바구니 보기

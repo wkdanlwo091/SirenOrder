@@ -5,14 +5,16 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form id = "toOrderPageId" action = "product.html">
+	<form id = "toOrderPageId" action = "product.html"><!--  -->
 		<input type='hidden' name='chain_name' value='hidden' />
+		<input type='hidden' name='store_name' value='hidden' />
 		<input type='hidden' name='number' value='1' />
 	</form>
 <script>
 	var tmp;
-	function getProduct(store_name){
-    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = store_name;
+	function getProduct(chain_name, store_name){//체인의 상점의 물품을 가져오기 위해서 form 태그로 서버에 보낸다. 
+    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
+    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
     	document.getElementById("toOrderPageId").submit();
 			/*
 			data = "chain_name=" + store_name + "&number=1";
@@ -72,7 +74,7 @@
             success: function(data){
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
                 }
                 console.log(data[0]);
             },

@@ -1,27 +1,70 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
+<meta charset="utf-8">
 <title>Insert title here</title>
 </head>
+
+<script>
+	//이 function에서 sub 장바구니 ( 로그인정보 옆에 있는 장바구니) 를 hide 시킨다. 
+	$(function(){
+		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
+		
+		//장바구니 정보 refresh한다. 
+		$.ajax({//세션 만들어서 return 한다. 
+			  url: "cartProductBring",
+			  method: "POST", 
+			  success: function(result){
+				if(result == "noCart"){
+					alert("noCart");
+					return;
+				}
+				var array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				var totalIndex = 0;
+				
+				
+			  	var cartHistory = document.getElementById("cartList");
+			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+				for(var i in array){//iteration을 한다. 
+				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+					tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></a></li>";
+				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+				  	
+					  
+				  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
+				  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
+		              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
+		                item += "<span class=\"text-muted\">" + array[i]["price"] + "</span>";
+		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "</span></li>";
+					  	$('.list-group, .mb-3').append(item);
+					totalPrice += array[i]["price"] * array[i]["number"];
+
+
+				}
+			  	document.querySelector("#wrapper > div.main > div > div > ul > li:nth-child(4) > strong").innerHTML = totalPrice;
+				
+	                //
+	               
+			  
+			  },
+	            error: function(result){
+	            	alert("error 는" + result);
+	            }
+		});
+	});
+	
+	
+</script>
 <body>
 	        <div class="col-md-4 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
-            <span class="text-muted">Your cart</span>
+            <span class="text-muted">장바구니</span>
           </h4>
           <ul class="list-group mb-3">
           
-          	<li><a href="#" class="notification-item" th:each="item: ${session.cart}" th:value="${item['key']}" th:text="${ item['key']  +  ' ' +  item['value'] + '��'}"><span class="dot bg-warning"></span>System space is almost full</a></li>
-          
-            <li class="list-group-item d-flex justify-content-between lh-condensed" th:each="item: ${session.cart}" th:value="${item['key']}">
-              <div>
-                <h6 class="my-0" th:text="${ item['key']}">Product name</h6>
-                <small class="text-muted" th:text="${ item['value']}" >Brief description</small>
-              </div>
-              <span class="text-muted">$12</span>
-            </li>
-            
-            
             <li class="list-group-item d-flex justify-content-between lh-condensed">
               <div>
                 <h6 class="my-0">Second product</h6>
@@ -29,6 +72,8 @@
               </div>
               <span class="text-muted">$8</span>
             </li>
+            
+            
             <li class="list-group-item d-flex justify-content-between lh-condensed">
               <div>
                 <h6 class="my-0">Third item</h6>
@@ -36,6 +81,8 @@
               </div>
               <span class="text-muted">$5</span>
             </li>
+            
+            
             <li class="list-group-item d-flex justify-content-between bg-light">
               <div class="text-success">
                 <h6 class="my-0">Promo code</h6>
@@ -43,20 +90,15 @@
               </div>
               <span class="text-success">-$5</span>
             </li>
+            
+            
             <li class="list-group-item d-flex justify-content-between">
-              <span>Total (USD)</span>
+              <span>총액 : </span>
               <strong>$20</strong>
+              <button id = "checkOutId" >주문하기</button>
             </li>
           </ul>
 
-          <form class="card p-2">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Promo code">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary">Redeem</button>
-              </div>
-            </div>
-          </form>
         </div>
 	
 </body>
