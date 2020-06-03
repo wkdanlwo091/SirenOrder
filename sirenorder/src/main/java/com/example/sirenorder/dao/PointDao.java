@@ -12,7 +12,12 @@ public class PointDao implements Dao<String, PointVO>{
 	
 	@Autowired
 	PointMapper pointmapper;
-
+	
+	@Override
+	public void insert(PointVO pointVO) {
+		pointmapper.insert(pointVO);
+	}
+	
 	@Override
 	public PointVO select(String id) {
 		// TODO Auto-generated method stub

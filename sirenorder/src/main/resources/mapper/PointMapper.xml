@@ -14,4 +14,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT * 
 		FROM POINT
     </select>
+    <insert id = "insert">
+    	INSERT INTO POINT VALUES(#{point_id}, #{users_id})
+    </insert>
 </mapper>

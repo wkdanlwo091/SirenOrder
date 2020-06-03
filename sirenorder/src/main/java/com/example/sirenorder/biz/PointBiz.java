@@ -14,6 +14,10 @@ public class PointBiz implements Biz<String, PointVO>  {
 	Dao<String, PointVO> dao;
 	
 	@Override
+	public void register(PointVO pointVO) throws Exception {
+		dao.insert(pointVO);
+	}
+	@Override
 	public PointVO get(String id) {
 		// TODO Auto-generated method stub
 		return dao.select(id);

@@ -24,6 +24,12 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getProduct(String name, int num) throws Exception{
 		return null;
 	}
+	
+	@Transactional 
+	default public Model getPoint_store(String name, String name2) throws Exception{
+		return null;
+	}
+	
 	@Transactional 
 	default public void deleteProduct(Model m) throws Exception{
 	}
