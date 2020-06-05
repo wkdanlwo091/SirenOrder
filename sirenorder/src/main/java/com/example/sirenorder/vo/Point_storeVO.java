@@ -13,3 +13,4 @@ public class Point_storeVO {
 	String users_id;
 	String chain_name;
 }
+

@@ -20,12 +20,15 @@ public interface Dao<Id, Model> {
 		return null;
 	}
 
-	default public Model selectPoint_store(String  name, String name2) throws Exception {
+	default public Model select(String  name, String name2) throws Exception {
 		return null;
 	}
 
-	
 	default public void deleteProduct(Model m) throws Exception {
+	}
+	
+	default public Model selectByChain_name(Id id) throws Exception {
+		return null;
 	}
 
 	public Model select(Id id);

@@ -4,14 +4,12 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-
 <script>
-function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 
+function addToCartCheckout(product_name,store_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 
 	alert(product_name + " " + store_name + " " + price);
-	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
-
+	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name;
 	$.ajax({//세션 만들어서 return 한다. 
-		  url: "cartProductAdd",
+		  url: "cartProduct",
 		  method: "POST", 
 		  data : data,
 		  success: function(result){
@@ -26,7 +24,7 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
 	              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
 	                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
-	                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></span>  </li>";
+	                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
 	                item += "";
 				  	$('#checkOutCartId').prepend(item);
 					totalPrice += array[i]["price"] * array[i]["number"];
@@ -46,11 +44,11 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
             }
 	});
 }
-function minusToCartCheckout(product_name,store_name, chain_name,price){//장바구니를 더한다. 그리고 그에 따른 포인트 정보도 뺀다. 
+function minusToCartCheckout(product_name,store_name, price){//장바구니를 더한다. 그리고 그에 따른 포인트 정보도 뺀다. 
 	alert(store_name);
-	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
+	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name;
 	$.ajax({//세션 만들어서 return 한다. 
-		  url: "cartProductMinus",
+		  url: "cartProduct",
 		  method: "POST", 
 		  data : data,
 		  success: function(result){
@@ -73,7 +71,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 				  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
 		              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
 		                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
-		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></span>  </li>";
+		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
 		                item += "";
 					  	$('#checkOutCartId').prepend(item);
 						totalPrice += array[i]["price"] * array[i]["number"];
@@ -114,9 +112,8 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 				  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
 				  	 	item += "<h6 class=\"my-0\">" + array[i]["product_name"] + "</h6>";
 		              	item += "<small class=\"text-muted\">" + array[i]["store_name"] + "</small></div>";
-		              	item += "<small class=\"text-muted\">" + array[i]["chain_name"] + "</small></div>";
 		                item += "<span class=\"text-muted\">" + array[i]["price"] + "원 "+ "</span>";
-		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"]  + "'," +array[i]["price"] +")\">-</button></span>  </li>";
+		                item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></span>  </li>";
 		                item += "";
 					  	$('#checkOutCartId').prepend(item);
 						totalPrice += array[i]["price"] * array[i]["number"];
@@ -124,7 +121,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 				}
 			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
 				
-	            //
+	                //
 	               
 			  
 			  },
@@ -132,11 +129,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 	            	alert("error 는" + result);
 	            }
 		});
-		
-		
 	});
-	
-	
 </script>
 <body>
 	        <div class="col-md-4 order-md-2 mb-4">
@@ -144,19 +137,14 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
             <span class="text-muted">장바구니</span>
           </h4>
           <ul class="list-group mb-3" id = "checkOutCartId">
-            <!-- thymeleaf 로 point 정보를 가져오겠다 장바구니 아이템의 chain_name 기반으로  -->
-            <li class="list-group-item d-flex justify-content-between" th:each= "data, iterstat: ${arrayList}">
-              <span>포인트  : </span>
-              <strong th:text = "${data.getChain_name()}" th:id = "point${iterstat.index}">$20</strong>
-            </li>
+          
+            
             <li class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
               <strong id = "strongTotalId">$20</strong>
               <button id = "checkOutId" >&nbsp주문하기</button>
             </li>
           </ul>
-
         </div>
-	
 </body>
 </html>

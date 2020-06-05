@@ -26,7 +26,12 @@ public interface Biz<Id, Model> {
 	}
 	
 	@Transactional 
-	default public Model getPoint_store(String name, String name2) throws Exception{
+	default public Model get(String name, String name2) throws Exception{
+		return null;
+	}
+	
+	@Transactional 
+	default public Model getByChain_name(String chain_name) throws Exception{
 		return null;
 	}
 	

@@ -1,30 +1,36 @@
 package com.example.sirenorder.biz;
 
 import java.util.ArrayList;
+
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.PointVO;
+import com.example.sirenorder.vo.Point_storeVO;
 
 @Service("pointbiz")
-public class PointBiz implements Biz<String, PointVO>  {
-	
+public class PointBiz implements Biz<String, PointVO>{
 	@Resource(name = "pointdao")
 	Dao<String, PointVO> dao;
 	
-	@Override
-	public void register(PointVO pointVO) throws Exception {
-		dao.insert(pointVO);
-	}
 	@Override
 	public PointVO get(String id) {
 		// TODO Auto-generated method stub
 		return dao.select(id);
 	}
+	
+	@Override
+	public PointVO getByChain_name(String chain_name) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.selectByChain_name(chain_name);
+	}
+	
 	@Override
 	public ArrayList<PointVO> get() {
 		// TODO Auto-generated method stub
-		return dao.selectall();
+		return null;
 	}
 }

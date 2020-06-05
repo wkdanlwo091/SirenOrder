@@ -48,9 +48,11 @@
                                 <img th:src="${list.image}" alt="">
                                 <div class="single_product_text">
                                     <h4 th:text="${list.product_name}"></h4>
-                                    <h3 th:text="${list.price}"></h3>
-                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}','${store_name}' ,'${list.price}')|" class="add_cart">+ 물건 담기</a>
-                                    <a href="#"  th:attr="onclick=|minusToCart('${list.product_name}','${store_name}' ,'${list.price}')|" class="add_cart">- 물건 빼기</a>
+                                    <h4 th:text="${list.price}"></h4>
+                                    <h4 th:text="${store_name}"></h4>
+                                    <h4 th:text="${list.chain_name}"></h4>
+                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.price}')|" class="add_cart">+ 물건 담기</a>
+                                    <a href="#"  th:attr="onclick=|minusToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.price}')|" class="add_cart">- 물건 빼기</a>
                                 </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>

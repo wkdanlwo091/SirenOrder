@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
-import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.StoreVO;
 
 @Service("storebiz")

@@ -39,7 +39,6 @@ $(function() {
 				alert("noCart");
 				return;
 			}
-			
 			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
 				alert("hidden");
 				return;
@@ -58,7 +57,7 @@ $(function() {
 		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
 			for(var i in array){//iteration을 한다. 
 			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></a></li>";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
 			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 			  	totalPrice += array[i]["price"] * array[i]["number"];
 			  	totalIndex += array[i]["number"];
@@ -72,11 +71,11 @@ $(function() {
 	});
 });
 
-function addToCart(product_name,store_name,price){
+function addToCart(product_name,store_name,chain_name,price){
 	alert(product_name + " " + store_name + " " + price);
-	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name;
+	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
-		  url: "cartProduct",
+		  url: "cartProductAdd",
 		  method: "POST", 
 		  data : data,
 		  success: function(result){
@@ -85,17 +84,11 @@ function addToCart(product_name,store_name,price){
 			var numOfArrays = array.length;
 			var totalPrice = 0;
 			var totalIndex = 0;
-			console.log(array.length);
-			console.log("kaka" + JSON.parse(result)[0]["price"]);
-			console.log("haha" + array[0]["product_name"]);
-			console.log("jaja" + array[0]["number"]);
-			
 		  	var cartHistory = document.getElementById("cartList");
 		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
-		  	
 			for(var i in array){//iteration을 한다. 
 			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></a></li>";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] + "','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
 			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 			  	totalPrice += array[i]["price"] * array[i]["number"];
 			  	totalIndex += array[i]["number"];
@@ -108,11 +101,12 @@ function addToCart(product_name,store_name,price){
             }
 	});
 }
-function minusToCart(product_name,store_name, price){
+function minusToCart(product_name,store_name, chain_name,price){
 	alert(store_name);
-	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name;
+	
+	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name + "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
-		  url: "cartProduct",
+		  url: "cartProductMinus",
 		  method: "POST", 
 		  data : data,
 		  success: function(result){
@@ -120,6 +114,8 @@ function minusToCart(product_name,store_name, price){
 			  		alert("notExistgin");
 					return;	
 			  	}else if(result == "noData"){// 모든 데이터 삭제한 경우 
+			  		alert("noData");
+
 				  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = 0;
 				  	document.getElementById("cartList").innerHTML = "<li><a href=\"/checkOut.html\" class=\"more\" >장바구니</a></li>";//먼저 있던 내용을 다 지운다 
 				  	return;
@@ -139,17 +135,13 @@ function minusToCart(product_name,store_name, price){
 			  	
 				for(var i in array){//iteration을 한다. 
 				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-					tmp += array[i]["store_name"] + " " +  array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"'," +array[i]["price"] +")\">-</button></a></li>";
+					tmp += array[i]["store_name"] + " " +  array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
 				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 				  	totalPrice += array[i]["price"] * array[i]["number"];
 				  	totalIndex += array[i]["number"];
 				}
 				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
 			  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
-
-			  
-			  
-			  
 		  },
           error: function(result){
           }

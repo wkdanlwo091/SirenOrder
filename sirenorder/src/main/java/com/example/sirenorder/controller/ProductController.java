@@ -32,7 +32,6 @@ public class ProductController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		
 		String chain_name = request.getParameter("chain_name");
 		String store_name = request.getParameter("store_name");
 		String  numberString = request.getParameter("number");
@@ -71,115 +70,45 @@ public class ProductController {
 		}
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
-	//세션에 카트 정보를 저장하는 컨트롤러  plus minus 둘다 담당 --> 이 둘 나눠야지
-	@RequestMapping(value = "cartProduct", method = RequestMethod.POST)
-	@ResponseBody
-	public String carProduct(HttpServletRequest request) throws Exception {
-		String product_name = request.getParameter("product_name");
-		String store_name = request.getParameter("store_name");
-		String price = request.getParameter("price");
-		String sign = request.getParameter("sign");
-		HttpSession httpSession = request.getSession();
-		System.out.println(product_name + " " + price);
-		HashMap<CartVO, Integer> cartProduct = new HashMap<CartVO, Integer>();
-
-		if(httpSession.getAttribute("cartProduct") == null) { 
-			if(sign.equals("minus")) {
-				return "noData";
-			}
-			int num = 1;
-			CartVO cartVO = new CartVO();//작업 중인 것 
-			cartVO.setPrice(Integer.parseInt(price));
-			cartVO.setProduct_name(product_name);
-			cartVO.setNumber(num);
-			cartVO.setStore_name(store_name);
-			cartProduct.put(cartVO, 1);
-			httpSession.setAttribute("cartProduct", cartProduct);
-		}else {
-			CartVO cartVO = new CartVO();//작업 중인 것 
-			cartVO.setPrice(Integer.parseInt(price));
-			cartVO.setProduct_name(product_name);
-			cartVO.setStore_name(store_name);
-			cartVO.setNumber(1);//일단은 1로 잡는다. 나중에 db 설정할 때는 최신화 한다. 
-			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
-			if(cartProduct.get(cartVO) == null) {//새로운 아이템이 들어온 장바구니 
-				if(sign.equals("minus")) {//데이터가 없는데 - 이면 noData라고 return 
-					return "notExisting";
-				}
-				cartProduct.put(cartVO, 1);//수량 한개 늘리기 
-			}else {//이미 있던 장바구니 아이템
-				if(sign.equals("plus")) {//카트 수량 늘리기 
-					cartProduct.put(cartVO, cartProduct.get(cartVO)+1);//수량 한개 늘리기 
-				}else {//카트 수량 줄이기 
-					if(cartProduct.get(cartVO) == 1) {
-						cartProduct.remove(cartVO);
-						System.out.println("카트 파괴");
-					}else {
-						cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 줄이기
-					}
-				}
-			}
-			httpSession.setAttribute("cartProduct", cartProduct);
-		}
-		
-		JSONArray ja = new JSONArray();
-		Iterator<CartVO> itr = cartProduct.keySet().iterator();
-		int index = 0;
-		int totalPrice = 0;
-		int totalIndex = 0;
-		while (itr.hasNext()) {
-			System.out.println("created" + index++);
-			CartVO tmp = itr.next();
-			
-			JSONObject jo = new JSONObject();
-			jo.put("product_name", tmp.getProduct_name());
-			jo.put("store_name", tmp.getStore_name());
-			jo.put("price", tmp.getPrice());
-			jo.put("number", cartProduct.get(tmp));//물건 개수
-			ja.add(jo);
-			totalIndex += (cartProduct.get(tmp));
-			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
-		}
-		httpSession.setAttribute("totalPrice", totalPrice);
-		httpSession.setAttribute("totalIndex", totalIndex);
-
-		if(index == 0) {
-			System.out.println("noData");
-			return "noData";
-		}
-		System.out.println("ja size" + ja.size());
-		//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
-
-		return ja.toString();
-	}
 	
+	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {
+		int num = 1;
+		CartVO cartVO = new CartVO();//작업 중인 것 
+		cartVO.setPrice(Integer.parseInt(price));
+		cartVO.setProduct_name(product_name);
+		cartVO.setChain_name(chain_name);
+		cartVO.setNumber(num);
+		cartVO.setStore_name(store_name);
+		return cartVO;
+	}
+	public JSONObject putJSONObject(CartVO tmp, HashMap<CartVO, Integer> cartProduct) {
+		JSONObject jo = new JSONObject();
+		jo.put("product_name", tmp.getProduct_name());
+		jo.put("store_name", tmp.getStore_name());
+		jo.put("chain_name", tmp.getChain_name());
+		jo.put("price", tmp.getPrice());
+		jo.put("number", cartProduct.get(tmp));//물건 개수
+		return jo;
+	}
 	//세션에 카트 정보를 저장하는 컨트롤러  plus minus 둘다 담당 --> 이 둘 나눠야지
 	@RequestMapping(value = "cartProductAdd", method = RequestMethod.POST)
 	@ResponseBody
 	public String carProductAdd(HttpServletRequest request) throws Exception {
 		String product_name = request.getParameter("product_name");
 		String store_name = request.getParameter("store_name");
+		String chain_name = request.getParameter("chain_name");
 		String price = request.getParameter("price");
 		String sign = request.getParameter("sign");
 		HttpSession httpSession = request.getSession();
-		System.out.println(product_name + " " + price);
+		System.out.println(product_name + " and price  " + price + " " + store_name + " " + chain_name + " " + price);
 		HashMap<CartVO, Integer> cartProduct = new HashMap<CartVO, Integer>();
 
 		if(httpSession.getAttribute("cartProduct") == null) { 
-			int num = 1;
-			CartVO cartVO = new CartVO();//작업 중인 것 
-			cartVO.setPrice(Integer.parseInt(price));
-			cartVO.setProduct_name(product_name);
-			cartVO.setNumber(num);
-			cartVO.setStore_name(store_name);
+			CartVO cartVO = makeCart(product_name, store_name, chain_name, price);
 			cartProduct.put(cartVO, 1);
 			httpSession.setAttribute("cartProduct", cartProduct);
 		}else {
-			CartVO cartVO = new CartVO();//작업 중인 것 
-			cartVO.setPrice(Integer.parseInt(price));
-			cartVO.setProduct_name(product_name);
-			cartVO.setStore_name(store_name);
-			cartVO.setNumber(1);//일단은 1로 잡는다. 나중에 db 설정할 때는 최신화 한다. 
+			CartVO cartVO = makeCart(product_name, store_name, chain_name, price);
 			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
 			if(cartProduct.get(cartVO) == null) {//새로운 아이템이 들어온 장바구니 
 				cartProduct.put(cartVO, 1);//수량 한개 늘리기 
@@ -188,6 +117,62 @@ public class ProductController {
 			}
 			httpSession.setAttribute("cartProduct", cartProduct);
 		}
+		JSONArray ja = new JSONArray();
+		Iterator<CartVO> itr = cartProduct.keySet().iterator();
+		int index = 0;
+		int totalPrice = 0;
+		int totalIndex = 0;
+		while (itr.hasNext()) {
+			System.out.println("created" + index++);
+			CartVO tmp = itr.next();
+			JSONObject jo = new JSONObject();
+			jo = putJSONObject(tmp, cartProduct);
+			ja.add(jo);
+			totalIndex += (cartProduct.get(tmp));
+			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
+		}
+		httpSession.setAttribute("totalPrice", totalPrice);
+		httpSession.setAttribute("totalIndex", totalIndex);
+		if(index == 0) {
+			System.out.println("noData");
+			return "noData";
+		}
+		System.out.println("ja size" + ja.size());//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
+
+		return ja.toString();
+	}
+
+	@RequestMapping(value = "cartProductMinus", method = RequestMethod.POST)
+	@ResponseBody
+	public String carProductMinus(HttpServletRequest request) throws Exception {
+		String product_name = request.getParameter("product_name");
+		String store_name = request.getParameter("store_name");
+		String chain_name = request.getParameter("chain_name");
+		String price = request.getParameter("price");
+		String sign = request.getParameter("sign");
+		HttpSession httpSession = request.getSession();
+		System.out.println(product_name + " " + price + " " + chain_name);
+		HashMap<CartVO, Integer> cartProduct = new HashMap<CartVO, Integer>();
+
+		if(httpSession.getAttribute("cartProduct") == null) { 
+			System.out.println("null cartProduct");
+			if(sign.equals("minus")) {
+				return "noData";
+			}
+		}else {
+			CartVO cartVO = new CartVO();//작업 중인 것 
+			cartVO = makeCart(product_name, store_name, chain_name, price);
+			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
+			System.out.println(cartVO);
+			if(cartProduct.get(cartVO) == 1) {//새로운 아이템이 들어온 장바구니 
+				cartProduct.remove(cartVO);
+				System.out.println("카트 파괴");
+			}else {//이미 있던 장바구니 아이템
+				cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 한개 늘리기 
+			}
+			httpSession.setAttribute("cartProduct", cartProduct);
+		}
+		
 		
 		JSONArray ja = new JSONArray();
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
@@ -197,12 +182,8 @@ public class ProductController {
 		while (itr.hasNext()) {
 			System.out.println("created" + index++);
 			CartVO tmp = itr.next();
-			
 			JSONObject jo = new JSONObject();
-			jo.put("product_name", tmp.getProduct_name());
-			jo.put("store_name", tmp.getStore_name());
-			jo.put("price", tmp.getPrice());
-			jo.put("number", cartProduct.get(tmp));//물건 개수
+			jo = putJSONObject(tmp, cartProduct);
 			ja.add(jo);
 			totalIndex += (cartProduct.get(tmp));
 			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
@@ -214,8 +195,7 @@ public class ProductController {
 			System.out.println("noData");
 			return "noData";
 		}
-		System.out.println("ja size" + ja.size());
-		//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
+		System.out.println("ja size" + ja.size());//여기서 json으로 모든 장바구니 정보를 json으로 받는다. 
 
 		return ja.toString();
 	}
@@ -229,7 +209,6 @@ public class ProductController {
 		if(httpSession.getAttribute("cartProduct") == null) { 
 			return "noCart";
 		}
-		
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		JSONArray ja = new JSONArray();
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
@@ -243,6 +222,7 @@ public class ProductController {
 			JSONObject jo = new JSONObject();
 			jo.put("product_name", tmp.getProduct_name());
 			jo.put("store_name", tmp.getStore_name());
+			jo.put("chain_name", tmp.getChain_name());
 			jo.put("price", tmp.getPrice());
 			jo.put("number", cartProduct.get(tmp));//물건 개수
 			ja.add(jo);

@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.Point_storeVO;
-import com.example.sirenorder.vo.ProductVO;
 
 @Service("point_storebiz")
 public class Point_storeBiz implements Biz<String, Point_storeVO>{
 	
 	@Resource(name = "point_storedao")
 	Dao<String, Point_storeVO> dao;
+	
 	@Override
-	public Point_storeVO getPoint_store(String users_id, String chain_name) throws Exception {
-		return dao.selectPoint_store(users_id, chain_name);
+	public Point_storeVO get(String users_id, String chain_name) throws Exception {
+		return dao.select(users_id, chain_name);
 	}
 	
 	@Override
