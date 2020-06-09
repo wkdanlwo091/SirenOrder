@@ -65,6 +65,45 @@ public class OrderController {
 				chain_names.put(tmp.getChain_name(), true);
 			}
 		}
+		
+		Iterator<String> itr2 = chain_names.keySet().iterator();
+		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
+		while (itr2.hasNext()) {
+			String chain_names_next = itr2.next();
+			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
+			arrayList.add(pointVO);
+		}
+		System.out.println("arraylist size는 "  + arrayList.size());
+		model.addObject("arrayList", arrayList);
+		model.addObject("checkout", "clicked");
+		model.setViewName("thymeleaf/main");
+		return model;
+	}
+
+	
+	@RequestMapping(value = "buyProduct", method = RequestMethod.GET)
+	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
+		System.out.println("checkout에 들어왔다. ");
+		ModelAndView model = new ModelAndView();
+		HttpSession httpSession = request.getSession();
+		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
+		Iterator<CartVO> itr;
+		if(cartProduct != null) {
+			 itr = cartProduct.keySet().iterator();
+		}else{
+			model.addObject("checkout", "clicked");
+			model.setViewName("thymeleaf/main");
+			return model;
+		}
+		
+		HashMap<String, Boolean> chain_names = new HashMap<String, Boolean >();
+		while (itr.hasNext()) {
+			CartVO tmp = itr.next();
+			if(chain_names.get(tmp.getChain_name()) == null) {
+				chain_names.put(tmp.getChain_name(), true);
+			}
+		}
+		
 		Iterator<String> itr2 = chain_names.keySet().iterator();
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
