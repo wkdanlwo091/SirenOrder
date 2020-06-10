@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.sirenorder.mapper.Orders_detailMapper">
+	<select id="selectOrders_detail" resultType="orders_detail">
+		SELECT *
+		FROM ORDERS_DETAIL
+		WHERE ORDERS_ID = #{orders_id} AND PRODUCT_ID = #{product_id}
+	</select>
+	<insert id="insert">
+		<selectKey keyProperty="seq" resultType="int">
+			select orders_seq.nextval as seq from dual
+		</selectKey>
+		INSERT INTO ORDERS_DETAIL VALUES( #{orders_detail_id}||#{seq}, #{price},
+		#{quantity}, #{orders_id}, #{product_id})
+	</insert>
+</mapper>

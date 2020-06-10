@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>Insert title here</title>
+
 </head>
 
 <script>
@@ -34,9 +35,6 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			
 			var totalPriceElement = "<li class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 				totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\">&nbsp;주문하기</button></li>";
-            
-            
-          
 			
 			$('#checkOutCartId').append(totalPriceElement);
 		  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
@@ -133,19 +131,32 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 	            }
 		});
 	});
+function userPoint(point, chain_name, useOrNot){
 	
-function userPoint(point, chain_name){
-	alert($('#strongTotalId').html() +" " +point);
-	console.log("총 가격은" + $('#strongTotalId').html());
-	$('#strongTotalId').html($('#strongTotalId').html()-point);
-	//
+	if($("#"+ chain_name+"").length == 1){//element 존재할 때 
+		if(useOrNot == 1){//사용하기
+			$("#"+ chain_name).val("yes");
+		}
+		else{//미사용하기 
+			$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);//원래 값으로 돌리기 
+			$("#"+ chain_name).val("no");
+		}
+	}else if($("#"+ chain_name).length == 0){
+		if(useOrNot == 1){//사용하기
+			$('#buyProductId').append("<input type=\"hidden\" name = \"point\" value=\"yes&"+chain_name+"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			$('#strongTotalId').html(parseInt($('#strongTotalId').html())+point);//원래 값으로 돌리기 
+		}
+		else{//미사용하기 
+			$('#buyProductId').append("<input type=\"hidden\" name = \"point\" value=\"yes&"+chain_name+"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+		}
+	}
 }
 function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
 	//서버에서 point_store를 만들고
 	//orders, ordersdetail 만든다. 
+	document.getElementById("buyProductId").submit();//사용한 point정보, 사는 물건정보 	
 }
-
 </script>
 <body>
 	        <div class="col-md-4 order-md-2 mb-4">
@@ -158,19 +169,19 @@ function checkOutCart(){
               <span>포인트  : </span>
               <strong th:text = "${data.getChain_name()}" th:id="|point${iterStat.index}|">$20</strong>
               <strong th:text = "${data.getPoint()}" >$20</strong>
-              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}')|" >사용</button>
+              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 1)|" >사용</button>
+              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 0)|" >미사용</button>
             </li>
-              <tr th:each="data, iterstat: ${mois}">
-     			<td th:text="${data}" th:id="|td${iterstat.index}|"></td>
-  			  </tr>
+            
             <li class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
-              <strong id = "strongTotalId">$20</strong>
+              <strong id = "strongTotalId">$20	</strong>
               <button id = "checkOutId" onclick="checkOutCart()" >&nbsp주문하기</button>
+              <form id="buyProductId" th:action="@{buyProduct}" th:object="${pointlist}" method ="post">
+			  </form>
             </li>
+            
           </ul>
-
         </div>
-	
 </body>
 </html>
