@@ -143,11 +143,11 @@ function userPoint(point, chain_name, useOrNot){
 		}
 	}else if($("#"+ chain_name).length == 0){
 		if(useOrNot == 1){//사용하기
-			$('#buyProductId').append("<input type=\"hidden\" name = \"point\" value=\"yes&"+chain_name+"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			$('#buyProductId').append("<input type=\"hidden\" th:value=\"*{" +chain_name+"}\" name = \"chain_name[0]\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())+point);//원래 값으로 돌리기 
 		}
-		else{//미사용하기 
-			$('#buyProductId').append("<input type=\"hidden\" name = \"point\" value=\"yes&"+chain_name+"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+		else{//미사용하기  value=\"yes&"+chain_name+"\"
+			$('#buyProductId').append("<input type=\"hidden\" th:value=\"*{" +chain_name+"}\" name = \"chain_name[0]\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 		}
 	}
 }
@@ -180,7 +180,7 @@ function checkOutCart(){
               <form id="buyProductId" th:action="@{buyProduct}" th:object="${pointlist}" method ="post">
 			  </form>
             </li>
-            
+
           </ul>
         </div>
 </body>

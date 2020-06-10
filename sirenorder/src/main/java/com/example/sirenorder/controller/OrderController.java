@@ -3,7 +3,7 @@ package com.example.sirenorder.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -91,18 +91,14 @@ public class OrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "buyProduct", method = RequestMethod.GET)
-	public ModelAndView buyProduct(@ModelAttribute("personForm") Pointlist pointlist,HttpServletRequest request) throws Exception {
+	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
+	public ModelAndView buyProduct(@ModelAttribute("pointlist") Pointlist pointlist,HttpServletRequest request) throws Exception {
 		System.out.println("물건을 샀다 사면 point, point_store, orders, orderdetail point_store가 만들어진다.");
-		String Point = request.getParameter("point");
 
-		StringTokenizer st = new StringTokenizer();
+		System.out.println(pointlist.getChain_name() + " " + pointlist);//[Ljava.lang.String;@48ae1b13 Pointlist(chain_name=[]) 이렇게 나온다. 
 		
-		if(Point.equals("yes")) {
-			
-		}else if(Point.equals("no")){
-			
-		}
+		Scanner scan = new Scanner(System.in);
+		scan.next();
 		
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
