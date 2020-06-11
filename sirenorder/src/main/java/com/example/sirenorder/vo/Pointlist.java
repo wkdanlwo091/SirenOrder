@@ -9,4 +9,5 @@ import lombok.Data;
 public class Pointlist {
 	String [] chain_name;
 	int [] useOrNot;
+	int [] point;
 }
