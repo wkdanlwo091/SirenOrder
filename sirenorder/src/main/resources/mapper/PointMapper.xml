@@ -10,6 +10,11 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM POINT
 		WHERE POINT = #{point_id}
     </select>
+    <update id = "update"><!-- 포인트 모두 사용  -->
+    	UPDATE POINT
+    	SET POINT = 0
+    	WHERE USERS_ID = #{users_id}
+    </update>
     <select id="selectByChain_name" resultType="point">
 		SELECT * 
 		FROM POINT

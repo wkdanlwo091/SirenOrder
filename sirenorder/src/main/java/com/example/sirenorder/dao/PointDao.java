@@ -27,5 +27,10 @@ public class PointDao implements Dao<String, PointVO> {
 	public ArrayList<PointVO> selectall() {
 		return null;
 	}
+	
+	@Override
+	public void insert(PointVO pointVO) {
+		pointmapper.insert(pointVO);
+	}
 
 }

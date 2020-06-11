@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.PointVO;
-import com.example.sirenorder.vo.Point_storeVO;
 
 @Service("pointbiz")
 public class PointBiz implements Biz<String, PointVO>{
@@ -32,5 +31,10 @@ public class PointBiz implements Biz<String, PointVO>{
 	public ArrayList<PointVO> get() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public void register(PointVO pointVO) throws Exception {
+		dao.insert(pointVO);
 	}
 }

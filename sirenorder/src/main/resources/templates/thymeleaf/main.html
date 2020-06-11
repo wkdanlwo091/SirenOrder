@@ -29,7 +29,6 @@ var myProduct= 5;
 //
 $(function() {
 	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
-
 	//장바구니 정보 refresh한다. 
 	$.ajax({//세션 만들어서 return 한다. 
 		  url: "cartProductBring",
@@ -63,7 +62,7 @@ $(function() {
 			  	totalIndex += array[i]["number"];
 			}
 			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
-		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;
+		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
 		  },
             error: function(result){
             	alert("error 는" + result);
