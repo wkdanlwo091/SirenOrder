@@ -97,7 +97,6 @@ public class OrderController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("users_id");
 		
-		
 		System.out.println("물건을 샀다 사면 point, point_store, orders, orderdetail point_store가 만들어진다.");
 		System.out.println(pointlist.getChain_name() + " " + pointlist);//[Ljava.lang.String;@48ae1b13 Pointlist(chain_name=[]) 이렇게 나온다. 
 		System.out.println(pointlist.getChain_name().length);
@@ -106,15 +105,15 @@ public class OrderController {
 
 		//chain의 상품들의 합보다 point 값이 크다면 상품들의 값을 뺀다. 
 		//cart의 chain_name 기준으로 상품의 가격을 전달 
-//		for(int i = 0 ;i < pointlist.getChain_name().length; i++) {
-//			if(pointlist.getUseOrNot().equals("yes")) {//point 사용
-//				
-//			}else {
-//				PointVO pointVO = new PointVO();
-//				pointVO.setChain_name(pointlist.getChain_name()[i]);
-//			}
-//		}
-//		
+		for(int i = 0 ;i < pointlist.getChain_name().length; i++) {
+			if(pointlist.getUseOrNot().equals("yes")) {//point 사용
+				
+			}else {
+				PointVO pointVO = new PointVO();
+				pointVO.setChain_name(pointlist.getChain_name()[i]);
+			}
+		}
+		
 		
 		Scanner scan = new Scanner(System.in);
 		scan.next();

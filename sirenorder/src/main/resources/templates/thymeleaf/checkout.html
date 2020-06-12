@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <title>Insert title here</title>
-
 </head>
 <script>
+var pointsArray = new Array();//포인트 정보 저장 
+
 function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 
 	alert(product_name + " " + store_name + " " + price);
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
@@ -19,7 +20,6 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			var numOfArrays = array.length;
 			var totalPrice = 0;
 			var pointClone = document.getElementById('pointListId').cloneNode( true );//totalListId
-			//
 			
 			$('#checkOutCartId').text("");//페이지 코드 refresh 한다. 
 			for(var i in array){//iteration을 한다. 
@@ -43,6 +43,20 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			$('#checkOutCartId').append(totalPriceElement);//포인트 정보
 			
 		  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
+
+			
+			//포인트의 point 초기화
+			var numOfPoints;
+			var myIndex = 0;
+			numOfPoints = document.querySelectorAll("[id^=\"myPoint\"]");
+			[].forEach.call(numOfPoints, function(index) {
+				  console.log("가격은" + index.innerHTML);
+				  index.innerHTML = pointsArray[myIndex];
+				  pointsArray.push(index.innerHTML);
+				  console.log("typeof는 " + typeof index.innerHTML);
+				  myIndex++;//인덱스 증가
+			});
+
 		  },
             error: function(result){
             	alert("error 는" + result);
@@ -97,10 +111,18 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
           }
 	});
 }
-	//이 function에서 sub 장바구니 ( 로그인정보 옆에 있는 장바구니) 를 hide 시킨다. 
+//이 function에서 sub 장바구니 ( 로그인정보 옆에 있는 장바구니) 를 hide 시킨다. 
 $(function(){
-		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
+		var numOfPoints = 0;//point 순회하는 index
+
+		numOfPoints = document.querySelectorAll("[id^=\"myPoint\"]");
+		[].forEach.call(numOfPoints, function(index) {
+			  console.log("가격은" + index.innerHTML + " index는" + index + "index의 type은 " + typeof index);
+			  pointsArray.push(index.innerHTML);
+			  console.log("typeof는 " + typeof index.innerHTML);
+		});
 		
+		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
 		//장바구니 정보 refresh한다. 
 		$.ajax({//세션 만들어서 return 한다. 
 			  url: "cartProductBring",
@@ -154,10 +176,9 @@ function userPoint(point, chain_name, useOrNot){//point 사용정보를 input태
 	}else{//체인 총가격이 point 보다 낮을 때 point = point - chain_total_price가 된다. 
 		point = point - chain_total_price;
 	}
-	
 	if($("#"+ chain_name+"").length == 1){//element 존재할 때  point를 사용 할 것인지 아닌지 판단
 		if(useOrNot == 1){//사용하기
-			$("#"+ chain_name).val("yes");
+			$("#"+ chain_name).val("1");
 		}
 		else{//미사용하기 
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())+point);//원래 값으로 돌리기 
@@ -181,7 +202,6 @@ function userPoint(point, chain_name, useOrNot){//point 사용정보를 input태
 		chain_nameIndex++;//포인트 체인이름 
 	}
 }
-
 function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
 	//서버에서 point_store를 만들고
@@ -198,12 +218,11 @@ function checkOutCart(){
             <!-- thymeleaf 로 point 정보를 가져오겠다 장바구니 아이템의 chain_name 기반으로  -->
             <li id = "pointListId" class="list-group-item d-flex justify-content-between" th:each= "data, iterStat: ${arrayList}">
               <span>포인트  : </span>
-              <strong th:text = "${data.getChain_name()}" th:id="|point${iterStat.index}|">$20</strong>
-              <strong th:text = "${data.getPoint()}" >$20</strong>
+              <strong th:text = "${data.getChain_name()}" >$20</strong>
+              <strong th:text = "${data.getPoint()}"  th:id="|myPoint${iterStat.index}|" >$20</strong>
               <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 1)|" >사용</button>
               <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 0)|" >미사용</button>
             </li>
-            
             <li id = "totalListId" class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
               <strong id = "strongTotalId">$20	</strong>
