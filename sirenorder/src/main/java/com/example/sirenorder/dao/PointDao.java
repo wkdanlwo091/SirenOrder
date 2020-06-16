@@ -17,17 +17,18 @@ public class PointDao implements Dao<String, PointVO> {
 	public PointVO select(String point_id) {
 		return pointmapper.select(point_id);
 	}
-	
 	@Override
 	public PointVO selectByChain_name(String chain_name) {
 		return pointmapper.selectByChain_name(chain_name);
 	}
-	
 	@Override
 	public ArrayList<PointVO> selectall() {
 		return null;
 	}
-	
+	@Override
+	public void update(PointVO pointVO) {
+		pointmapper.update(pointVO);
+	}
 	@Override
 	public void insert(PointVO pointVO) {
 		pointmapper.insert(pointVO);

@@ -9,10 +9,13 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		SELECT * 
 		FROM POINT_STORE
 		WHERE USERS_ID = #{users_id} AND CHAIN_NAME = #{chain_name}
-    </select>
+    </select>	
     <insert id ="insert">	
+        <selectKey keyProperty="seq" resultType="int">
+    		select point_store_seq.nextval as seq from dual
+    	</selectKey>
     	INSERT INTO POINT_STORE
-        	 VALUES(#{point_store_id}, #{point_id}, #{store_id},
-    	  #{users_id}, #{chain_name})
+        	 VALUES( #{point_store_id}||#{seq}, #{point_id}, #{store_id},
+    	  #{users_id}, #{chain_name}, #{point_date}, #{used_point})
     </insert>
 </mapper>

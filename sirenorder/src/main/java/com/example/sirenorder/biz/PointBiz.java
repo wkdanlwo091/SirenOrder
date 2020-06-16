@@ -28,6 +28,11 @@ public class PointBiz implements Biz<String, PointVO>{
 	}
 	
 	@Override
+	public void update(PointVO m) throws Exception {
+		// TODO Auto-generated method stub
+		dao.update(m);
+	}
+	@Override
 	public ArrayList<PointVO> get() {
 		// TODO Auto-generated method stub
 		return null;

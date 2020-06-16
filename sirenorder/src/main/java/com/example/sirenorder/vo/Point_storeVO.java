@@ -1,5 +1,7 @@
 package com.example.sirenorder.vo;
 
+import java.sql.Date;
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -12,5 +14,6 @@ public class Point_storeVO {
 	String store_id;
 	String users_id;
 	String chain_name;
+	Date point_date;
+	int used_point;
 }
-

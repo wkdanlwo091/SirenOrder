@@ -91,18 +91,60 @@ public class OrderController {
 		return model;
 	}
 	
+	public void usePoint(Pointlist pointlist, String users_id) throws Exception {
+		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {//포인트의 개수에 따라서 point를 update한다. 
+			if(pointlist.getUseOrNot()[i] == 1) {//포인트를 사용할 것이면
+				String chain_name = pointlist.getChain_name()[i];
+				int point = pointlist.getPoint()[i];
+				PointVO pointVO = new PointVO();
+				pointVO.setPoint(point);
+				pointVO.setChain_name(chain_name);
+				pointVO.setUsers_id(users_id);
+				pointbiz.update(new PointVO());
+			}
+		}
+	}
 	
+	public void getPoint(String chain_name) throws Exception {
+		pointbiz.getByChain_name(chain_name);
+	}
+	
+	public void makePoint_store(Pointlist pointlist, String users_id) {
+		for(int i= 0;i < pointlist.getChain_name().length;i++) {
+			String chain_name = pointlist.getChain_name()[i];
+			int point = pointlist.getPoint()[i];
+			int useOrNot = pointlist.getUseOrNot()[i];// 1이면 point 사용 0이면 사용 안함
+			if(useOrNot == 1) {//포인트 사용 
+				Point_storeVO point_storeVO = new Point_storeVO();
+				point_storeVO.setPoint_store_id("point_store_id");
+				System.out.println("store name is " + pointlist.getStore_name()[0]);
+				PointVO temp = pointbiz.getByChain_name(chain_name);
+				point_storeVO.setPoint_id(temp.getPoint_id());
+				point_storeVO.setStore_id(pointlist.getStore_name()[i]);
+				point_storeVO.setUsers_id(temp.getUsers_id());
+				point_storeVO.setChain_name(temp.getChain_name());
+
+				point_storeVO.setPoint_date(new java.sql.Date( System.currentTimeMillis() ));//자바 date to 오라클 date
+				point_storeVO.setUsed_point(point);
+			}else {
+				
+			}
+		}
+	}
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") Pointlist pointlist,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("users_id");
+		//포인트가 미사용 이라면 
 		
-		System.out.println("물건을 샀다 사면 point, point_store, orders, orderdetail point_store가 만들어진다.");
-		System.out.println(pointlist.getChain_name() + " " + pointlist);//[Ljava.lang.String;@48ae1b13 Pointlist(chain_name=[]) 이렇게 나온다. 
-		System.out.println(pointlist.getChain_name().length);
-		System.out.println(pointlist.getChain_name()[0]);
-		System.out.println(pointlist.getUseOrNot()[0]);
-
+		if(pointlist.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
+			System.out.println("null");
+		}else {//point 사용한 경우 point update 및 point_store생성 
+			usePoint(pointlist, users_id);
+			makePoint_store(pointlist,users_id);
+		} 
+		Scanner scan = new Scanner(System.in);
+		scan.next();
 		//chain의 상품들의 합보다 point 값이 크다면 상품들의 값을 뺀다. 
 		//cart의 chain_name 기준으로 상품의 가격을 전달 
 		for(int i = 0 ;i < pointlist.getChain_name().length; i++) {
@@ -115,8 +157,6 @@ public class OrderController {
 		}
 		
 		
-		Scanner scan = new Scanner(System.in);
-		scan.next();
 		
 		ModelAndView model = new ModelAndView();
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
