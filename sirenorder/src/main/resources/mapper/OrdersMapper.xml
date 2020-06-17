@@ -11,8 +11,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		WHERE USERS_ID = #{users_id}
 	</select>
 	<insert id="insert">
-		<selectKey keyProperty="seq" resultType="int">
-			select orders_seq.nextval as seq from dual
+		<selectKey keyProperty="seq" resultType="int"  order="BEFORE">
+			select orders_seq.nextval from dual
 		</selectKey>
 		INSERT INTO ORDERS VALUES( #{orders_id}||#{seq}, #{orders_date},
 		#{payment_way}, #{total_price}, #{users_id})

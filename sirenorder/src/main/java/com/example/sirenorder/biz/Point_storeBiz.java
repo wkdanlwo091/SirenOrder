@@ -31,9 +31,11 @@ public class Point_storeBiz implements Biz<String, Point_storeVO>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 	@Override
 	public ArrayList<Point_storeVO> get() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }

@@ -17,4 +17,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		INSERT INTO ORDERS_DETAIL VALUES( #{orders_detail_id}||#{seq}, #{price},
 		#{quantity}, #{orders_id}, #{product_id})
 	</insert>
+	<select id="selectOrders_seq" resultType="int">
+		select * from users_sequences where sequence_name = 'ORDERS_SEQ'
+	</select>
 </mapper>

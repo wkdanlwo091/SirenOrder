@@ -28,4 +28,8 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	public void register(Orders_detailVO orders_detailVO) throws Exception {
 		dao.insert(orders_detailVO);
 	}
+	@Override
+	public int getOrders_seq() throws Exception {
+		return dao.selectOrders_seq();
+	}
 }

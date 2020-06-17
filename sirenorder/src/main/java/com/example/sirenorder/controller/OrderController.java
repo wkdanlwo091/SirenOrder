@@ -94,13 +94,20 @@ public class OrderController {
 	public void usePoint(Pointlist pointlist, String users_id) throws Exception {
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {//포인트의 개수에 따라서 point를 update한다. 
 			if(pointlist.getUseOrNot()[i] == 1) {//포인트를 사용할 것이면
+				
 				String chain_name = pointlist.getChain_name()[i];
 				int point = pointlist.getPoint()[i];
+				String point_id = pointlist.getPoint_id()[i];
+				
+				System.out.println(users_id);
+				
 				PointVO pointVO = new PointVO();
 				pointVO.setPoint(point);
+				pointVO.setPoint_id(point_id);
 				pointVO.setChain_name(chain_name);
 				pointVO.setUsers_id(users_id);
-				pointbiz.update(new PointVO());
+				System.out.println(pointVO);
+				pointbiz.update(pointVO);
 			}
 		}
 	}
@@ -109,40 +116,68 @@ public class OrderController {
 		pointbiz.getByChain_name(chain_name);
 	}
 	
-	public void makePoint_store(Pointlist pointlist, String users_id) {
+	public void makePoint_store(Pointlist pointlist, String users_id) throws Exception {//두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장 
 		for(int i= 0;i < pointlist.getChain_name().length;i++) {
 			String chain_name = pointlist.getChain_name()[i];
 			int point = pointlist.getPoint()[i];
 			int useOrNot = pointlist.getUseOrNot()[i];// 1이면 point 사용 0이면 사용 안함
+			
 			if(useOrNot == 1) {//포인트 사용 
 				Point_storeVO point_storeVO = new Point_storeVO();
-				point_storeVO.setPoint_store_id("point_store_id");
-				System.out.println("store name is " + pointlist.getStore_name()[0]);
 				PointVO temp = pointbiz.getByChain_name(chain_name);
+				point_storeVO.setPoint_store_id("point_store_id");
 				point_storeVO.setPoint_id(temp.getPoint_id());
-				point_storeVO.setStore_id(pointlist.getStore_name()[i]);
+				StoreVO storeVO = storebiz.get(pointlist.getStore_name()[i]);//store_name 으로 store_id 얻기 
+				
+				String store_id = storeVO.getStore_id();
+				
+				point_storeVO.setStore_id(store_id);
 				point_storeVO.setUsers_id(temp.getUsers_id());
 				point_storeVO.setChain_name(temp.getChain_name());
-
 				point_storeVO.setPoint_date(new java.sql.Date( System.currentTimeMillis() ));//자바 date to 오라클 date
 				point_storeVO.setUsed_point(point);
+				point_storebiz.register(point_storeVO);	
 			}else {
 				
 			}
 		}
 	}
+	
+	public void makeOrders(String users_id,  Pointlist pointlist) throws Exception {
+		int totalPrice = 0;
+		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
+			totalPrice += pointlist.getTotalPrice()[i];
+		}
+		
+		OrdersVO ordersVO = new OrdersVO();
+		ordersVO.setOrders_id("orders_id");
+		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
+		ordersVO.setPayment_way("before_card");
+		ordersVO.setUsers_id(users_id);
+		ordersVO.setTotal_price(totalPrice);
+		ordersbiz.register(ordersVO);
+		System.out.println("orders completed");
+	}
+	
+	public void makeOrders_detail() throws Exception {
+		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq());
+		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
+	}
+	
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") Pointlist pointlist,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
-		String users_id = (String) httpSession.getAttribute("users_id");
+		String users_id = (String) httpSession.getAttribute("userId");
 		//포인트가 미사용 이라면 
-		
 		if(pointlist.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
 			System.out.println("null");
 		}else {//point 사용한 경우 point update 및 point_store생성 
 			usePoint(pointlist, users_id);
 			makePoint_store(pointlist,users_id);
-		} 
+		}
+		makeOrders(users_id, pointlist);
+		makeOrders_detail();
+		
 		Scanner scan = new Scanner(System.in);
 		scan.next();
 		//chain의 상품들의 합보다 point 값이 크다면 상품들의 값을 뺀다. 
@@ -155,8 +190,6 @@ public class OrderController {
 				pointVO.setChain_name(pointlist.getChain_name()[i]);
 			}
 		}
-		
-		
 		
 		ModelAndView model = new ModelAndView();
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");

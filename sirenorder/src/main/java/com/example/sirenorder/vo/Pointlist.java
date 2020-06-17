@@ -9,6 +9,10 @@ import lombok.Data;
 public class Pointlist {
 	String [] chain_name;
 	String [] store_name;
+	String [] point_id;
 	int [] useOrNot;
 	int [] point;
+	int [] totalPrice;
+	int [][] productPrice;
+	int [][] productQuantity;
 }

@@ -21,6 +21,12 @@ public class Point_storeDao implements Dao<String, Point_storeVO>{
 	}
 
 	@Override
+	public void insert(Point_storeVO point_storeVO) {
+		point_storemapper.insert(point_storeVO);
+	}
+
+	
+	@Override
 	public Point_storeVO select(String id) {
 		// TODO Auto-generated method stub
 		return null;

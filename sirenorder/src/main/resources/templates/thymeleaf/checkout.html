@@ -160,7 +160,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 	
 var chain_nameIndex = 0;
 
-function userPoint(point, chain_name, useOrNot){//point 사용정보를 input태그 hidden에 넣기   point --> 포인트 사용 , 체인 이름, 사용 할 지 안 할지 
+function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를 input태그 hidden에 넣기   point --> 포인트 사용 , 체인 이름, 사용 할 지 안 할지 
 	var chain_namePoint = document.querySelectorAll("[id=\""+ chain_name + "개"+"\"]");//개를 붙인것은 아래에서 chain_name id가 겹쳐서 
 	var chain_total_price = 0;
 	
@@ -173,6 +173,7 @@ function userPoint(point, chain_name, useOrNot){//point 사용정보를 input태
 	}else{//체인 총가격이 point 보다 낮을 때 point = point - chain_total_price가 된다. 
 		point = point - chain_total_price;
 	}
+	
 	if($("#"+ chain_name+"").length == 1){//element 존재할 때  point를 사용 할 것인지 아닌지 판단
 		if(useOrNot == 1){//사용하기
 			$("#"+ chain_name).val("1");
@@ -185,27 +186,47 @@ function userPoint(point, chain_name, useOrNot){//point 사용정보를 input태
 		var chain_nameNum = "chain_name[" + chain_nameIndex + "]";// chain_name[0]이런식으로 하는 이유는 스프링의 object에서 chain_name[1]이런식으로 받아드리기 때문이다. 
 		var useOrNotNum = "useOrNot[" +chain_nameIndex +"]";
 		var pointNum = "point[" +chain_nameIndex +"]";
+		var point_idNum =  "point_id[" +chain_nameIndex +"]";
+		var totalPriceNum = "totalPrice[" +chain_nameIndex +"]";
+		
+		
+		
+		var productPriceNum = "productPrice[" +chain_nameIndex +"]";
+		var productPriceNum = "productPrice[" +chain_nameIndex +"]";
+		
+		
+		
+		
 		if(useOrNot == 1){//사용하기
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_name+"\" name = \"" + chain_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point+"\" name = \"" + pointNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-				
-			var store_name = document.querySelector("[id^=\"my"+ chain_name+"\"]");
+			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point_id+"\" name = \"" + point_idNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_total_price+"\" name = \"" + totalPriceNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			var store_name = document.querySelector("[id^=\"my"+ chain_name+"\"]");//한개
 			var store_nameNum = "store_name[0]";// store_name[0] store_name[1] 이런식이 컨트롤러의 pointlist 옵젝트에 들어간다. 
 			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);//원래 값으로 돌리기 
+		
+		
 		}
 		else{//미사용하기  value=\"yes&"+chain_name+"\"    th:value=\"*{" +chain_name+"}\"
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_name+"\" name = \"" + chain_nameNum +"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point+"\" name = \"" + pointNum +"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point_id+"\" name = \"" + point_idNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_total_price+"\" name = \"" + totalPriceNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+			var store_name = document.querySelector("[id^=\"my"+ chain_name+"\"]");//한개
+			var store_nameNum = "store_name[0]";// store_name[0] store_name[1] 이런식이 컨트롤러의 pointlist 옵젝트에 들어간다. 
+			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
+			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
+		
+		
 		}
 		chain_nameIndex++;//포인트 체인이름 
 	}
 }
-
 function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
 	//서버에서 point_store를 만들고
@@ -225,8 +246,8 @@ function checkOutCart(){
               <span>포인트  : </span>
               <strong th:text = "${data.getChain_name()}" >$20</strong>
               <strong th:text = "${data.getPoint()}"  th:id="|myPoint${iterStat.index}|" >$20</strong>
-              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 1)|" >사용</button>
-              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', 0)|" >미사용</button>
+              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',1, )|" >사용</button>
+              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',0)|" >미사용</button>
             </li>
             <li id = "totalListId" class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>

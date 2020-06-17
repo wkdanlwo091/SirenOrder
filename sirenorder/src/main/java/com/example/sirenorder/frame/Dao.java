@@ -30,6 +30,9 @@ public interface Dao<Id, Model> {
 	default public Model selectByChain_name(Id id) throws Exception {
 		return null;
 	}
+	default public int selectOrders_seq() throws Exception {
+		return (Integer) null;
+	}
 
 	public Model select(Id id);
 

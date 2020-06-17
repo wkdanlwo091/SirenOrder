@@ -39,6 +39,11 @@ public interface Biz<Id, Model> {
 	default public void deleteProduct(Model m) throws Exception{
 	}
 	
+	@Transactional
+	default public int getOrders_seq() throws Exception{
+		return (Integer) null;
+	}
+	
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

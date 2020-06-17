@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <select id="select" resultType="store">
 		SELECT * 
 		FROM STORE
-		WHERE STORE_ID = #{store_id}
+		WHERE STORE_NAME = #{store_name}
     </select>
     <select id="selectall" resultType="store">
     	SELECT * 

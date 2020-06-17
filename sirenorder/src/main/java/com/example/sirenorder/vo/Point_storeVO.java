@@ -16,4 +16,5 @@ public class Point_storeVO {
 	String chain_name;
 	Date point_date;
 	int used_point;
+	int seq;
 }
