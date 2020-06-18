@@ -22,7 +22,7 @@ import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeVO;
-import com.example.sirenorder.vo.Pointlist;
+import com.example.sirenorder.vo.PointList;
 import com.example.sirenorder.vo.StoreVO;
 
 @Controller
@@ -91,7 +91,7 @@ public class OrderController {
 		return model;
 	}
 	
-	public void usePoint(Pointlist pointlist, String users_id) throws Exception {
+	public void usePoint(PointList pointlist, String users_id) throws Exception {
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {//포인트의 개수에 따라서 point를 update한다. 
 			if(pointlist.getUseOrNot()[i] == 1) {//포인트를 사용할 것이면
 				
@@ -116,7 +116,7 @@ public class OrderController {
 		pointbiz.getByChain_name(chain_name);
 	}
 	
-	public void makePoint_store(Pointlist pointlist, String users_id) throws Exception {//두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장 
+	public void makePoint_store(PointList pointlist, String users_id) throws Exception {//두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장 
 		for(int i= 0;i < pointlist.getChain_name().length;i++) {
 			String chain_name = pointlist.getChain_name()[i];
 			int point = pointlist.getPoint()[i];
@@ -142,13 +142,11 @@ public class OrderController {
 			}
 		}
 	}
-	
-	public void makeOrders(String users_id,  Pointlist pointlist) throws Exception {
+	public void makeOrders(String users_id,  PointList pointlist) throws Exception {
 		int totalPrice = 0;
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
 			totalPrice += pointlist.getTotalPrice()[i];
 		}
-		
 		OrdersVO ordersVO = new OrdersVO();
 		ordersVO.setOrders_id("orders_id");
 		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
@@ -159,37 +157,31 @@ public class OrderController {
 		System.out.println("orders completed");
 	}
 	
-	public void makeOrders_detail() throws Exception {
+	public void makeOrders_detail(PointList pointList) throws Exception {
+		System.out.println(pointList);
 		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq());
 		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
 	}
 	
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
-	public ModelAndView buyProduct(@ModelAttribute("pointlist") Pointlist pointlist,HttpServletRequest request) throws Exception {
+	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		//포인트가 미사용 이라면 
-		if(pointlist.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
+		if(pointList.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
 			System.out.println("null");
 		}else {//point 사용한 경우 point update 및 point_store생성 
-			usePoint(pointlist, users_id);
-			makePoint_store(pointlist,users_id);
+			usePoint(pointList, users_id);
+			makePoint_store(pointList,users_id);
 		}
-		makeOrders(users_id, pointlist);
-		makeOrders_detail();
+		makeOrders(users_id, pointList);
+		makeOrders_detail(pointList);
 		
 		Scanner scan = new Scanner(System.in);
 		scan.next();
-		//chain의 상품들의 합보다 point 값이 크다면 상품들의 값을 뺀다. 
-		//cart의 chain_name 기준으로 상품의 가격을 전달 
-		for(int i = 0 ;i < pointlist.getChain_name().length; i++) {
-			if(pointlist.getUseOrNot().equals("yes")) {//point 사용
-				
-			}else {
-				PointVO pointVO = new PointVO();
-				pointVO.setChain_name(pointlist.getChain_name()[i]);
-			}
-		}
+
+		
+		
 		
 		ModelAndView model = new ModelAndView();
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
