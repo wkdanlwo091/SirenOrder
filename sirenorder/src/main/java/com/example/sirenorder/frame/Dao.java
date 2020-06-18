@@ -33,7 +33,10 @@ public interface Dao<Id, Model> {
 	default public int selectOrders_seq() throws Exception {
 		return (Integer) null;
 	}
-
+	default public String selectProduct_id(String product_name) {
+		return null;
+	}
+	
 	public Model select(Id id);
 
 	public ArrayList<Model> selectall();

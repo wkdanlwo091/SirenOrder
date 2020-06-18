@@ -20,6 +20,10 @@ public class ProductBiz implements Biz<String, ProductVO>{
 		return dao.selectProduct(name, num);
 	}
 	@Override
+	public String getProduct_id(String product_name) throws Exception {
+		return dao.selectProduct_id(product_name);
+	}
+	@Override
 	public void deleteProduct(ProductVO m) throws Exception {
 		// TODO Auto-generated method stub
 		dao.deleteProduct(m);

@@ -14,7 +14,7 @@ public class PointList {
 	int [] point;
 	int [] totalPrice;
 	
-	String [][] productName = new String[10][10];
-	int [][] productPrice = new int[10][10];
-	int [][] productQuantity = new int[10][10];
+	String [][] productName = new String[5][5];
+	int [][] productPrice = new int[5][5];
+	int [][] productQuantity = new int[5][5];
 }

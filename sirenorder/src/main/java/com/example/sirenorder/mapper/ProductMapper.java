@@ -5,4 +5,5 @@ public interface ProductMapper {
 	public ArrayList<ProductVO> selectProduct(String chain_name, int number);
 	public void deleteProduct(ProductVO product);
 	public void insert(ProductVO product);
+	public String selectProduct_id(String product_name);
 }

@@ -20,9 +20,10 @@ import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailVO;
+import com.example.sirenorder.vo.PointList;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeVO;
-import com.example.sirenorder.vo.PointList;
+import com.example.sirenorder.vo.ProductVO;
 import com.example.sirenorder.vo.StoreVO;
 
 @Controller
@@ -30,14 +31,21 @@ public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
+	
 	@Resource(name = "pointbiz")
 	Biz<String, PointVO> pointbiz;
+	
 	@Resource(name = "point_storebiz")
 	Biz<String, Point_storeVO> point_storebiz;
+	
 	@Resource(name = "ordersbiz")
 	Biz<String, OrdersVO> ordersbiz;
+	
 	@Resource(name = "orders_detailbiz")
 	Biz<String, Orders_detailVO> orders_detailbiz;
+	
+	@Resource(name = "productbiz")
+	Biz<String, ProductVO> productbiz;
 	
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST)//가게 이름을 return 한다. 
 	@ResponseBody
@@ -158,8 +166,30 @@ public class OrderController {
 	}
 	
 	public void makeOrders_detail(PointList pointList) throws Exception {
-		System.out.println(pointList);
-		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq());
+
+		
+		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
+		System.out.println(orders_id);
+		
+		String [][] tempName = pointList.getProductName();
+		int productNum = 0;
+		
+		for(int i= 0 ;i < 5; i++) {
+			if(tempName[i][0] == null)break;
+			for(int j = 0 ;j < 5;j++) {
+				if(tempName[i][j] != null)productNum++;
+				if(tempName[i][j] == null )break;
+
+				Orders_detailVO orders_detailVO = new Orders_detailVO();
+				orders_detailVO.setOrders_detail_id("orders_detail_id");
+				orders_detailVO.setPrice(pointList.getProductPrice()[i][j]);
+				orders_detailVO.setQuantity(pointList.getProductQuantity()[i][j]);
+				orders_detailVO.setOrders_id(orders_id);
+				orders_detailVO.setProduct_id( productbiz.getProduct_id(tempName[i][j]));
+				orders_detailbiz.register(orders_detailVO);
+
+			}
+		}
 		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
 	}
 	

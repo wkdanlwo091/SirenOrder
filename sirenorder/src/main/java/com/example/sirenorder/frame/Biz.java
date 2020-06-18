@@ -44,6 +44,11 @@ public interface Biz<Id, Model> {
 		return (Integer) null;
 	}
 	
+	@Transactional
+	default public String getProduct_id(String product_name) throws Exception{
+		return  null;
+	}
+	
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

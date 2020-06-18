@@ -12,4 +12,5 @@ public class Orders_detailVO {
 	int quantity;
 	String orders_id;
 	String product_id;
+	int seq;
 }
