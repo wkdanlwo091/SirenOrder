@@ -62,19 +62,14 @@ public class OrderController {
 	}
 	//checkout 장바구니 보기
 	
-	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET)
-	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
-		System.out.println("checkout에 들어왔다. ");
-		ModelAndView model = new ModelAndView();
-		HttpSession httpSession = request.getSession();
+	public ArrayList<PointVO> makeCart(HttpSession httpSession) throws Exception {
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
+
 		Iterator<CartVO> itr;
 		if(cartProduct != null) {
 			 itr = cartProduct.keySet().iterator();
 		}else{
-			model.addObject("checkout", "clicked");
-			model.setViewName("thymeleaf/main");
-			return model;
+			return null;
 		}
 		
 		HashMap<String, Boolean> chain_names = new HashMap<String, Boolean >();
@@ -92,7 +87,22 @@ public class OrderController {
 			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
 			arrayList.add(pointVO);
 		}
-		System.out.println("arraylist size는 "  + arrayList.size());
+		return arrayList;
+	}
+	
+	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET)
+	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
+		System.out.println("checkout에 들어왔다. ");
+		ModelAndView model = new ModelAndView();
+		HttpSession httpSession = request.getSession();
+		
+		ArrayList<PointVO> arrayList = makeCart(httpSession);
+
+		if(arrayList == null) {
+			model.addObject("checkout", "clicked");
+			model.setViewName("thymeleaf/main");
+			return model;
+		}
 		model.addObject("arrayList", arrayList);
 		model.addObject("checkout", "clicked");
 		model.setViewName("thymeleaf/main");
@@ -150,7 +160,8 @@ public class OrderController {
 			}
 		}
 	}
-	public void makeOrders(String users_id,  PointList pointlist) throws Exception {
+	
+	public void makeOrders(String users_id,  PointList pointlist) throws Exception {//orders 테이블에 insert
 		int totalPrice = 0;
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
 			totalPrice += pointlist.getTotalPrice()[i];
@@ -165,7 +176,7 @@ public class OrderController {
 		System.out.println("orders completed");
 	}
 	
-	public void makeOrders_detail(PointList pointList) throws Exception {
+	public void makeOrders_detail(PointList pointList) throws Exception {//orders_detail 테이블에 insert
 
 		
 		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
@@ -197,6 +208,7 @@ public class OrderController {
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
 		//포인트가 미사용 이라면 
 		if(pointList.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
 			System.out.println("null");
@@ -204,45 +216,12 @@ public class OrderController {
 			usePoint(pointList, users_id);
 			makePoint_store(pointList,users_id);
 		}
+		
 		makeOrders(users_id, pointList);
 		makeOrders_detail(pointList);
 		
-		Scanner scan = new Scanner(System.in);
-		scan.next();
-
-		
-		
-		
-		ModelAndView model = new ModelAndView();
-		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
-		Iterator<CartVO> itr;
-		if(cartProduct != null) {
-			 itr = cartProduct.keySet().iterator();
-		}else{
-			model.addObject("checkout", "clicked");
-			model.setViewName("thymeleaf/main");
-			return model;
-		}
-		
-		HashMap<String, Boolean> chain_names = new HashMap<String, Boolean >();
-		while (itr.hasNext()) {
-			CartVO tmp = itr.next();
-			if(chain_names.get(tmp.getChain_name()) == null) {
-				chain_names.put(tmp.getChain_name(), true);
-			}
-		}
-		Iterator<String> itr2 = chain_names.keySet().iterator();
-		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
-		while (itr2.hasNext()) {
-			String chain_names_next = itr2.next();
-			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
-			arrayList.add(pointVO);
-		}
-		System.out.println("arraylist size는 "  + arrayList.size());
-		model.addObject("arrayList", arrayList);
 		model.addObject("checkout", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-
 }
