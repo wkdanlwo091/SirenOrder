@@ -36,6 +36,12 @@ public interface Dao<Id, Model> {
 	default public String selectProduct_id(String product_name) {
 		return null;
 	}
+	default public int selectListCnt(String chain_name) {
+		return (Integer) null;
+	}
+	default public ArrayList<Model> selectProductList(String chain_name, int startList, int listSize) {
+		return null;
+	}
 	
 	public Model select(Id id);
 

@@ -43,4 +43,12 @@ public class ProductBiz implements Biz<String, ProductVO>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int getListCnt(String chain_name) {
+		return dao.selectListCnt(chain_name);
+	}
+	@Override
+	public ArrayList<ProductVO> getProductList(String chain_name, int startList, int listSize) {
+		return dao.selectProductList(chain_name, startList, listSize);
+	}
 }

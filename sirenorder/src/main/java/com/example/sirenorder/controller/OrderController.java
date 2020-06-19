@@ -97,7 +97,7 @@ public class OrderController {
 		HttpSession httpSession = request.getSession();
 		
 		ArrayList<PointVO> arrayList = makeCart(httpSession);
-
+		
 		if(arrayList == null) {
 			model.addObject("checkout", "clicked");
 			model.setViewName("thymeleaf/main");

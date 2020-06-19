@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ProductVO;
@@ -22,24 +27,41 @@ import com.example.sirenorder.vo.ProductVO;
 public class ProductController {
 	@Resource(name = "productbiz")	
 	Biz<String, ProductVO> productbiz;
-
-	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다. 
-	public ModelAndView showProduct(HttpServletRequest request) throws Exception {
+	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다.   . pagination 구현
+	public ModelAndView showProduct(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page , 
+			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
 		
+		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		if(httpSession.getAttribute("userId") == null) {//아이디 로그인 안 했을 시 로그인 해라로 간다. 
-			ModelAndView model = new ModelAndView();
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+		
 		String chain_name = request.getParameter("chain_name");
 		String store_name = request.getParameter("store_name");
 		String  numberString = request.getParameter("number");
 		int number = Integer.parseInt(numberString);
-		System.out.println("chain name 은 "+ chain_name + "number 은" + number);
+		int listCnt;
+		int startList;
+		int listSize;
+		
+		listCnt = productbiz.getListCnt(chain_name);
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		startList = pagination.getStartList();
+		listSize =  pagination.getListSize();
+		List<ProductVO> List1 = productbiz.getProductList(chain_name, startList, listSize);
+		model.addObject("productList", List1);
+		model.addObject("pagination", pagination);
+		
+		System.out.println(pagination);
+		
+		
+		
 		List<ProductVO> List = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
 		
-		ModelAndView model = new ModelAndView();
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");
 		model.addObject("store_name", store_name);//체인점 중 가게를 구분하기 위한 변수 
@@ -53,14 +75,15 @@ public class ProductController {
 		}
 		return model;
 	}
-	//가게의 판매 물건을 가져오는 컨트롤러이다. 
+	
+	//가게의 판매 물건을 가져오는 컨트롤러이다
 	@RequestMapping(value = "getProduct", method = RequestMethod.POST)
 	@ResponseBody
 	public Object getProduct(HttpServletRequest request) throws Exception {
 		String chain_name = request.getParameter("chain_name");
 		String  numberString = request.getParameter("number");
 		int number = Integer.parseInt(numberString);
-		//System.out.println("chain name 은 "+ chain_name + "number 은" + number);
+		
 		ArrayList<ProductVO> arrList = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
 		if(arrList.size() == 0) {
 			//System.out.println("가게에 물건이 없습니다.");
@@ -70,6 +93,10 @@ public class ProductController {
 		}
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
+	
+	
+	
+	
 	
 	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {
 		int num = 1;
@@ -90,6 +117,8 @@ public class ProductController {
 		jo.put("number", cartProduct.get(tmp));//물건 개수
 		return jo;
 	}
+	
+	
 	//세션에 카트 정보를 저장하는 컨트롤러  plus minus 둘다 담당 --> 이 둘 나눠야지
 	@RequestMapping(value = "cartProductAdd", method = RequestMethod.POST)
 	@ResponseBody

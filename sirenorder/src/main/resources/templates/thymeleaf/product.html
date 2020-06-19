@@ -24,6 +24,33 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <script>
+//이전 버튼 이벤트
+function fn_prev(page, range, rangeSize) {// 7, 7, 6
+		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
+		var range = range - 1;// 6
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		location.href = url;
+	}
+  //페이지 번호 클릭
+	function fn_pagination(page, range, rangeSize) {
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		location.href = url;	
+
+	}
+	//다음 버튼 이벤트
+	function fn_next(page, range, rangeSize) {
+		var page = parseInt((range * rangeSize)) + 1;
+		var range = parseInt(range) + 1;
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		location.href = url;
+	}
+
 </script>
 <body>
     <!--================Category Product Area =================-->
@@ -80,6 +107,28 @@
                                 </nav>
                             </div>
                         </div>
+                        	<!-- pagination{s} -->
+
+						<div id="paginationBox">
+							<ul class="pagination">
+									<li th:if="${pagination.prev}" class="page-item">
+										<a class="page-link" href="#" onClick="fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">Prev
+										</a>
+									</li>
+									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
+										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
+											<a class="page-link" href="#" onClick="fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')" th:text="${idx}"> ${idx} 
+											</a>
+										</li>
+									</th:block>	
+									<li th:if="${pagination.next}" class="page-item">
+										<a class="page-link" href="#" onClick="fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')">next
+										</a>
+									</li>
+							</ul>
+						</div>
+						<!-- pagination{e} -->
+                        
                     </div>
                 </div>
             </div>

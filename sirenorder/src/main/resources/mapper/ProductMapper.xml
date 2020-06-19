@@ -10,13 +10,24 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM PRODUCT
 		WHERE (CHAIN_NAME = #{chain_name}) AND (ROWNUM &lt; 1 + #{number}*6) AND (ROWNUM &gt; (#{number}-1)*6)
     </select>
+    
+    <select id="selectListCnt" resultType = "int">
+    	SELECT count(*) as listCnt from product where chain_name = #{chain_name}
+    </select>
+    
+    <select id = "selectProductList" resultType = "product">
+    	SELECT *
+    	FROM PRODUCT
+    	WHERE (CHAIN_NAME = #{chain_name} AND (ROWNUM &lt;#{startList} + #{listSize} AND ROWNUM &gt;= #{startList} ))
+    </select>
+    
+    
+    
     <select id="selectProduct_id" resultType="string">
 		SELECT PRODUCT_ID
 		FROM PRODUCT
 		WHERE PRODUCT_NAME = #{product_name}
     </select>
-    
-    
     <select id="deleteProduct">
 		SELECT * 
 		FROM PRODUCT

@@ -48,6 +48,14 @@ public interface Biz<Id, Model> {
 	default public String getProduct_id(String product_name) throws Exception{
 		return  null;
 	}
+	@Transactional
+	default public int getListCnt(String chain_name) {
+		return (Integer) null;
+	}
+	@Transactional
+	default public ArrayList<Model> getProductList(String chain_name, int startList, int listSize) {
+		return  null;
+	}
 	
 	public Model get(Id id);
 	public ArrayList<Model> get();

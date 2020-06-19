@@ -20,4 +20,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id="selectOrders_seq" resultType="int"><!-- orders의 마지막 시퀸스 번호를 찾기 -->
 		select last_number from user_sequences where sequence_name = 'ORDERS_SEQ'
 	</select>
+	<select id = "selectOrdersStatus" resultType="orders_detail">
+		select * from orders_detail where status = 'not_done'
+		 AND (ROWNUM &lt; #{startList}+#{listSize} ) AND (ROWNUM &gt;= #{startList})
+	</select>
 </mapper>
+

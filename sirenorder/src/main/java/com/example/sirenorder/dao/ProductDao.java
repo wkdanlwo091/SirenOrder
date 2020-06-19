@@ -30,7 +30,15 @@ public class ProductDao implements Dao<String,ProductVO>{
 	public void insert(ProductVO product) {
 	}
 
+	@Override
+	public int selectListCnt(String chain_name) {
+		return productmapper.selectListCnt(chain_name);
+	}
 	
+	@Override
+	public ArrayList<ProductVO> selectProductList(String chain_name, int startList, int listSize) {
+		return productmapper.selectProductList(chain_name, startList, listSize);
+	}
 	
 	
 	//아래는 구현 안함 
@@ -45,7 +53,6 @@ public class ProductDao implements Dao<String,ProductVO>{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 
 
