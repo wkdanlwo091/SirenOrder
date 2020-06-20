@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -17,18 +15,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ProductVO;
-
 @Controller
 public class ProductController {
 	@Resource(name = "productbiz")	
 	Biz<String, ProductVO> productbiz;
 	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다.   . pagination 구현
 	public ModelAndView showProduct(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int number , 
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
 		
@@ -42,12 +39,13 @@ public class ProductController {
 		String chain_name = request.getParameter("chain_name");
 		String store_name = request.getParameter("store_name");
 		String  numberString = request.getParameter("number");
-		int number = Integer.parseInt(numberString);
+		
+		
 		int listCnt;
 		int startList;
 		int listSize;
-		
-		listCnt = productbiz.getListCnt(chain_name);
+		System.out.println(chain_name + " " + store_name);
+		listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		startList = pagination.getStartList();
@@ -55,12 +53,12 @@ public class ProductController {
 		List<ProductVO> List1 = productbiz.getProductList(chain_name, startList, listSize);
 		model.addObject("productList", List1);
 		model.addObject("pagination", pagination);
-		
-		System.out.println(pagination);
-		
-		
-		
-		List<ProductVO> List = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
+		model.addObject("chain_name", chain_name);
+		model.addObject("store_name", store_name);
+		 
+		List<ProductVO> List = productbiz.getProductList(chain_name, startList, listSize);
+		System.out.println(" chain_name is " + chain_name +" startList "+ startList + "List size" +List.size() +" list size" +listSize);
+		List<ProductVO> List2 = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
 		
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");

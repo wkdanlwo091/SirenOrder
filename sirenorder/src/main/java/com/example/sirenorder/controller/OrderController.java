@@ -224,4 +224,17 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
+	@RequestMapping(value = "/orderStatus.html", method = RequestMethod.POST)
+	public ModelAndView orderStatus(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		String users_id = (String) httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
+		//포인트가 미사용 이라면 
+		
+		if(users_id.equals(null)) {
+			model.setViewName("redirect:/index.html");
+		}
+		
+		return model;
+	}
 }

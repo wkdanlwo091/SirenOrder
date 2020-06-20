@@ -15,10 +15,14 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SELECT count(*) as listCnt from product where chain_name = #{chain_name}
     </select>
     
-    <select id = "selectProductList" resultType = "product">
-    	SELECT *
-    	FROM PRODUCT
-    	WHERE (CHAIN_NAME = #{chain_name} AND (ROWNUM &lt;#{startList} + #{listSize} AND ROWNUM &gt;= #{startList} ))
+    <select id = "selectProductList" resultType = "product">    	
+    	 SELECT * from
+		 (
+			 select A.*, rownum r
+			 from product A
+			 where A.chain_name = #{chain_name}
+		 )
+		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
     </select>
     
     
