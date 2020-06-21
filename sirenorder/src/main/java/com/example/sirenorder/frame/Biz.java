@@ -57,6 +57,16 @@ public interface Biz<Id, Model> {
 		return  null;
 	}
 	
+	@Transactional
+	default public ArrayList<Model> getOrdersStatus(int startList, int listSize){
+		return null;
+	}
+	
+	@Transactional
+	default public int getOrders_detailCnt( ){
+		return (Integer) null;
+	}
+	
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

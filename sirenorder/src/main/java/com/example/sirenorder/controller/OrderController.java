@@ -13,12 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.OrdersVO;
+import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.PointList;
 import com.example.sirenorder.vo.PointVO;
@@ -43,6 +46,8 @@ public class OrderController {
 	
 	@Resource(name = "orders_detailbiz")
 	Biz<String, Orders_detailVO> orders_detailbiz;
+	@Resource(name = "orders_detailjoinproductbiz")
+	Biz<String, Orders_detailJoinProductVO> orders_detailjoinproductbiz;
 	
 	@Resource(name = "productbiz")
 	Biz<String, ProductVO> productbiz;
@@ -175,13 +180,9 @@ public class OrderController {
 		ordersbiz.register(ordersVO);
 		System.out.println("orders completed");
 	}
-	
 	public void makeOrders_detail(PointList pointList) throws Exception {//orders_detail 테이블에 insert
-
-		
 		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
 		System.out.println(orders_id);
-		
 		String [][] tempName = pointList.getProductName();
 		int productNum = 0;
 		
@@ -224,17 +225,35 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	@RequestMapping(value = "/orderStatus.html", method = RequestMethod.POST)
-	public ModelAndView orderStatus(HttpServletRequest request) throws Exception {
+	@RequestMapping(value = "/orderStatus.html", method = RequestMethod.GET)
+	public ModelAndView orderStatus(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page , 
+			@RequestParam(required = false, defaultValue = "1") int range  
+			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 		//포인트가 미사용 이라면 
-		
 		if(users_id.equals(null)) {
 			model.setViewName("redirect:/index.html");
 		}
 		
+		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		int startList = pagination.getStartList();
+		int listSize = pagination.getListSize();
+		ArrayList<Orders_detailJoinProductVO> list = orders_detailjoinproductbiz.getOrdersStatus(startList, listSize);
+		
+		
+		
+
+		
+		Scanner scan = new Scanner(System.in);
+		scan.nextLine();
+		
+
+		model.addObject("order", "clicked");
 		return model;
 	}
 }

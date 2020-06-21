@@ -2,6 +2,8 @@ package com.example.sirenorder.frame;
 
 import java.util.ArrayList;
 
+import com.example.sirenorder.vo.Orders_detailJoinProductVO;
+
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
 	}
@@ -42,6 +44,14 @@ public interface Dao<Id, Model> {
 	default public ArrayList<Model> selectProductList(String chain_name, int startList, int listSize) {
 		return null;
 	}
+	default public ArrayList<Model> selectOrdersStatus(int startList, int listSize){
+		
+		return null;
+	}
+	default public int selectOrders_detailCnt( ){
+		return (Integer) null;
+	}
+
 	
 	public Model select(Id id);
 

@@ -25,7 +25,6 @@ public class ProductController {
 	Biz<String, ProductVO> productbiz;
 	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다.   . pagination 구현
 	public ModelAndView showProduct(HttpServletRequest request,
-			@RequestParam(required = false, defaultValue = "1") int number , 
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
 		
@@ -35,31 +34,23 @@ public class ProductController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		
 		String chain_name = request.getParameter("chain_name");
 		String store_name = request.getParameter("store_name");
-		String  numberString = request.getParameter("number");
-		
 		
 		int listCnt;
 		int startList;
 		int listSize;
-		System.out.println(chain_name + " " + store_name);
 		listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		startList = pagination.getStartList();
 		listSize =  pagination.getListSize();
-		List<ProductVO> List1 = productbiz.getProductList(chain_name, startList, listSize);
-		model.addObject("productList", List1);
+		 
+		List<ProductVO> List = productbiz.getProductList(chain_name, startList, listSize);
 		model.addObject("pagination", pagination);
 		model.addObject("chain_name", chain_name);
 		model.addObject("store_name", store_name);
-		 
-		List<ProductVO> List = productbiz.getProductList(chain_name, startList, listSize);
-		System.out.println(" chain_name is " + chain_name +" startList "+ startList + "List size" +List.size() +" list size" +listSize);
-		List<ProductVO> List2 = productbiz.getProduct(chain_name, number);//number가 1이면 1번부터 6번까지의 데이터가져오기
-		
+
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");
 		model.addObject("store_name", store_name);//체인점 중 가게를 구분하기 위한 변수 
@@ -226,7 +217,6 @@ public class ProductController {
 
 		return ja.toString();
 	}
-
 	
 	@RequestMapping(value = "cartProductBring", method = RequestMethod.POST)
 	@ResponseBody

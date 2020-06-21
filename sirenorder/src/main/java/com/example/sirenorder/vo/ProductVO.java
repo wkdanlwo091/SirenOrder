@@ -12,4 +12,5 @@ public class ProductVO {
 	String chain_name;
 	String image;
 	int price;
+	int seq;
 }

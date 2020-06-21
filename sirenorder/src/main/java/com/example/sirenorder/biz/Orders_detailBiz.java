@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
+import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 
 @Service("orders_detailbiz")
@@ -32,4 +33,9 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	public int getOrders_seq() throws Exception {
 		return dao.selectOrders_seq();
 	}
+	@Override
+	public int getOrders_detailCnt(){
+		return  dao.selectOrders_detailCnt();
+	}
+
 }

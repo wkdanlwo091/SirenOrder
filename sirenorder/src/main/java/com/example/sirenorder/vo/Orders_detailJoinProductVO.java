@@ -5,8 +5,8 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("orders_detail")	
-public class Orders_detailVO {
+@Alias("Orders_detailJoinProduct")	
+public class Orders_detailJoinProductVO{
 	String orders_detail_id;
 	int price;
 	int quantity;
@@ -14,4 +14,5 @@ public class Orders_detailVO {
 	String product_id;
 	String status;
 	int seq;
+	ProductVO productVO;
 }

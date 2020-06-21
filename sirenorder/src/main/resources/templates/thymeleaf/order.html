@@ -8,7 +8,6 @@
 	<form id = "toOrderPageId" action = "product.html"><!--  -->
 		<input type='hidden' name='chain_name' value='hidden' />
 		<input type='hidden' name='store_name' value='hidden' />
-		<input type='hidden' name='number' value='1' />
 	</form>
 <script>
 	var tmp;
@@ -16,43 +15,7 @@
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
     	document.getElementById("toOrderPageId").submit();
-			/*
-			data = "chain_name=" + store_name + "&number=1";
-			$.ajax({		        
-				url: "getProduct",
-		        type: "POST",
-		        data: data,
-		        dataType: "json",
-		        success: function(data){
-		        	myProduct = data;//상품 데이터 
-		        	tmp = data;
-		        	alert(myProduct);
-		        	document.getElementById("toOrderPageId").submit();
-		        	//여기서 order로 redirect 해준다. 
-		        },
-		        error: function(data){
-					console.log("에러는" + data);
-		        }
-		    });
-			*/
 	}
-	/*
-		$("#sendStoreId").on("click", function(){
-			data = "chain=" + $('#searchStoreId').val();
-			$.ajax({
-		        url: "sendStore",
-		        type: "POST",
-		        data: data,
-		        dataType: "json",
-		        success: function(data){
-		        	
-		        },
-		        error: function(data){
-					console.log("에러는" + data);
-		        }
-		    });
-		});
-		*/
 	</script>
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색">

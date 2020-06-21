@@ -32,4 +32,8 @@ public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
 	public int selectOrders_seq() {
 		return orders_detailMapper.selectOrders_seq();
 	}
+	@Override
+	public int selectOrders_detailCnt( ){
+		return orders_detailMapper.selectOrders_detailCnt();
+	}
 }

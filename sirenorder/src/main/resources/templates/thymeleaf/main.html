@@ -213,6 +213,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 		
 		<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
 		<div th:if = "${product != null}"><div th:replace="/thymeleaf/product"></div></div>
+		<div th:if = "${orderStatus != null}"><div th:replace="/thymeleaf/orderStatus"></div></div>
 		<div th:if = "${order != null}"><div th:replace="/thymeleaf/order"></div></div>
 		<div th:if = "${checkout != null}"><div th:replace="/thymeleaf/checkout"></div></div>
 		

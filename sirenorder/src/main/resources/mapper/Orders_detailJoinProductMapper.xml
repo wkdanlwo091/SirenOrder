@@ -3,25 +3,7 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
-<mapper namespace="com.example.sirenorder.mapper.Orders_detailMapper">
-	<select id="selectOrders_detail" resultType="orders_detail">
-		SELECT *
-		FROM ORDERS_DETAIL
-		WHERE ORDERS_ID = #{orders_id} AND PRODUCT_ID = #{product_id}
-	</select>
-	<insert id="insert">
-		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
-			select orders_detail_seq.nextval as seq from dual
-		</selectKey>
-		INSERT INTO ORDERS_DETAIL VALUES( #{orders_detail_id}||#{seq}, #{price},
-		#{quantity}, #{orders_id}, #{product_id})
-	</insert>
-	<select id="selectOrders_seq" resultType="int"><!-- orders의 마지막 시퀸스 번호를 찾기 -->
-		select last_number from user_sequences where sequence_name = 'ORDERS_SEQ'
-	</select>
-	
-	
+<mapper namespace="com.example.sirenorder.mapper.Orders_detailJoinProductMapper">
 	<resultMap id="product" type="Orders_detailJoinProduct">
 	    <result property="orders_detail_id" column="ORDERS_DETAIL_ID" />
 	    <result property="price" column="PRICE" />
@@ -30,7 +12,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	    <result property="product_id" column="PRODUCT_ID" />
 	    <result property="status" column="STATUS" />
 	    <result property="seq" column="SEQ" />
-  
 <!-- javaType : "객체를 속성으로 가지고있는 해당 객체의 CamelCase명 또는, @Alias("키값")" -->
 <!-- property : "객체참조변수명" -->
 <!-- id : "PK" -->
@@ -43,18 +24,17 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	         <result property="seq" column="SEQ" />
 	    </association>
 	</resultMap>
-	<select id = "selectOrdersStatus" resultType="orders_detail" resultMap="product">
+	<select id = "selectOrdersStatus" resultMap="product">
 		select * from 
 		(
-			select A.*, rownum r, B.chain_name
+			select A.*, rownum r, B.*
 			from orders_detail A, product B
 			where A.status = 'not_done' and A.product_id = B.product_id
 		)
-		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSiz e}
+		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
 	</select>
 		<select id = "selectOrders_detailCnt" resultType="int">
 			select count(*) from orders_detail where status = 'not_done'
 	</select>
-	
 </mapper>
 
