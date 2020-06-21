@@ -24,14 +24,15 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	         <result property="seq" column="SEQ" />
 	    </association>
 	</resultMap>
-	<select id = "selectOrdersStatus" resultMap="product">
+	<select id = "selectOrdersStatus"  parameterType="com.example.common.Pagination" resultMap="product">
 		select * from 
 		(
-			select A.*, rownum r, B.*
+			select A.*, rownum r, B.chain_name
 			from orders_detail A, product B
 			where A.status = 'not_done' and A.product_id = B.product_id
 		)
 		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
+		 <!-- where r &gt;= #{startList} and r &lt; #{startList} + #{listSize} -->
 	</select>
 		<select id = "selectOrders_detailCnt" resultType="int">
 			select count(*) from orders_detail where status = 'not_done'

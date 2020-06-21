@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.sirenorder.vo.StoreVO;
+import com.example.common.Pagination;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -58,7 +58,7 @@ public interface Biz<Id, Model> {
 	}
 	
 	@Transactional
-	default public ArrayList<Model> getOrdersStatus(int startList, int listSize){
+	default public ArrayList<Model> getOrdersStatus(Pagination pagination){
 		return null;
 	}
 	

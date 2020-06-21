@@ -2,6 +2,7 @@ package com.example.sirenorder.frame;
 
 import java.util.ArrayList;
 
+import com.example.common.Pagination;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 
 public interface Dao<Id, Model> {
@@ -44,7 +45,7 @@ public interface Dao<Id, Model> {
 	default public ArrayList<Model> selectProductList(String chain_name, int startList, int listSize) {
 		return null;
 	}
-	default public ArrayList<Model> selectOrdersStatus(int startList, int listSize){
+	default public ArrayList<Model> selectOrdersStatus(Pagination pagination){
 		
 		return null;
 	}

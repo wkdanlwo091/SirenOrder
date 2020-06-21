@@ -243,17 +243,16 @@ public class OrderController {
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
 		int listSize = pagination.getListSize();
-		ArrayList<Orders_detailJoinProductVO> list = orders_detailjoinproductbiz.getOrdersStatus(startList, listSize);
 		
 		
-		
-
-		
+		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
 		Scanner scan = new Scanner(System.in);
 		scan.nextLine();
 		
+		model.addObject("pagination", pagination);
+		model.addObject("orderStatus", "clicked");
+		model.addObject("List", List);
 
-		model.addObject("order", "clicked");
 		return model;
 	}
 }

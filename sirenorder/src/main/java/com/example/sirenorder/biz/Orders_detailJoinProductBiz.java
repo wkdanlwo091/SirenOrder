@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
+import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
@@ -14,9 +15,8 @@ public class Orders_detailJoinProductBiz implements Biz<String, Orders_detailJoi
 	@Resource(name = "orders_detailjoinproductdao")
 	Dao<String, Orders_detailJoinProductVO> dao;
 
-	@Override
-	public ArrayList<Orders_detailJoinProductVO> getOrdersStatus(int startList, int listSize){
-		return dao.selectOrdersStatus(startList, listSize);
+	public ArrayList<Orders_detailJoinProductVO> getOrdersStatus(Pagination pagination){
+		return dao.selectOrdersStatus(pagination);
 	}
 	@Override
 	public int getOrders_detailCnt(){

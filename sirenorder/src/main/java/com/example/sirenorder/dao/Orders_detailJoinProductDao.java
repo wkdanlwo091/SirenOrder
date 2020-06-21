@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.common.Pagination;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.mapper.Orders_detailJoinProductMapper;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
@@ -15,8 +16,8 @@ public class Orders_detailJoinProductDao implements Dao<String, Orders_detailJoi
 	Orders_detailJoinProductMapper orders_detailJoinProductMapper;
 
 	@Override
-	public ArrayList<Orders_detailJoinProductVO> selectOrdersStatus(int startList, int listSize){
-		return orders_detailJoinProductMapper.selectOrdersStatus(startList, listSize);
+	public ArrayList<Orders_detailJoinProductVO> selectOrdersStatus(Pagination pagination){
+		return orders_detailJoinProductMapper.selectOrdersStatus(pagination);
 	}
 
 	@Override
