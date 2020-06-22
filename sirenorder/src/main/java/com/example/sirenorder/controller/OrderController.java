@@ -1,6 +1,6 @@
 package com.example.sirenorder.controller;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -285,17 +285,16 @@ public class OrderController {
 		return model;
 	}
 	
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-	    binder.registerCustomEditor(Date.class, new CustomDateEditor(
-	            dateFormat, false));
+	@InitBinder     
+	public void initBinder(WebDataBinder binder){
+	     binder.registerCustomEditor(       Date.class,     
+	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
 	}
 
 	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
-			@DateTimeFormat(pattern="yyyy-mm-dd")  @RequestParam(required = false) Date from,
-			@DateTimeFormat(pattern="yyyy-mm-dd") @RequestParam(required = false)Date to
+			@DateTimeFormat(pattern="yyyy-MM-dd")  @RequestParam(required = false) Date from,
+			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false)Date to
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
