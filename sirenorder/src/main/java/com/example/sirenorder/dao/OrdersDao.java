@@ -1,5 +1,6 @@
 package com.example.sirenorder.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,11 @@ public class OrdersDao  implements Dao<String, OrdersVO>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public ArrayList<OrdersVO> selectByDateFromTo(String users_id, Date firstDate, Date secondDate) {
+		return ordersMapper.selectByDateFromTo(users_id, firstDate, secondDate);
+	}
+	
 	@Override
 	public void insert(OrdersVO ordersVO) {
 		// TODO Auto-generated method stub

@@ -1,9 +1,11 @@
 package com.example.sirenorder.frame;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.common.Pagination;
-import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
@@ -53,7 +55,12 @@ public interface Dao<Id, Model> {
 		return (Integer) null;
 	}
 
-	
+	@Transactional
+	default public ArrayList<Model> selectByDateFromTo(String users_id, Date firstDate, Date secondDate){
+		return null;
+	}
+
+
 	public Model select(Id id);
 
 	public ArrayList<Model> selectall();

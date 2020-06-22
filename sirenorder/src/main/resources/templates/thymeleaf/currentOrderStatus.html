@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <title></title>
+    <!-- animate CSS -->
+    <link rel="stylesheet" href="css/animate.css">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!-- nice select CSS -->
+    <link rel="stylesheet" href="css/nice-select.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="css/all.css">
+    <!-- flaticon CSS -->
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <!-- font awesome CSS -->
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <!-- swiper CSS -->
+    <link rel="stylesheet" href="css/slick.css">
+    <!-- style CSS -->
+    <!--  -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<script>
+//이전 버튼 이벤트
+function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
+		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
+		var range = range - 1;// 6
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		url = url + "&chain_name=" + chain_name;
+		location.href = url;
+	}
+  //페이지 번호 클릭
+	function fn_pagination(page, range, rangeSize, chain_name ) {
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		url = url + "&chain_name=" + chain_name;
+		location.href = url;	
+
+	}
+	//다음 버튼 이벤트
+	function fn_next(page, range, rangeSize, chain_name ) {
+		var page = parseInt((range * rangeSize)) + 1;
+		var range = parseInt(range) + 1;
+		var url = "/product.html";
+		url = url + "?page=" + page;
+		url = url + "&range=" + range;
+		url = url + "&chain_name=" + chain_name;
+		location.href = url;
+	}
+
+</script>
+<body>
+    <!--================Category Product Area =================-->
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="row align-items-center latest_product_inner">
+                        <!--  
+						<tr th:each="data, iterstat: ${mois}">
+						     <td th:text="${data}" th:id="|td${iterstat.index}|"></td>
+						</tr>
+						<tr th:each="prod : ${prods}">
+					        <td th:text="${prod.name}">Onions</td>
+					        <td th:text="${prod.price}">2.41</td>
+					        <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+					    </tr>	
+									-->		
+                        <div class="col-lg-4 col-sm-6" th:each="list : ${List}">
+                            <div class="single_product_item">
+                                <img th:src="${list.productVO.image}" alt="">
+                                <div class="single_product_text">
+                                    <h4 th:text="${list.productVO.product_name}"></h4>
+                                    <h4 th:text="${list.price}"></h4>
+                                    <h4 th:text="${list.productVO.chain_name}"></h4>
+                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
+                            </div>
+                        </div>
+
+						<div id="paginationBox">
+							<ul class="pagination">
+									<li th:if="${pagination.prev}" class="page-item">
+										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
+										</a>
+									</li>
+									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
+										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
+											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
+											</a>
+										</li>
+									</th:block>	
+									<li th:if="${pagination.next}" class="page-item">
+										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">next
+										</a>
+									</li>
+							</ul>
+						</div>
+						<!-- pagination{e} -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- jquery plugins here-->
+    <script src="js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="js/slick.min.js"></script>
+    <script src="js/jquery.counterup.min.js"></script>
+    <script src="js/waypoints.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="js/jquery.form.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/mail-script.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="js/custom.js"></script>
+</body>
+
+</html>

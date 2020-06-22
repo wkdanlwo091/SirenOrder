@@ -1,5 +1,7 @@
 package com.example.sirenorder.controller;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,7 +11,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -225,10 +231,10 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	@RequestMapping(value = "/orderStatus.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET)
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
-			@RequestParam(required = false, defaultValue = "1") int range  
+			@RequestParam(required = false, defaultValue = "1") int range
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -238,6 +244,9 @@ public class OrderController {
 			model.setViewName("redirect:/index.html");
 		}
 		
+		
+		Scanner scan = new Scanner(System.in);
+		
 		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
@@ -246,13 +255,65 @@ public class OrderController {
 		
 		
 		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
-		Scanner scan = new Scanner(System.in);
-		scan.nextLine();
-		
+		System.out.println(List);
 		model.addObject("pagination", pagination);
-		model.addObject("orderStatus", "clicked");
+		model.addObject("currentOrderStatus", "clicked");
 		model.addObject("List", List);
+		model.setViewName("thymeleaf/main");
 
+		return model;
+	}
+	
+	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.GET)
+	public ModelAndView ordersHistory(HttpServletRequest request
+			) throws Exception {
+		HttpSession httpSession = request.getSession();
+		String users_id = (String) httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
+		//포인트가 미사용 이라면 
+		if(users_id.equals(null)) {
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+//	    String str1="2020-06-17";  
+//	    String str2="2020-06-18";  
+//		Date firstDate = Date.valueOf(str1);//converting string into sql date  
+//		Date secondDate = Date.valueOf(str2);
+//		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, firstDate, secondDate);
+		model.addObject("ordersHistory", "clicked");
+		model.setViewName("thymeleaf/main");
+		return model;
+	}
+	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(
+	            dateFormat, false));
+	}
+
+	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)
+	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
+			@DateTimeFormat(pattern="yyyy-mm-dd")  @RequestParam(required = false) Date from,
+			@DateTimeFormat(pattern="yyyy-mm-dd") @RequestParam(required = false)Date to
+			) throws Exception {
+		HttpSession httpSession = request.getSession();
+		String users_id = (String) httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
+		//포인트가 미사용 이라면 
+		if(users_id.equals(null)) {
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		Scanner scan = new Scanner(System.in);
+		scan.next();
+//	    String str1="2020-06-17";  
+//	    String str2="2020-06-18";  
+//		Date firstDate = Date.valueOf(str1);//converting string into sql date  
+//		Date secondDate = Date.valueOf(str2);
+//		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, firstDate, secondDate);
+		model.addObject("ordersHistory", "clicked");
+		model.setViewName("thymeleaf/main");
 		return model;
 	}
 }

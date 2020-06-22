@@ -1,5 +1,6 @@
 package com.example.sirenorder.frame;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +68,11 @@ public interface Biz<Id, Model> {
 		return (Integer) null;
 	}
 	
+	@Transactional
+	default public ArrayList<Model> getByDateFromTo(String users_id, Date firstDate, Date secondDate){
+		return null;
+	}
+
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

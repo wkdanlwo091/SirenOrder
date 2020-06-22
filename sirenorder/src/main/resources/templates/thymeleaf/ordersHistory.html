@@ -20,10 +20,16 @@
     <!-- swiper CSS -->
     <link rel="stylesheet" href="css/slick.css">
     <!-- style CSS -->
-    <!--  -->
-    <link rel="stylesheet" href="css/style.css">
+    
+    
+    <!-- date picker전용  -->
+	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 </head>
 <script>
+
 //이전 버튼 이벤트
 function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
@@ -53,58 +59,64 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		url = url + "&chain_name=" + chain_name;
 		location.href = url;
 	}
+	
+    var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
+	  j( function() {
+		    var dateFormat = "yyyy-mm-dd";
+		    var from = j( "#from" )
+		        .datepicker({
+		          defaultDate: "+1w",
+		          changeMonth: true,
+		          changeYear: true,
+		          numberOfMonths: 1
+		        })/*
+		        .on( "change", function() {
+		          to.datepicker( "option", "minDate", getDate( this ) );
+		        });*/
+		    var to = j( "#to" ).datepicker({
+		        defaultDate: "+1w",
+		        changeMonth: true,
+		        changeYear: true,
+		        numberOfMonths: 1
+		      })
+		      /*
+		      .on( "change", function() {
+		        from.datepicker( "option", "maxDate", getDate( this ) );
+		      });*/
+		 
+
+		    function getDate( element ) {//이 fucntion이 document ready scope 안에 있어야한다. 
+			      var date;
+			      try {
+			        date = j.datepicker.parseDate( dateFormat, element.value );
+			      } catch( error ) {
+			        date = null;
+			      }
+			 
+			      return date;
+			    }
+
+		  } );
 
 </script>
+
 <body>
-    <!--================Category Product Area =================-->
         <div class="container">
             <div class="row">
                 <div class="col-lg-9">
                     <div class="row align-items-center latest_product_inner">
-                        <!--  
-						<tr th:each="data, iterstat: ${mois}">
-						     <td th:text="${data}" th:id="|td${iterstat.index}|"></td>
-						</tr>
-						<tr th:each="prod : ${prods}">
-					        <td th:text="${prod.name}">Onions</td>
-					        <td th:text="${prod.price}">2.41</td>
-					        <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
-					    </tr>	
-									-->		
-                        <div class="col-lg-4 col-sm-6" th:each="list : ${List}">
-                            <div class="single_product_item">
-                                <img th:src="${list.image}" alt="">
-                                <div class="single_product_text">
-                                    <h4 th:text="${list.product_name}"></h4>
-                                    <h4 th:text="${list.price}"></h4>
-                                    <h4 th:text="${list.chain_name}"></h4>
-                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
-                            </div>
-                        </div>
-
-						<div id="paginationBox">
-							<ul class="pagination">
-									<li th:if="${pagination.prev}" class="page-item">
-										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
-										</a>
-									</li>
-									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
-										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
-											</a>
-										</li>
-									</th:block>	
-									<li th:if="${pagination.next}" class="page-item">
-										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">next
-										</a>
-									</li>
-							</ul>
-						</div>
-						<!-- pagination{e} -->
+						<form method="post" action="/ordersHistory.html">
+							<label for="from">From</label>
+							<input type="date" id="from" name="from">
+							<label for="to">to</label>
+							<input type="date" id="to" name="to">
+							<input type="submit" value="조회">
+						</form>
                     </div>
                 </div>
             </div>
         </div>
+</body>
     <!-- jquery plugins here-->
     <script src="js/jquery-1.12.1.min.js"></script>
     <!-- popper js -->
@@ -132,6 +144,4 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
     <script src="js/price_rangs.js"></script>
     <!-- custom js -->
     <script src="js/custom.js"></script>
-</body>
-
 </html>

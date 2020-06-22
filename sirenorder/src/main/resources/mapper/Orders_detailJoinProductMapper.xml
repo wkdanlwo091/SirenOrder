@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id = "selectOrdersStatus"  parameterType="com.example.common.Pagination" resultMap="product">
 		select * from 
 		(
-			select A.*, rownum r, B.chain_name
+			select A.orders_detail_id, A.quantity, A.orders_id, A.status, rownum r, B.*
 			from orders_detail A, product B
 			where A.status = 'not_done' and A.product_id = B.product_id
 		)

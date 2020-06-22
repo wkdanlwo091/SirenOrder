@@ -10,6 +10,12 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM ORDERS
 		WHERE USERS_ID = #{users_id}
 	</select>
+	<select id="selectByDateFromTo" resultType="orders">
+		SELECT *
+		FROM ORDERS
+		WHERE USERS_ID = #{users_id} AND ORDERS_DATE &gt;= to_date(#{firstDate},'YYYY-MM-DD') 
+		AND ORDERS_DATE &lt;= to_date(#{secondDate},'YYYY-MM-DD') 
+	</select>
 	<insert id="insert">
 		<selectKey keyProperty="seq" resultType="int"  order="BEFORE">
 			select orders_seq.nextval from dual
