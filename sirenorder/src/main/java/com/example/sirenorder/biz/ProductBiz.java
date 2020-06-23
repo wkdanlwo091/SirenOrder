@@ -36,7 +36,7 @@ public class ProductBiz implements Biz<String, ProductVO>{
 	@Override
 	public ProductVO get(String id) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.select(id);
 	}
 	@Override
 	public ArrayList<ProductVO> get() {

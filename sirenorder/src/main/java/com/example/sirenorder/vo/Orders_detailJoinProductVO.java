@@ -1,5 +1,7 @@
 package com.example.sirenorder.vo;
 
+import java.sql.Date;//util 보다 oracle에 넣기 편하다 .but 둘다 사장된 api
+
 import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
@@ -13,6 +15,7 @@ public class Orders_detailJoinProductVO{
 	String orders_id;
 	String product_id;
 	String status;
+	Date orders_date;//개발의 간편화를 위해 역정규화를 하였다. 
 	int seq;
 	ProductVO productVO;
 }

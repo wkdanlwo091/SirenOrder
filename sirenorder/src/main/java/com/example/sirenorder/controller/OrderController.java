@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Scanner;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
-import com.example.sirenorder.vo.OrdersJoinOrders_detailJoinProductVO;
 import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
@@ -164,6 +165,7 @@ public class OrderController {
 				point_storeVO.setChain_name(temp.getChain_name());
 				point_storeVO.setPoint_date(new java.sql.Date( System.currentTimeMillis() ));//자바 date to 오라클 date
 				point_storeVO.setUsed_point(point);
+				
 				point_storebiz.register(point_storeVO);	
 			}else {
 				
@@ -205,13 +207,12 @@ public class OrderController {
 				orders_detailVO.setOrders_id(orders_id);
 				orders_detailVO.setProduct_name(tempName[i][j]);
 				orders_detailVO.setProduct_id( productbiz.getProduct_id(tempName[i][j]));
+				orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
 				orders_detailbiz.register(orders_detailVO);
-
 			}
 		}
 		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
 	}
-	
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
@@ -257,7 +258,6 @@ public class OrderController {
 		model.addObject("currentOrderStatus", "clicked");
 		model.addObject("List", List);
 		model.setViewName("thymeleaf/main");
-
 		return model;
 	}
 	
@@ -268,7 +268,7 @@ public class OrderController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 		//포인트가 미사용 이라면 
-		if(users_id.equals(null)) {
+		if(users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
@@ -283,45 +283,61 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
+	
 	@InitBinder     
 	public void initBinder(WebDataBinder binder){
 	     binder.registerCustomEditor(Date.class,     
 	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
 	}
+	
 	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
 			@DateTimeFormat(pattern="yyyy-MM-dd")  @RequestParam(required = false) Date from,
-			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false)Date to,
+			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false) Date to,
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
+		
+		if(range == 1) {
+			System.out.println("haha");
+			System.out.println(from);
+			System.out.println(from.getTime());
+		model.addObject("from", from.getTime());
+		model.addObject("to", to.getTime());
+		model.addObject("ordersHistory", "clicked");
+		model.setViewName("thymeleaf/main");
+		return model;
+		
+		}
+
+		
 		//포인트가 미사용 이라면 
-		if(users_id.equals(null)) {
+		if(users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;
 		} 
-		
+		ArrayList<Orders_detailVO> detailTemp = null;
+
 		if(httpSession.getAttribute("orders_detailList") != null &&
 				httpSession.getAttribute("startDate") == from &&
 				httpSession.getAttribute("endDate") == to) {
 			//이미 데이터 있는 것으로 한다. 
-		}else {//새로운 데이터 세션 해제
-			
+			detailTemp = (ArrayList<Orders_detailVO>) httpSession.getAttribute("orders_detailList");
+		}else {//새로운 데이터 기존 세션 해제
+			httpSession.invalidate();
+			java.sql.Date sqlDateFrom = new java.sql.Date( from.getTime() ); 
+			java.sql.Date sqlDateTo = new java.sql.Date( to.getTime() ); 
+			ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, sqlDateFrom, sqlDateTo);//여기서 orders_id 가져온다. 
+			detailTemp = new ArrayList<Orders_detailVO>();
+			for(int i = 0;i < temp.size();i++) {
+				ArrayList<Orders_detailVO> orders_detailTemp = orders_detailbiz.getOrders_detailByOrdersId(temp.get(i).getOrders_id());
+				detailTemp.addAll(orders_detailTemp);
+			}
+			httpSession.setAttribute("orders_detailList", detailTemp);
 		}
-		
-		java.sql.Date sqlDateFrom = new java.sql.Date( from.getTime() ); 
-		java.sql.Date sqlDateTo = new java.sql.Date( to.getTime() ); 
-		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, sqlDateFrom, sqlDateTo);//여기서 orders_id 가져온다. 
-		
-		ArrayList<Orders_detailVO> detailTemp = null;
-		for(int i = 0;i < temp.size();i++) {
-			ArrayList<Orders_detailVO> orders_detailTemp = orders_detailbiz.getOrders_detailByOrdersId(temp.get(i).getOrders_id());
-			detailTemp.addAll(orders_detailTemp);
-		}
-		httpSession.setAttribute("orders_detailList", detailTemp);
 		
 		//detailTemp에 모든 것이 있다. 근데 여기에는 product_name이 없다. 
 		int listCnt = detailTemp.size();
@@ -330,18 +346,20 @@ public class OrderController {
 		int startList = pagination.getStartList();
 		int listSize = pagination.getListSize();
 		
-		ArrayList<Orders_detailJoinProductVO> List2;
-		OrdersJoinOrders_detailJoinProductVO ordersJoinOrders_detailJoinProductVO;
+		ArrayList<Orders_detailJoinProductVO> List = new ArrayList<Orders_detailJoinProductVO>();
 
-		for(int i= page ;i<= page+ 6;i++) {
-			
-			ordersJoinOrders_detailJoinProductVO.(detailTemp.get(i).getPrice());
-			List2.add(e);
-			detailTemp.get(i);
+		for(int i= page ;i<= page+ 6;i++) {//6개의 데이터만 전송 
+			Orders_detailJoinProductVO tempVO = new Orders_detailJoinProductVO();
+			ProductVO productVO = new ProductVO();
+			productVO.setImage(productbiz.get(detailTemp.get(i).getProduct_id()).getImage());
+			productVO.setProduct_name(detailTemp.get(i).getProduct_name());
+			tempVO.setOrders_date(detailTemp.get(i).getOrders_date());
+			tempVO.setPrice(detailTemp.get(i).getPrice());
+			tempVO.setQuantity(detailTemp.get(i).getQuantity());
+			List.add(tempVO);
 		}
+
 		
-		
-		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
 		model.addObject("pagination", pagination);
 		model.addObject("List", List);
 		model.addObject("ordersHistory", "clicked");

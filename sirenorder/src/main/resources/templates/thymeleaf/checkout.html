@@ -206,8 +206,6 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 		var chain_productPrice = document.querySelectorAll("[id^=\""+chain_name+"_price\"]");//banapresso_price
 		var chain_productQuantity = document.querySelectorAll("[id^=\""+chain_name+"_quantity\"]");//banapresso_quantity
 
-		
-		
 		if(useOrNot == 1){//사용하기
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_name+"\" name = \"" + chain_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
@@ -250,11 +248,7 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 				console.log(productQuantityNum + " ");
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callQuantity+"\" name = \"" + productQuantityNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
-
-
-			
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);//원래 값으로 돌리기 
-		
 		}
 		else{//미사용하기  value=\"yes&"+chain_name+"\"    th:value=\"*{" +chain_name+"}\"
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
@@ -271,7 +265,6 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 			var productNameNum;
 			var productPriceNum;
 			var productQuantityNum;
-
 			var indexCall = 0;
 			[].forEach.call( chain_productName, function(el) {
 				var callName = el.innerHTML;

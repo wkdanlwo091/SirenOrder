@@ -14,7 +14,8 @@ public class PointList {
 	int [] point;
 	int [] totalPrice;
 	
-	String [][] productName = new String[5][5];
+	String [][] productName = new String[5][5];//체인 점당 여러가지 물건이 있으므로 2차원 배열
 	int [][] productPrice = new int[5][5];
 	int [][] productQuantity = new int[5][5];
+	
 }

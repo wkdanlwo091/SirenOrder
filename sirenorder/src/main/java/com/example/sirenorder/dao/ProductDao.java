@@ -45,7 +45,7 @@ public class ProductDao implements Dao<String,ProductVO>{
 	@Override
 	public ProductVO select(String id) {
 		// TODO Auto-generated method stub
-		return null;
+		return productmapper.select(id);
 	}
 
 	@Override

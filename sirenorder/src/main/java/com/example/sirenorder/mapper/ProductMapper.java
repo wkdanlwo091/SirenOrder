@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import com.example.sirenorder.vo.ProductVO;
 public interface ProductMapper {
 	public ArrayList<ProductVO> selectProduct(String chain_name, int number);
+	public ProductVO select(String id);
 	public void deleteProduct(ProductVO product);
 	public void insert(ProductVO product);
 	public String selectProduct_id(String product_name);

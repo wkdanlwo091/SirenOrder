@@ -10,6 +10,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	    <result property="quantity" column="QUANTITY" />
 	    <result property="orders_id" column="ORDERS_ID" />
 	    <result property="product_id" column="PRODUCT_ID" />
+	    <result property="product_name" column="PRODUCT_NAME" />
+	    <result property="orders_date" column="ORDERS_DATE" />
 	    <result property="status" column="STATUS" />
 	    <result property="seq" column="SEQ" />
 <!-- javaType : "객체를 속성으로 가지고있는 해당 객체의 CamelCase명 또는, @Alias("키값")" -->
