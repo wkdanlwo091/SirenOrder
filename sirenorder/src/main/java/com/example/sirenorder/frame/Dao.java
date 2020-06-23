@@ -55,11 +55,13 @@ public interface Dao<Id, Model> {
 		return (Integer) null;
 	}
 
-	@Transactional
 	default public ArrayList<Model> selectByDateFromTo(String users_id, Date firstDate, Date secondDate){
 		return null;
 	}
-
+	default public ArrayList<Model> selectOrders_detailByOrdersId(String orders_id ){
+		return null;
+	}
+	
 
 	public Model select(Id id);
 

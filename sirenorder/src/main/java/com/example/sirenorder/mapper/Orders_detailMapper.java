@@ -10,4 +10,5 @@ public interface Orders_detailMapper {
 	public void insert(Orders_detailVO orders_detailVO);
 	public int selectOrders_seq();
 	public int selectOrders_detailCnt();
+	public ArrayList<Orders_detailVO> selectOrders_detailByOrdersId(String orders_id);
 }

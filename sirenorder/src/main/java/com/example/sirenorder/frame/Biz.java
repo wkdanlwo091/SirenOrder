@@ -72,6 +72,10 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getByDateFromTo(String users_id, Date firstDate, Date secondDate){
 		return null;
 	}
+	@Transactional
+	default public ArrayList<Model> getOrders_detailByOrdersId(String orders_id ){
+		return null;
+	}
 
 	public Model get(Id id);
 	public ArrayList<Model> get();

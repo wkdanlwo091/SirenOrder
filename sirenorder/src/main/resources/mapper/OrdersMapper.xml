@@ -13,8 +13,8 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id="selectByDateFromTo" resultType="orders">
 		SELECT *
 		FROM ORDERS
-		WHERE USERS_ID = #{users_id} AND ORDERS_DATE &gt;= to_date(#{firstDate},'YYYY-MM-DD') 
-		AND ORDERS_DATE &lt;= to_date(#{secondDate},'YYYY-MM-DD') 
+		WHERE USERS_ID = #{users_id} AND ORDERS_DATE &gt;= to_date(#{firstDate},'yyyy-mm-dd') 
+		AND ORDERS_DATE &lt;= to_date(#{secondDate},'yyyy-mm-dd') 
 	</select>
 	<insert id="insert">
 		<selectKey keyProperty="seq" resultType="int"  order="BEFORE">

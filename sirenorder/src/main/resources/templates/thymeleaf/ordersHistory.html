@@ -107,11 +107,52 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
                     <div class="row align-items-center latest_product_inner">
 						<form method="post" action="/ordersHistory.html">
 							<label for="from">From</label>
-							<input type="date" id="from" name="from">
+							<input type="date" id="from"  th:value="*{from}" name="from">
 							<label for="to">to</label>
-							<input type="date" id="to" name="to">
+							<input type="date" id="to" th:value="*{to}" name="to">
 							<input type="submit" value="조회">
 						</form>
+						
+						
+						<div th:if="${from}">
+						</div>
+						<!-- ELSE -->
+						<div th:unless="${from}">
+						   <div >No one</div>
+						   						<div class="col-lg-4 col-sm-6" th:each="list : ${List}">
+                            <div class="single_product_item">
+                                <img th:src="${list.productVO.image}" alt="">
+                                <div class="single_product_text">
+                                    <h4 th:text="${list.productVO.product_name}"></h4>
+                                    <h4 th:text="${list.price}"></h4>
+                                    <h4 th:text="${list.productVO.chain_name}"></h4>
+                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
+                            </div>
+                        </div>
+
+						<div id="paginationBox">
+							<ul class="pagination">
+									<li th:if="${pagination.prev}" class="page-item">
+										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
+										</a>
+									</li>
+									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
+										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
+											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
+											</a>
+										</li>
+									</th:block>	
+									<li th:if="${pagination.next}" class="page-item">
+										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">next
+										</a>
+									</li>
+							</ul>
+						</div>
+						   
+						</div>
+						
+						
+						
                     </div>
                 </div>
             </div>

@@ -36,6 +36,9 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	@Override
 	public int getOrders_detailCnt(){
 		return  dao.selectOrders_detailCnt();
+	}	
+	@Override
+	public ArrayList<Orders_detailVO> getOrders_detailByOrdersId(String orders_id) {
+		return dao.selectOrders_detailByOrdersId(orders_id);
 	}
-
 }

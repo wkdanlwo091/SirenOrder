@@ -1,12 +1,10 @@
 package com.example.sirenorder.controller;
 
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Scanner;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
+import com.example.sirenorder.vo.OrdersJoinOrders_detailJoinProductVO;
 import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
@@ -186,6 +185,7 @@ public class OrderController {
 		ordersbiz.register(ordersVO);
 		System.out.println("orders completed");
 	}
+	
 	public void makeOrders_detail(PointList pointList) throws Exception {//orders_detail 테이블에 insert
 		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
 		System.out.println(orders_id);
@@ -203,6 +203,7 @@ public class OrderController {
 				orders_detailVO.setPrice(pointList.getProductPrice()[i][j]);
 				orders_detailVO.setQuantity(pointList.getProductQuantity()[i][j]);
 				orders_detailVO.setOrders_id(orders_id);
+				orders_detailVO.setProduct_name(tempName[i][j]);
 				orders_detailVO.setProduct_id( productbiz.getProduct_id(tempName[i][j]));
 				orders_detailbiz.register(orders_detailVO);
 
@@ -244,15 +245,11 @@ public class OrderController {
 			model.setViewName("redirect:/index.html");
 		}
 		
-		
-		Scanner scan = new Scanner(System.in);
-		
 		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
 		int listSize = pagination.getListSize();
-		
 		
 		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
 		System.out.println(List);
@@ -280,21 +277,23 @@ public class OrderController {
 //		Date firstDate = Date.valueOf(str1);//converting string into sql date  
 //		Date secondDate = Date.valueOf(str2);
 //		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, firstDate, secondDate);
+		model.addObject("from","");
+		model.addObject("to" ,"");
 		model.addObject("ordersHistory", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	
 	@InitBinder     
 	public void initBinder(WebDataBinder binder){
-	     binder.registerCustomEditor(       Date.class,     
+	     binder.registerCustomEditor(Date.class,     
 	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
 	}
-
 	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
 			@DateTimeFormat(pattern="yyyy-MM-dd")  @RequestParam(required = false) Date from,
-			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false)Date to
+			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false)Date to,
+			@RequestParam(required = false, defaultValue = "1") int page , 
+			@RequestParam(required = false, defaultValue = "1") int range
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -303,14 +302,48 @@ public class OrderController {
 		if(users_id.equals(null)) {
 			model.setViewName("redirect:/index.html");
 			return model;
+		} 
+		
+		if(httpSession.getAttribute("orders_detailList") != null &&
+				httpSession.getAttribute("startDate") == from &&
+				httpSession.getAttribute("endDate") == to) {
+			//이미 데이터 있는 것으로 한다. 
+		}else {//새로운 데이터 세션 해제
+			
 		}
-		Scanner scan = new Scanner(System.in);
-		scan.next();
-//	    String str1="2020-06-17";  
-//	    String str2="2020-06-18";  
-//		Date firstDate = Date.valueOf(str1);//converting string into sql date  
-//		Date secondDate = Date.valueOf(str2);
-//		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, firstDate, secondDate);
+		
+		java.sql.Date sqlDateFrom = new java.sql.Date( from.getTime() ); 
+		java.sql.Date sqlDateTo = new java.sql.Date( to.getTime() ); 
+		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, sqlDateFrom, sqlDateTo);//여기서 orders_id 가져온다. 
+		
+		ArrayList<Orders_detailVO> detailTemp = null;
+		for(int i = 0;i < temp.size();i++) {
+			ArrayList<Orders_detailVO> orders_detailTemp = orders_detailbiz.getOrders_detailByOrdersId(temp.get(i).getOrders_id());
+			detailTemp.addAll(orders_detailTemp);
+		}
+		httpSession.setAttribute("orders_detailList", detailTemp);
+		
+		//detailTemp에 모든 것이 있다. 근데 여기에는 product_name이 없다. 
+		int listCnt = detailTemp.size();
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		int startList = pagination.getStartList();
+		int listSize = pagination.getListSize();
+		
+		ArrayList<Orders_detailJoinProductVO> List2;
+		OrdersJoinOrders_detailJoinProductVO ordersJoinOrders_detailJoinProductVO;
+
+		for(int i= page ;i<= page+ 6;i++) {
+			
+			ordersJoinOrders_detailJoinProductVO.(detailTemp.get(i).getPrice());
+			List2.add(e);
+			detailTemp.get(i);
+		}
+		
+		
+		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
+		model.addObject("pagination", pagination);
+		model.addObject("List", List);
 		model.addObject("ordersHistory", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;

@@ -1,6 +1,6 @@
 package com.example.sirenorder.vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 

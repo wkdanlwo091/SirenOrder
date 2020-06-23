@@ -24,9 +24,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		 )
 		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
     </select>
-    
-    
-    
     <select id="selectProduct_id" resultType="string">
 		SELECT PRODUCT_ID
 		FROM PRODUCT
