@@ -16,7 +16,6 @@ function cartProductElments(array){
   		item += "<h6 class=\"my-0\" id = \""+ array[i]["chain_name"]+"_name"+ i +"\" >" + array[i]["product_name"] + "</h6>";
   	 	item += "<h6 class=\"my-0\" id = \""+ array[i]["chain_name"]+"_price"+i+"\" hidden>" + array[i]["price"] + "</h6>";
   	 	item += "<h6 class=\"my-0\" id 	= \""+ array[i]["chain_name"]+"_quantity"+i+"\" hidden>" + array[i]["number"] + "</h6>";
-          	
 	  	 	item += "<small class=\"text-muted\" id = \"my"+ array[i]["chain_name"]+ i +"\">" + array[i]["store_name"] + "</small></div>";
           	item += "<small class=\"text-muted\">" + array[i]["chain_name"] + "</small></div><br>";
             item += "<span class=\"text-muted\"  id =\""+array[i]["chain_name"]+"개"+"\"  >" + array[i]["price"]*array[i]["number"] + "원 "+ "</span>";
@@ -27,8 +26,6 @@ function cartProductElments(array){
 	}
 	return totalPrice;
 }
-
-
 
 $(function(){
 		var numOfPoints = 0;//point 순회하는 index

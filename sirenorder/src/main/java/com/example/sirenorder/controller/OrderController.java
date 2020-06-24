@@ -272,13 +272,8 @@ public class OrderController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-//	    String str1="2020-06-17";  
-//	    String str2="2020-06-18";  
-//		Date firstDate = Date.valueOf(str1);//converting string into sql date  
-//		Date secondDate = Date.valueOf(str2);
-//		ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, firstDate, secondDate);
-		model.addObject("from","");
-		model.addObject("to" ,"");
+		model.addObject("from","");//페이지에 orders_hitory 안 내놓기 위해 
+		model.addObject("to" ,"");//
 		model.addObject("ordersHistory", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
@@ -300,65 +295,86 @@ public class OrderController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
-		
-		if(range == 1) {
-			System.out.println("haha");
-			System.out.println(from);
-			System.out.println(from.getTime());
-		model.addObject("from", from.getTime());
-		model.addObject("to", to.getTime());
-		model.addObject("ordersHistory", "clicked");
-		model.setViewName("thymeleaf/main");
-		return model;
-		
-		}
-
-		
-		//포인트가 미사용 이라면 
-		if(users_id == null) {
+		if(users_id == null) {//로그인 안된상태는 return ;
 			model.setViewName("redirect:/index.html");
 			return model;
 		} 
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");//프론트의 자바스크립트에 날짜 표시하는 것
+		model.addObject("from", formatter.format(from));//from을 페이지의 datepicker의 ${from} value에 넣기 위함
+		model.addObject("to", formatter.format(to));//to을 페이지의 datepicker의 ${from} value에 넣기 위함
+		//포인트가 미사용 이라면 
 		ArrayList<Orders_detailVO> detailTemp = null;
+		
+		if(httpSession.getAttribute("from") != null && httpSession.getAttribute("to") != null) {
+			if(httpSession.getAttribute("from").equals(formatter.format(from)) && 
+					httpSession.getAttribute("to").equals(formatter.format(to))){
+				detailTemp = (ArrayList<Orders_detailVO>) httpSession.getAttribute("orders_detailList");
+				System.out.println("same state");
+				
+				//전과 같은 스테이트 
+				//pagination 범위
+			}else {//다른 스테이트
+				//pagination 첫페이지
+				//날짜에 따라서 디비에서 OrdersVO 데이터를 가져온다.  OrdersVO의 orders_id를 기반으로 orders_detail들을 가져온다. 
+				httpSession.removeAttribute("from");
+				httpSession.removeAttribute("to");
+				httpSession.setAttribute("from", from);
+				httpSession.setAttribute("to", from);
+				
+				java.sql.Date sqlDateFrom = new java.sql.Date( from.getTime() ); 
+				java.sql.Date sqlDateTo = new java.sql.Date( to.getTime() ); 
+				
+				ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, sqlDateFrom, sqlDateTo);//여기서 orders_id 가져온다. 
+				detailTemp = new ArrayList<Orders_detailVO>();
+				
+				for(int i = 0;i < temp.size();i++) {
+					ArrayList<Orders_detailVO> orders_detailTemp = orders_detailbiz.getOrders_detailByOrdersId(temp.get(i).getOrders_id());
+					detailTemp.addAll(orders_detailTemp);
+				}
+				httpSession.setAttribute("orders_detailList", detailTemp);
 
-		if(httpSession.getAttribute("orders_detailList") != null &&
-				httpSession.getAttribute("startDate") == from &&
-				httpSession.getAttribute("endDate") == to) {
-			//이미 데이터 있는 것으로 한다. 
-			detailTemp = (ArrayList<Orders_detailVO>) httpSession.getAttribute("orders_detailList");
-		}else {//새로운 데이터 기존 세션 해제
-			httpSession.invalidate();
+			}
+		}else {//맨 처음 들어온 경우
+			//pagination 첫페이지
+			//날짜에 따라서 디비에서 OrdersVO 데이터를 가져온다.  OrdersVO의 orders_id를 기반으로 orders_detail들을 가져온다. 
+			httpSession.setAttribute("from", from);
+			httpSession.setAttribute("to", from);
+			
 			java.sql.Date sqlDateFrom = new java.sql.Date( from.getTime() ); 
 			java.sql.Date sqlDateTo = new java.sql.Date( to.getTime() ); 
 			ArrayList<OrdersVO> temp = ordersbiz.getByDateFromTo(users_id, sqlDateFrom, sqlDateTo);//여기서 orders_id 가져온다. 
-			detailTemp = new ArrayList<Orders_detailVO>();
+			
+			detailTemp = new ArrayList<Orders_detailVO>();//detailTemp는 orders_detail 모음
 			for(int i = 0;i < temp.size();i++) {
 				ArrayList<Orders_detailVO> orders_detailTemp = orders_detailbiz.getOrders_detailByOrdersId(temp.get(i).getOrders_id());
 				detailTemp.addAll(orders_detailTemp);
 			}
 			httpSession.setAttribute("orders_detailList", detailTemp);
 		}
-		
-		//detailTemp에 모든 것이 있다. 근데 여기에는 product_name이 없다. 
-		int listCnt = detailTemp.size();
+		//페이지네이션 관련
+		int listCnt = detailTemp.size();//주문 상품 각각의 개수 
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
 		int listSize = pagination.getListSize();
 		
+		//상품이미지를 추가하기 위한것
 		ArrayList<Orders_detailJoinProductVO> List = new ArrayList<Orders_detailJoinProductVO>();
-
-		for(int i= page ;i<= page+ 6;i++) {//6개의 데이터만 전송 
+		for(int i= (page-1)*6 ;i < (page-1)*6+ 6;i++) {//6개의 데이터만 전송 
+			if(i >= detailTemp.size()) {  /// detailTemp (orders_detail ) 사이즈를 넘어가면 break ex) 1 >= 1 이면 break;
+				break;
+			}
 			Orders_detailJoinProductVO tempVO = new Orders_detailJoinProductVO();
 			ProductVO productVO = new ProductVO();
-			productVO.setImage(productbiz.get(detailTemp.get(i).getProduct_id()).getImage());
+			productVO.setImage(productbiz.get(detailTemp.get(i).getProduct_id()).getImage());//이미지 설정
 			productVO.setProduct_name(detailTemp.get(i).getProduct_name());
 			tempVO.setOrders_date(detailTemp.get(i).getOrders_date());
 			tempVO.setPrice(detailTemp.get(i).getPrice());
 			tempVO.setQuantity(detailTemp.get(i).getQuantity());
+			tempVO.setProductVO(productVO);
 			List.add(tempVO);
 		}
-
 		
 		model.addObject("pagination", pagination);
 		model.addObject("List", List);
