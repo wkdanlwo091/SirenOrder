@@ -107,6 +107,13 @@ public class OrderController {
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		
+		String users_id = (String) httpSession.getAttribute("userId");
+		//포인트가 미사용 이라면 
+		if(users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+
 		ArrayList<PointVO> arrayList = makeCart(httpSession);
 		
 		if(arrayList == null) {
@@ -120,7 +127,7 @@ public class OrderController {
 		return model;
 	}
 	
-	public void usePoint(PointList pointlist, String users_id) throws Exception {
+	public void usePoint(PointList pointlist, String users_id) throws Exception {//체인별로 포인트 사용하기 
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {//포인트의 개수에 따라서 point를 update한다. 
 			if(pointlist.getUseOrNot()[i] == 1) {//포인트를 사용할 것이면
 				
@@ -136,7 +143,7 @@ public class OrderController {
 				pointVO.setChain_name(chain_name);
 				pointVO.setUsers_id(users_id);
 				System.out.println(pointVO);
-				pointbiz.update(pointVO);
+				pointbiz.update(pointVO);//point를 사용한 만큼 차감하기 
 			}
 		}
 	}
@@ -145,7 +152,8 @@ public class OrderController {
 		pointbiz.getByChain_name(chain_name);
 	}
 	
-	public void makePoint_store(PointList pointlist, String users_id) throws Exception {//두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장 
+	public void makePoint_store(PointList pointlist, String users_id) throws Exception {
+		//두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장 
 		for(int i= 0;i < pointlist.getChain_name().length;i++) {
 			String chain_name = pointlist.getChain_name()[i];
 			int point = pointlist.getPoint()[i];
@@ -188,6 +196,22 @@ public class OrderController {
 		System.out.println("orders completed");
 	}
 	
+	public void makePoints(String users_id,  PointList pointlist) throws Exception {//처음 간 chain의 포인트를 만든다. 
+		//포인트 비율 어떻게 ?? 구매액의 0.5%? 
+		int totalPrice = 0;
+		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
+			totalPrice += pointlist.getTotalPrice()[i];
+		}
+		OrdersVO ordersVO = new OrdersVO();
+		ordersVO.setOrders_id("orders_id");
+		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
+		ordersVO.setPayment_way("before_card");
+		ordersVO.setUsers_id(users_id);
+		ordersVO.setTotal_price(totalPrice);
+		ordersbiz.register(ordersVO);
+		System.out.println("orders completed");
+	}
+	
 	public void makeOrders_detail(PointList pointList) throws Exception {//orders_detail 테이블에 insert
 		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
 		System.out.println(orders_id);
@@ -213,7 +237,7 @@ public class OrderController {
 		}
 		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
 	}
-	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)
+	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)//물건을 살 때 부르는 컨트롤러 
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList,HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -221,19 +245,18 @@ public class OrderController {
 		//포인트가 미사용 이라면 
 		if(pointList.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
 			System.out.println("null");
-		}else {//point 사용한 경우 point update 및 point_store생성 
+		}else {//point 사용한 경우 point update 및 point_store생성 및 point생성
 			usePoint(pointList, users_id);
 			makePoint_store(pointList,users_id);
 		}
 		
 		makeOrders(users_id, pointList);
 		makeOrders_detail(pointList);
-		
 		model.addObject("checkout", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET)//현재 주문들어간 상품 보기 (주문 완료전) 
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range
@@ -245,8 +268,8 @@ public class OrderController {
 		if(users_id.equals(null)) {
 			model.setViewName("redirect:/index.html");
 		}
-		
-		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();
+		//orders_detail과 product가 join 되었다. mybatis의 resultmap을 사용하여 
+		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();//페이지네이션을 위해서 orders_detail 개수를 센다 
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
@@ -261,7 +284,7 @@ public class OrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.GET)
+	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.GET)//물건을 산기록을 보는 컨트롤러 ( 물건들의 날짜 범위 검색 전)
 	public ModelAndView ordersHistory(HttpServletRequest request
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
@@ -285,7 +308,7 @@ public class OrderController {
 	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
 	}
 	
-	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)
+	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)//물건을 산 기록을 보는 컨트롤러 
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
 			@DateTimeFormat(pattern="yyyy-MM-dd")  @RequestParam(required = false) Date from,
 			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false) Date to,

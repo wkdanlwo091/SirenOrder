@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 			select orders_detail_seq.nextval as seq from dual
 		</selectKey>
 		INSERT INTO ORDERS_DETAIL VALUES( #{orders_detail_id}||#{seq}, #{price},
-		#{quantity}, #{orders_id}, #{product_id}, #{product_name})
+		#{quantity}, #{orders_id}, #{product_id}, #{product_name}, #{orders_date})
 	</insert>
 	<select id="selectOrders_seq" resultType="int"><!-- orders의 마지막 시퀸스 번호를 찾기 -->
 		select last_number from user_sequences where sequence_name = 'ORDERS_SEQ'

@@ -14,6 +14,7 @@ public class Orders_detailJoinProductVO{
 	int quantity;
 	String orders_id;
 	String product_id;
+	String product_name;
 	String status;
 	Date orders_date;//개발의 간편화를 위해 역정규화를 하였다. 
 	int seq;
