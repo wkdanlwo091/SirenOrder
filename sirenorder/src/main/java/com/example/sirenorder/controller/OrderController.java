@@ -333,7 +333,6 @@ public class OrderController {
 					detailTemp.addAll(orders_detailTemp);
 				}
 				httpSession.setAttribute("orders_detailList", detailTemp);
-
 			}
 		}else {//맨 처음 들어온 경우
 			//pagination 첫페이지
@@ -368,7 +367,9 @@ public class OrderController {
 			Orders_detailJoinProductVO tempVO = new Orders_detailJoinProductVO();
 			ProductVO productVO = new ProductVO();
 			productVO.setImage(productbiz.get(detailTemp.get(i).getProduct_id()).getImage());//이미지 설정
-			productVO.setProduct_name(detailTemp.get(i).getProduct_name());
+			
+			productVO.setProduct_name(productbiz.get(detailTemp.get(i).getProduct_id()).getProduct_name());
+			productVO.setChain_name(productbiz.get(detailTemp.get(i).getProduct_id()).getChain_name());
 			tempVO.setOrders_date(detailTemp.get(i).getOrders_date());
 			tempVO.setPrice(detailTemp.get(i).getPrice());
 			tempVO.setQuantity(detailTemp.get(i).getQuantity());

@@ -116,22 +116,19 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 							<input type="submit" value="조회">
 						</form>
 						
-						<div th:if="${from.equals('') }">
-						</div>
 						<!-- ELSE -->
-						<div th:unless="${from.equals('')}">
-							<div class="col-lg-4 col-sm-6" th:each="list : ${List}">
+							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
-	                                <img th:src="${list.productVO.image}" alt="">
+	                                <img th:src="${list.productVO.image}" alt="" width="333" height="333"><!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
 	                                <div class="single_product_text">
 	                                    <h4 th:text="${list.productVO.product_name}"></h4>
 	                                    <h4 th:text="${list.price}"></h4>
+	                                    <h4 th:text="${list.orders_date}"></h4>
 	                                    <h4 th:text="${list.productVO.chain_name}"></h4>
 	                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
 	                            </div>
 	                        </div>
-
-							<div id="paginationBox">
+							<div th:if="${!from.equals('')}" id="paginationBox">
 								<ul class="pagination">
 										<li th:if="${pagination.prev}" class="page-item">
 											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
@@ -149,7 +146,6 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 										</li>
 								</ul>
 							</div>
-						</div>
 						
 						
 						
