@@ -61,7 +61,7 @@ public class OrderController {
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST)//가게 이름을 return 한다. 
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
-		String chain = request.getParameter("chain");
+		String chain = request.getParameter("chain").trim();//검색 했을 때 뒤에 오는 스페이스를 자르기 
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
 		if(arrList.size() == 0) {
 			System.out.println("찾는 가게가 없습니다.");
@@ -73,7 +73,7 @@ public class OrderController {
 	}
 	//checkout 장바구니 보기
 	
-	public ArrayList<PointVO> makeCart(HttpSession httpSession) throws Exception {
+	public ArrayList<PointVO> bringPointInfo(HttpSession httpSession) throws Exception {//카트에 대한 포인트 정보를 넣는다. 
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 
 		Iterator<CartVO> itr;
@@ -82,7 +82,6 @@ public class OrderController {
 		}else{
 			return null;
 		}
-		
 		HashMap<String, Boolean> chain_names = new HashMap<String, Boolean >();
 		while (itr.hasNext()) {
 			CartVO tmp = itr.next();
@@ -90,32 +89,30 @@ public class OrderController {
 				chain_names.put(tmp.getChain_name(), true);
 			}
 		}
-		
 		Iterator<String> itr2 = chain_names.keySet().iterator();
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
 			String chain_names_next = itr2.next();
 			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
-			arrayList.add(pointVO);
+			if(pointVO != null)
+				arrayList.add(pointVO);
 		}
 		return arrayList;
 	}
 	
-	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET)//주문하기 페이지 
 	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
 		System.out.println("checkout에 들어왔다. ");
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
-		
 		String users_id = (String) httpSession.getAttribute("userId");
 		//포인트가 미사용 이라면 
 		if(users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-
-		ArrayList<PointVO> arrayList = makeCart(httpSession);
-		
+		ArrayList<PointVO> arrayList = bringPointInfo(httpSession);//포인트정보를 넣는다. 
+		System.out.println(arrayList.size());
 		if(arrayList == null) {
 			model.addObject("checkout", "clicked");
 			model.setViewName("thymeleaf/main");
@@ -180,62 +177,65 @@ public class OrderController {
 			}
 		}
 	}
-	
-	public void makeOrders(String users_id,  PointList pointlist) throws Exception {//orders 테이블에 insert
-		int totalPrice = 0;
-		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
-			totalPrice += pointlist.getTotalPrice()[i];
-		}
-		OrdersVO ordersVO = new OrdersVO();
-		ordersVO.setOrders_id("orders_id");
-		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
-		ordersVO.setPayment_way("before_card");
-		ordersVO.setUsers_id(users_id);
-		ordersVO.setTotal_price(totalPrice);
-		ordersbiz.register(ordersVO);
-		System.out.println("orders completed");
-	}
-	
 	public void makePoints(String users_id,  PointList pointlist) throws Exception {//처음 간 chain의 포인트를 만든다. 
-		//포인트 비율 어떻게 ?? 구매액의 0.5%? 
+		//포인트 비율 어떻게 ?? 구매액의 0.5%?  
 		int totalPrice = 0;
+		//point가 없는 경우 만든다. 
 		for(int i = 0 ;i < pointlist.getChain_name().length;i++) {
 			totalPrice += pointlist.getTotalPrice()[i];
-		}
-		OrdersVO ordersVO = new OrdersVO();
-		ordersVO.setOrders_id("orders_id");
-		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
-		ordersVO.setPayment_way("before_card");
-		ordersVO.setUsers_id(users_id);
-		ordersVO.setTotal_price(totalPrice);
-		ordersbiz.register(ordersVO);
-		System.out.println("orders completed");
-	}
-	
-	public void makeOrders_detail(PointList pointList) throws Exception {//orders_detail 테이블에 insert
-		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
-		System.out.println(orders_id);
-		String [][] tempName = pointList.getProductName();
-		int productNum = 0;
-		
-		for(int i= 0 ;i < 5; i++) {
-			if(tempName[i][0] == null)break;
-			for(int j = 0 ;j < 5;j++) {
-				if(tempName[i][j] != null)productNum++;
-				if(tempName[i][j] == null )break;
+			if( pointlist.getPoint_id()[i] != null) { //i번 째 체인에
+				//point 없는 체인이면 point 만들어야한다. 
+				pointbiz.get(pointlist.getPoint_id()[i]);
 
-				Orders_detailVO orders_detailVO = new Orders_detailVO();
-				orders_detailVO.setOrders_detail_id("orders_detail_id");
-				orders_detailVO.setPrice(pointList.getProductPrice()[i][j]);
-				orders_detailVO.setQuantity(pointList.getProductQuantity()[i][j]);
-				orders_detailVO.setOrders_id(orders_id);
-				orders_detailVO.setProduct_name(tempName[i][j]);
-				orders_detailVO.setProduct_id( productbiz.getProduct_id(tempName[i][j]));
-				orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
-				orders_detailbiz.register(orders_detailVO);
+				System.out.println("point 있다");
+			}else {
+				System.out.println("point 없다");
+
 			}
 		}
-		//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
+		
+		PointVO pointVO = new PointVO();
+		//pointVO.setChain_name(chain_name);
+		OrdersVO ordersVO = new OrdersVO();
+		ordersVO.setOrders_id("orders_id");
+		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
+		ordersVO.setPayment_way("before_card");
+		ordersVO.setUsers_id(users_id);
+		ordersVO.setTotal_price(totalPrice);
+		ordersbiz.register(ordersVO);
+		System.out.println("orders completed");
+	}
+
+	public void makeOrders(String users_id, HttpSession httpSession, int allTotalPrice) throws Exception {//orders 테이블에 insert
+			OrdersVO ordersVO = new OrdersVO();
+			ordersVO.setOrders_id("orders_id");
+			ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
+			ordersVO.setPayment_way("before_card");
+			ordersVO.setUsers_id(users_id);
+			ordersVO.setTotal_price(allTotalPrice);
+			ordersbiz.register(ordersVO);
+	}
+	
+	public void makeOrders_detail(HttpSession httpSession) throws Exception {//orders_detail 테이블에 insert
+		String orders_id = "orders_id"+Integer.toString(orders_detailbiz.getOrders_seq()-1 );//orders_list에 연결된 orders_id
+		System.out.println("orders_id 는 " + orders_id);
+		
+		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
+		Iterator<CartVO> itr = cartProduct.keySet().iterator();
+		while (itr.hasNext()) {
+			CartVO tmp =  itr.next();
+			Orders_detailVO orders_detailVO = new Orders_detailVO();
+			orders_detailVO.setOrders_detail_id("orders_detail_id");
+			orders_detailVO.setPrice(tmp.getPrice());
+			orders_detailVO.setQuantity(tmp.getNumber());
+			orders_detailVO.setOrders_id(orders_id);
+			orders_detailVO.setProduct_name(tmp.getProduct_name());
+			orders_detailVO.setProduct_id( productbiz.getProduct_id(tmp.getProduct_name()));
+			orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
+			orders_detailVO.setStatus("not_done");//주문이 들어갔고 아직 주문완료 전이다. 
+			orders_detailbiz.register(orders_detailVO);
+			//orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다. 
+		}
 	}
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST)//물건을 살 때 부르는 컨트롤러 
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList,HttpServletRequest request) throws Exception {
@@ -243,16 +243,24 @@ public class OrderController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 		//포인트가 미사용 이라면 
-		if(pointList.getChain_name() == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
+		if(pointList.getChain_name()  == null) {//포인트 아무 것도 안 쓴 겨우 orders 와 orders_detail을 만든다. 
 			System.out.println("null");
+			System.out.println(pointList);
 		}else {//point 사용한 경우 point update 및 point_store생성 및 point생성
+			makePoints(users_id, pointList);
 			usePoint(pointList, users_id);
 			makePoint_store(pointList,users_id);
 		}
 		
-		makeOrders(users_id, pointList);
-		makeOrders_detail(pointList);
-		model.addObject("checkout", "clicked");
+		makeOrders(users_id, httpSession, pointList.getAllTotalPrice());
+		makeOrders_detail(httpSession);
+		
+		httpSession.removeAttribute("cartProduct");//구매 후 카트 세션 파괴
+		
+		if(httpSession.getAttribute("cartProduct") == null) {
+			System.out.println("session 파괴되었다. ");
+		}
+		model.addObject("order", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
 	}

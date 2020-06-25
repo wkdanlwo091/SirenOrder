@@ -35,6 +35,7 @@
             data: data,
             dataType: "json",
             success: function(data){
+            	$('th').empty();
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
                 	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");

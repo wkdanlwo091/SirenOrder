@@ -179,7 +179,6 @@ public class UserController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	
     @RequestMapping(value="/getProfile", method=RequestMethod.POST)
     @ResponseBody
     public String getProfile(HttpServletRequest request) {
@@ -197,7 +196,6 @@ public class UserController {
     	jsonObject.put("role", user.getRole());
         return jsonObject.toString();
     }
-
     @RequestMapping(value="updateProfile", method=RequestMethod.POST)
     @ResponseBody
     public String updateProfile(HttpServletRequest request) throws Exception {
@@ -231,7 +229,6 @@ public class UserController {
     	
         return "fail";
     }
-    
     @RequestMapping(value="quitProfile", method=RequestMethod.POST)
     @ResponseBody
     public String quitProfile(HttpServletRequest request) throws Exception {
@@ -249,9 +246,6 @@ public class UserController {
     	//포인트에는 외래키가 걸려있어서 지우는게 복잡하다.
     	return "success";
     }
-
-    
-    
     @RequestMapping(value="/requestObject", method=RequestMethod.POST)// simpleWithObject는 연습을 위한 function이다.
     @ResponseBody
     public String simpleWithObject(UserVO user) {

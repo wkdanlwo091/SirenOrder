@@ -17,4 +17,5 @@ public class PointList {
 	//체인 점당 여러가지 물건이 있으므로 2차원 배열 ex) banapresso에 에스프레소, 녹차, 행신감자탕에 감자탕, 뼈다귀해장국
 	int [][] productPrice = new int[5][5];
 	int [][] productQuantity = new int[5][5];
+	int allTotalPrice;
 }

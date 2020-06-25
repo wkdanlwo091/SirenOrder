@@ -7,9 +7,7 @@
 <script>
 var pointsArray = new Array();//포인트 정보 저장 
 
-//이 function에서 sub 장바구니 ( 로그인정보 옆에 있는 장바구니) 를 hide 시킨다. 
-
-function cartProductElments(array){
+function cartProductElments(array){//카트에 담긴 상품들을 넣고 총 가격을 계산해서 return 해주는 함수 
 	var totalPrice =0;
 	for(var i in array){//iteration을 한다. 
 	  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
@@ -26,8 +24,8 @@ function cartProductElments(array){
 	}
 	return totalPrice;
 }
-
 $(function(){
+	//카트에 담긴 내용을 웹페이지에 뿌리는 내용
 		var numOfPoints = 0;//point 순회하는 index
 		numOfPoints = document.querySelectorAll("[id^=\"myPoint\"]");
 		[].forEach.call(numOfPoints, function(index) {
@@ -35,8 +33,9 @@ $(function(){
 			  pointsArray.push(index.innerHTML);
 			  console.log("typeof는 " + typeof index.innerHTML);
 		});
-		
 		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
+		//상단 바에 있는 장바구니 숨딘다.// 왜냐면 장바구니와 checkout 내용이 중복 되기 때문에 
+	
 		//장바구니 정보 refresh한다. 
 		$.ajax({//세션 만들어서 return 한다. 
 			  url: "cartProductBring",
@@ -46,30 +45,21 @@ $(function(){
 					alert("noCart");
 					return;
 				}
+				
 				var array = JSON.parse(result);
 				var number = array[0]["number"];
 				var numOfArrays = array.length;
 				var totalPrice = 0;
 				var totalIndex = 0;
-				
-				totalPrice = cartProductElments(array);
-				
-				
-				
-				
+				totalPrice = cartProductElments(array);//처음 들어와서 refresh 하는 코드
+				alert(totalPrice);
 			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
-				
-	            //
-	               
-			  
 			  },
 	            error: function(result){
 	            	alert("error 는" + result);
 	            }
 		});
 });
-
-
 function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 이 함수가 실행 될때 마다 포인트 정보도 초기화 
 	alert(product_name + " " + store_name + " " + price);
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
@@ -85,17 +75,11 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			var pointClone = document.getElementById('pointListId').cloneNode( true );//totalListId
 			$('#checkOutCartId').text("");//페이지 코드 refresh 한다. 
 			
-			
-			
-			
 			totalPrice = cartProductElments(array);
-			
-			
-			
 			
 			var totalPriceElement = "<li id = \"" + "totalListId" +"\" class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 				totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\" onclick=\"checkOutCart()\">&nbsp;주문하기</button>";
-				totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" th:object=\"${pointlist}\" method =\"post\"></form></li>";
+				totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" method =\"post\"></form></li>";
 			$('#checkOutCartId').append(pointClone);//포인트 정보 가져오기 
 			$('#checkOutCartId').append(totalPriceElement);//총 가격 가져오기 
 			document.querySelector("#strongTotalId").innerHTML = totalPrice;
@@ -297,29 +281,32 @@ function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
 	//서버에서 point_store를 만들고
 	//orders, ordersdetail 만든다. 
+	var allTotalPrice = parseInt($('#strongTotalId').text());
+	$('#buyProductId').append("<input type=\"hidden\" value=\"" +allTotalPrice+"\" name = \"" + "allTotalPrice" +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
 	document.getElementById("buyProductId").submit();//사용한 point정보, 사는 물건정보를 컨트롤러에 올린다. 
 }
-
 </script>
 <body>
-	        <div class="col-md-4 order-md-2 mb-4">
+	    <div class="col-md-4 order-md-2 mb-4">
           <h4 class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-muted">장바구니</span>
           </h4>
           <ul class="list-group mb-3" id = "checkOutCartId">
             <!-- thymeleaf 로 point 정보를 가져오겠다 장바구니 아이템의 chain_name 기반으로  -->
             <li id = "pointListId" class="list-group-item d-flex justify-content-between" th:each= "data, iterStat: ${arrayList}">
-              <span>포인트  : </span>
-              <strong th:text = "${data.getChain_name()}" >$20</strong>
-              <strong th:text = "${data.getPoint()}"  th:id="|myPoint${iterStat.index}|" >$20</strong>
-              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',1, )|" >사용</button>
-              <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',0)|" >미사용</button>
+              <div th:if="${data != null}"><!-- 한번이라도 사용해서 point가 null이 아닐 때 -->
+                <span>포인트  : </span>	
+                <strong th:th:text = "${data.getChain_name()}" >$20</strong>
+			  	<strong th:text = "${data.getPoint()}"  th:id="|myPoint${iterStat.index}|" >$20</strong>
+			    <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',1, )|" >사용</button>
+			    <button th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',0)|" >미사용</button>
+              </div>
             </li>
             <li id = "totalListId" class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
               <strong id = "strongTotalId">$20	</strong>
               <button id = "checkOutId" onclick="checkOutCart()" >&nbsp주문하기</button>
-              <form id="buyProductId" th:action="@{buyProduct}" th:object="${pointlist}" method ="post">
+              <form id="buyProductId" th:action="@{buyProduct}"  method ="post">
 			  </form>
             </li>
 			<li id = "li1"></li>

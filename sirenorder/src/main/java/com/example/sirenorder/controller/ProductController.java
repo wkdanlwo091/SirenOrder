@@ -190,8 +190,6 @@ public class ProductController {
 			}
 			httpSession.setAttribute("cartProduct", cartProduct);
 		}
-		
-		
 		JSONArray ja = new JSONArray();
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
 		int index = 0;
@@ -222,7 +220,6 @@ public class ProductController {
 	@ResponseBody
 	public String carProductBring(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
-
 		if(httpSession.getAttribute("cartProduct") == null) { 
 			return "noCart";
 		}
