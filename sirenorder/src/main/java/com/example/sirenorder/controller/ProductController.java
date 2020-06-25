@@ -186,10 +186,12 @@ public class ProductController {
 				cartProduct.remove(cartVO);
 				System.out.println("카트 파괴");
 			}else {//이미 있던 장바구니 아이템
-				cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 한개 늘리기 
+				cartProduct.put(cartVO, cartProduct.get(cartVO)-1);//수량 한개 줄이기
 			}
 			httpSession.setAttribute("cartProduct", cartProduct);
 		}
+		
+		
 		JSONArray ja = new JSONArray();
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
 		int index = 0;
@@ -220,6 +222,7 @@ public class ProductController {
 	@ResponseBody
 	public String carProductBring(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
+
 		if(httpSession.getAttribute("cartProduct") == null) { 
 			return "noCart";
 		}

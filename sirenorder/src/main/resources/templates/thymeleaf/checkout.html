@@ -129,15 +129,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 				var totalClone = document.getElementById('totalListId').cloneNode( true );//총가격 엘리먼트 복사 
 				
 				$('#checkOutCartId').text("");//원래있던 엘리먼트 지우기 
-				
-				
-				
 				totalPrice = cartProductElments(array);
-				
-				
-				
-				
-				
 				var totalPriceElement = "<li id = \"" + "totalListId" +"\" class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 					totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\" onclick=\"checkOutCart()\">&nbsp;주문하기</button>";
 					totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" th:object=\"${pointlist}\" method =\"post\"></form></li>";
@@ -283,6 +275,8 @@ function checkOutCart(){
 	//orders, ordersdetail 만든다. 
 	var allTotalPrice = parseInt($('#strongTotalId').text());
 	$('#buyProductId').append("<input type=\"hidden\" value=\"" +allTotalPrice+"\" name = \"" + "allTotalPrice" +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
+	$("span.badge.bg-danger").html("")  ;
+
 	document.getElementById("buyProductId").submit();//사용한 point정보, 사는 물건정보를 컨트롤러에 올린다. 
 }
 </script>
@@ -304,7 +298,7 @@ function checkOutCart(){
             </li>
             <li id = "totalListId" class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
-              <strong id = "strongTotalId">$20	</strong>
+              <strong id = "strongTotalId"> </strong>
               <button id = "checkOutId" onclick="checkOutCart()" >&nbsp주문하기</button>
               <form id="buyProductId" th:action="@{buyProduct}"  method ="post">
 			  </form>

@@ -75,7 +75,7 @@ public class OrderController {
 	
 	public ArrayList<PointVO> bringPointInfo(HttpSession httpSession) throws Exception {//카트에 대한 포인트 정보를 넣는다. 
 		HashMap<CartVO, Integer> cartProduct =  (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
-
+		
 		Iterator<CartVO> itr;
 		if(cartProduct != null) {
 			 itr = cartProduct.keySet().iterator();
@@ -112,7 +112,6 @@ public class OrderController {
 			return model;
 		}
 		ArrayList<PointVO> arrayList = bringPointInfo(httpSession);//포인트정보를 넣는다. 
-		System.out.println(arrayList.size());
 		if(arrayList == null) {
 			model.addObject("checkout", "clicked");
 			model.setViewName("thymeleaf/main");
@@ -256,6 +255,7 @@ public class OrderController {
 		makeOrders_detail(httpSession);
 		
 		httpSession.removeAttribute("cartProduct");//구매 후 카트 세션 파괴
+		httpSession.setAttribute("totalIndex", 0);//장바구니 수 0으로 초기화
 		
 		if(httpSession.getAttribute("cartProduct") == null) {
 			System.out.println("session 파괴되었다. ");
