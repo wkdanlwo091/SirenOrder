@@ -181,7 +181,7 @@ public class ProductController {
 			CartVO cartVO = new CartVO();//작업 중인 것 
 			cartVO = makeCart(product_name, store_name, chain_name, price);
 			cartProduct = (HashMap<CartVO, Integer>)httpSession.getAttribute("cartProduct");
-			System.out.println(cartVO);
+			System.out.println(cartProduct.size() + " haha");
 			if(cartProduct.get(cartVO) == 1) {//새로운 아이템이 들어온 장바구니 
 				cartProduct.remove(cartVO);
 				System.out.println("카트 파괴");

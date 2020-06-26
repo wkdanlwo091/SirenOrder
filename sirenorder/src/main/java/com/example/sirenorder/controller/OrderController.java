@@ -264,10 +264,11 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET)//현재 주문들어간 상품 보기 (주문 완료전) 
+	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET)//현재 주문들어간 상품 보기 (주문 완료전) not_done
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
-			@RequestParam(required = false, defaultValue = "1") int range
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "none") String chain_name
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -275,16 +276,14 @@ public class OrderController {
 		//포인트가 미사용 이라면 
 		if(users_id.equals(null)) {
 			model.setViewName("redirect:/index.html");
-		}
+		}	
 		//orders_detail과 product가 join 되었다. mybatis의 resultmap을 사용하여 
 		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();//페이지네이션을 위해서 orders_detail 개수를 센다 
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
 		int listSize = pagination.getListSize();
-		
 		ArrayList<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrdersStatus(pagination);
-		System.out.println(List);
 		model.addObject("pagination", pagination);
 		model.addObject("currentOrderStatus", "clicked");
 		model.addObject("List", List);
@@ -316,7 +315,7 @@ public class OrderController {
 	                         new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));   
 	}
 	
-	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)//물건을 산 기록을 보는 컨트롤러 
+	@RequestMapping(value = "/ordersHistory.html",method = RequestMethod.POST)//물건을 산 기록을 보는 컨트롤러 (날짜 검색 후 
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
 			@DateTimeFormat(pattern="yyyy-MM-dd")  @RequestParam(required = false) Date from,
 			@DateTimeFormat(pattern="yyyy-MM-dd") @RequestParam(required = false) Date to,

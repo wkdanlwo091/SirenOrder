@@ -24,6 +24,7 @@ function cartProductElments(array){//카트에 담긴 상품들을 넣고 총 �
 	}
 	return totalPrice;
 }
+
 $(function(){
 	//카트에 담긴 내용을 웹페이지에 뿌리는 내용
 		var numOfPoints = 0;//point 순회하는 index
@@ -60,6 +61,7 @@ $(function(){
 	            }
 		});
 });
+
 function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 이 함수가 실행 될때 마다 포인트 정보도 초기화 
 	alert(product_name + " " + store_name + " " + price);
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
@@ -76,7 +78,6 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			$('#checkOutCartId').text("");//페이지 코드 refresh 한다. 
 			
 			totalPrice = cartProductElments(array);
-			
 			var totalPriceElement = "<li id = \"" + "totalListId" +"\" class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 				totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\" onclick=\"checkOutCart()\">&nbsp;주문하기</button>";
 				totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" method =\"post\"></form></li>";
@@ -84,8 +85,6 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			$('#checkOutCartId').append(totalPriceElement);//총 가격 가져오기 
 			document.querySelector("#strongTotalId").innerHTML = totalPrice;
 			//포인트의 point 초기화 
-			
-			
 			var numOfPoints;//포인트 개수
 			var myIndex = 0;//나의 인덱스
 			
@@ -104,10 +103,9 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
             }
 	});
 }
-
 function minusToCartCheckout(product_name,store_name, chain_name,price){//장바구니를 더한다. 그리고 그에 따른 포인트 정보도 뺀다. 
 	alert(store_name);
-	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
+	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
 		  url: "cartProductMinus",
 		  method: "POST", 
@@ -118,8 +116,10 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 					return;	
 			  	}else if(result == "noData"){// 모든 데이터 삭제한 경우 
 				  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = 0;
-				  	document.getElementById("cartList").innerHTML = "<li><a href=\"/checkOut.html\" class=\"more\" >장바구니</a></li>";//먼저 있던 내용을 다 지운다 
+				  	document.getElementById("checkOutCartId").innerHTML = "";//먼저 있던 내용을 다 지운다 
 				  	return;
+			  	}else{
+			  		alert("else");
 			  	}
 			  	var array = JSON.parse(result);
 				var number = array[0]["number"];
@@ -158,7 +158,6 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 	}else{//체인 총가격이 point 보다 낮을 때 point = point - chain_total_price가 된다. 
 		point = point - chain_total_price;
 	}
-	
 	if($("#"+ chain_name+"").length == 1){//element 존재할 때  point를 사용 할 것인지 아닌지 판단
 		if(useOrNot == 1){//사용하기
 			$("#"+ chain_name).val("1");
@@ -189,12 +188,9 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 			var store_nameNum = "store_name[0]";// store_name[0] store_name[1] 이런식이 컨트롤러의 pointlist 옵젝트에 들어간다. 
 			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-			
-			
 			var productNameNum;
 			var productPriceNum;
 			var productQuantityNum;
-
 			var indexCall = 0;
 			[].forEach.call( chain_productName, function(el) {
 				var callName = el.innerHTML;
@@ -233,7 +229,6 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 			var store_nameNum = "store_name[0]";// store_name[0] store_name[1] 이런식이 컨트롤러의 pointlist 옵젝트에 들어간다. 
 			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-		
 		
 			var productNameNum;
 			var productPriceNum;

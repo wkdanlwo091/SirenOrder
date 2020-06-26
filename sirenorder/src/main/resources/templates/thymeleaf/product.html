@@ -43,7 +43,6 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 		url = url + "&chain_name=" + chain_name;
 		url = url + "&store_name=" + store_name;
 		location.href = url;	
-
 	}
 	//다음 버튼 이벤트
 	function fn_next(page, range, rangeSize, chain_name, store_name) {
@@ -79,7 +78,7 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 									-->		
                         <div class="col-lg-4 col-sm-6" th:each="list : ${List}">
                             <div class="single_product_item">
-                                <img th:src="${list.image}" alt="">
+                                <img th:src="${list.image}" alt="" width="300" height="350">
                                 <div class="single_product_text">
                                     <h4 th:text="${list.product_name}"></h4>
                                     <h4 th:text="${list.price}"></h4>
