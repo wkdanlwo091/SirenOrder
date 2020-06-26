@@ -20,46 +20,56 @@
     <!-- swiper CSS -->
     <link rel="stylesheet" href="css/slick.css">
     <!-- style CSS -->
-    
-    
-    <!-- date picker전용  -->
-	  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!-- date picker전용  -->
 	  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 </head>
 <script>
-
 //이전 버튼 이벤트
 function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
 		var range = range - 1;// 6
-		var url = "/product.html";
+		var url = "/ordersHistory.html";
+		var startDate = $('#from').val();
+		var endDate = $('#to').val();
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&chain_name=" + chain_name;
+		url = url + "&from=" + startDate;
+		url = url + "&to=" + endDate;
+		url = url + "&none=" + endDate;
 		location.href = url;
 	}
   //페이지 번호 클릭
 	function fn_pagination(page, range, rangeSize, chain_name ) {
-		var url = "/product.html";
+		var url = "/ordersHistory.html";
+		var startDate = $('#from').val();
+		var endDate = $('#to').val();
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&chain_name=" + chain_name;
+		url = url + "&from=" + startDate;
+		url = url + "&to=" + endDate;
+		url = url + "&none=" + endDate;
+		alert("pagination page " + page);
 		location.href = url;	
-
 	}
 	//다음 버튼 이벤트
 	function fn_next(page, range, rangeSize, chain_name ) {
 		var page = parseInt((range * rangeSize)) + 1;
 		var range = parseInt(range) + 1;
-		var url = "/product.html";
+		var url = "/ordersHistory.html";
+		var startDate = $('#from').val();
+		var endDate = $('#to').val();
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
 		url = url + "&chain_name=" + chain_name;
+		url = url + "&from=" + startDate;
+		url = url + "&to=" + endDate;
+		url = url + "&none=" + endDate;
+
 		location.href = url;
 	}
-	
     var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
 	  j( function() {
 		    var dateFormat = "yyyy-mm-dd";
@@ -69,53 +79,39 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		          changeMonth: true,
 		          changeYear: true,
 		          numberOfMonths: 1
-		        })/*
-		        .on( "change", function() {
-		          to.datepicker( "option", "minDate", getDate( this ) );
-		        });*/
+		        }) 
 		    var to = j( "#to" ).datepicker({
 		        defaultDate: "+1w",
 		        changeMonth: true,
 		        changeYear: true,
 		        numberOfMonths: 1
-		      })
-		      /*
-		      .on( "change", function() {
-		        from.datepicker( "option", "maxDate", getDate( this ) );
-		      });*/
-		 
-
-		    function getDate( element ) {//이 fucntion이 document ready scope 안에 있어야한다. 
-			      var date;
-			      try {
-			        date = j.datepicker.parseDate( dateFormat, element.value );
-			      } catch( error ) {
-			        date = null;
-			      }
-			      return date;
-			}
-		      
-		      
-
-		      
+		      }) 
 	  	} );
+    
+    	function submitOrdersHistoryDate(){
+    		var startDate = $('#from').val();
+    		var endDate = $('#to').val();
+			if(startDate > endDate){
+				alert("올바른 기간을 설정하세요");
+			}else{
+				document.getElementById("OrdersHistoryId").submit();
+			}
+    	}
 </script>
-
 <body>
-
-
         <div class="container">
             <div class="row">
                 <div class="col-lg-9">
                     <div class="row align-items-center latest_product_inner">
-						<form method="post" action="/ordersHistory.html">
-							<label for="from">From</label>
-							<input type="date" id="from"  th:value="${from}" name="from"><!-- 스프링 컨트롤러에서 date준다.  -->
-							<label for="to">to</label>
-							<input type="date" id="to" th:value="${to}" name="to"><!--  -->
-							<input type="submit" value="조회">
-						</form>
-						
+                    	<div>
+							<form method="post" action="/ordersHistory.html" id = "OrdersHistoryId">
+								<label for="from">From</label>
+								<input type="date" id="from"  th:value="${from}" name="from"><!-- 스프링 컨트롤러에서 date준다.  -->
+								<label for="to">to</label>
+								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
+							</form>
+							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
+						</div>
 						<!-- ELSE -->
 							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
@@ -181,4 +177,5 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
     <script src="js/price_rangs.js"></script>
     <!-- custom js -->
     <script src="js/custom.js"></script>
+    
 </html>
