@@ -11,4 +11,6 @@ public class PointVO {
 	String users_id;
 	int point; 
 	String chain_name;
+	double point_rate;
+	int seq;
 }

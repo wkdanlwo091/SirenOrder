@@ -29,7 +29,7 @@
 function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
 		var range = range - 1;// 6
-		var url = "/ordersHistory.html";
+		var url = "/pointHistory.html";
 		var startDate = $('#from').val();
 		var endDate = $('#to').val();
 		url = url + "?page=" + page;
@@ -42,7 +42,7 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 	}
   //페이지 번호 클릭
 	function fn_pagination(page, range, rangeSize, chain_name ) {
-		var url = "/ordersHistory.html";
+		var url = "/pointHistory.html";
 		var startDate = $('#from').val();
 		var endDate = $('#to').val();
 		url = url + "?page=" + page;

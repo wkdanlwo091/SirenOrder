@@ -47,6 +47,36 @@ public class Point_storeController {
 		model.setViewName("thymeleaf/points");
 		return model;
 	}
+	@RequestMapping(value = "pointHistory", method = RequestMethod.GET)
+	public ModelAndView pointHistorybefore(HttpServletRequest request) {
+		//로그인 안됐으면 바로 로그인 페이지로 가야지 
+		HttpSession httpSession = request.getSession();
+		String users_id = (String)httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
+		if(users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}
+		//user에 맞는 point_store를 뽑는다. 
+		model.addObject("points", "clicked");
+		model.setViewName("thymeleaf/points");
+		return model;
+	}
+	@RequestMapping(value = "pointHistory", method = RequestMethod.POST)
+	public ModelAndView pointHistoryAfter(HttpServletRequest request) {
+		//로그인 안됐으면 바로 로그인 페이지로 가야지 
+		HttpSession httpSession = request.getSession();
+		String users_id = (String)httpSession.getAttribute("userId");
+		ModelAndView model = new ModelAndView();
+		if(users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}
+		//user에 맞는 point_store를 뽑는다. 
+		model.addObject("points", "clicked");
+		model.setViewName("thymeleaf/points");
+		return model;
+	}
 	
 
 	

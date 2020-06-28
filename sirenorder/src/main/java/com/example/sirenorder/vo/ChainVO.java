@@ -5,13 +5,10 @@ import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
 @Data
-@Alias("store")	
-public class StoreVO {
-	String store_id;
-	String store_name;
+@Alias("chain")	
+public class ChainVO {
 	String chain_id;
 	String chain_name;
-	double gps_latitude;
-	double gps_longtitude;
 	double point_rate;
+	int seq;
 }

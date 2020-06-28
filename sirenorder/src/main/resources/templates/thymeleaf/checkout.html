@@ -4,23 +4,42 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-<script>
-var pointsArray = new Array();//포인트 정보 저장 
 
-function cartProductElments(array){//카트에 담긴 상품들을 넣고 총 가격을 계산해서 return 해주는 함수 
+<script>
+/*
+물건을 사는 페이지 
+*/
+
+// 카트에 있는 아이템을 add하거나 minus하면 전체 페이지가 refresh 되고 point 정보도 refresh 된다. 
+//form에 있는 정보도 refresh 된다. 
+var pointsArray = new Array();//포인트 정보 저장 
+var chain_nameDict = {}; 
+//banapresso 
+function cartProductElements(array){//카트에 담긴 상품들을 넣고 총 가격을 계산해서 return 해주는 함수 
 	var totalPrice =0;
+	var chain_index = 0;//체인이 몇개나 있는지 세는 변수 
 	for(var i in array){//iteration을 한다. 
 	  	var item = "<li class=\"list-group-item d-flex justify-content-between lh-condensed\"><div>";
   		item += "<h6 class=\"my-0\" id = \""+ array[i]["chain_name"]+"_name"+ i +"\" >" + array[i]["product_name"] + "</h6>";
   	 	item += "<h6 class=\"my-0\" id = \""+ array[i]["chain_name"]+"_price"+i+"\" hidden>" + array[i]["price"] + "</h6>";
   	 	item += "<h6 class=\"my-0\" id 	= \""+ array[i]["chain_name"]+"_quantity"+i+"\" hidden>" + array[i]["number"] + "</h6>";
-	  	 	item += "<small class=\"text-muted\" id = \"my"+ array[i]["chain_name"]+ i +"\">" + array[i]["store_name"] + "</small></div>";
-          	item += "<small class=\"text-muted\">" + array[i]["chain_name"] + "</small></div><br>";
-            item += "<span class=\"text-muted\"  id =\""+array[i]["chain_name"]+"개"+"\"  >" + array[i]["price"]*array[i]["number"] + "원 "+ "</span>";
-            item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"]  + "'," +array[i]["price"] +")\">-</button></span>  </li>";
-            item += "";
-		  	$('#checkOutCartId').prepend(item);
-			totalPrice += array[i]["price"] * array[i]["number"];
+	  	item += "<small class=\"text-muted\" id = \"my"+ array[i]["chain_name"]+ i +"\">" + array[i]["store_name"] + "</small></div>";
+        item += "<small class=\"text-muted\">" + array[i]["chain_name"] + "</small></div><br>";
+      	alert(typeof(array[i]["number"]));
+      	alert(typeof(array[i]["price"]));
+        
+      	if(!(array[i]["chain_name"] in chain_nameDict)){//체인 이름이 존재 하지 않으면  map에 key로 넣기  value는 가격 
+        	chain_nameDict[array[i]["chain_name"]] = array[i]["price"] *array[i]["number"];
+        }else{
+        	chain_nameDict[array[i]["chain_name"]] += array[i]["price"] *array[i]["number"];
+        }
+        
+        item += "<span class=\"text-muted\"  id =\""+array[i]["chain_name"]+"개"+"\"  >" + array[i]["price"]*array[i]["number"] + "원 "+ "</span>";
+        item += "<span class=\"text-muted\">" + array[i]["number"] + "개" + "<button type = \"button\" onclick=\"addToCartCheckout('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +  array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCartCheckout('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"]  + "'," +array[i]["price"] +")\">-</button></span>  </li>";
+        item += "";
+		$('#checkOutCartId').prepend(item);
+		//컨트롤러에 제출하는 form에 넣어야하는 것이 있다.
+		totalPrice += array[i]["price"] * array[i]["number"];
 	}
 	return totalPrice;
 }
@@ -29,14 +48,16 @@ $(function(){
 	//카트에 담긴 내용을 웹페이지에 뿌리는 내용
 		var numOfPoints = 0;//point 순회하는 index
 		numOfPoints = document.querySelectorAll("[id^=\"myPoint\"]");
+		
+		//포인트의 값을 뿌리는 내용 
 		[].forEach.call(numOfPoints, function(index) {
 			  console.log("가격은" + index.innerHTML + " index는" + index + "index의 type은 " + typeof index);
 			  pointsArray.push(index.innerHTML);
 			  console.log("typeof는 " + typeof index.innerHTML);
 		});
+		
 		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
 		//상단 바에 있는 장바구니 숨딘다.// 왜냐면 장바구니와 checkout 내용이 중복 되기 때문에 
-	
 		//장바구니 정보 refresh한다. 
 		$.ajax({//세션 만들어서 return 한다. 
 			  url: "cartProductBring",
@@ -46,15 +67,14 @@ $(function(){
 					alert("noCart");
 					return;
 				}
-				
-				var array = JSON.parse(result);
+				var array = JSON.parse(result);//자바에서 받아온 데이터를 parse 한다. 
 				var number = array[0]["number"];
 				var numOfArrays = array.length;
 				var totalPrice = 0;
 				var totalIndex = 0;
-				totalPrice = cartProductElments(array);//처음 들어와서 refresh 하는 코드
+				totalPrice = cartProductElements(array);//처음 들어와서 refresh 하는 코드
 				alert(totalPrice);
-			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;
+			  	document.querySelector("#strongTotalId").innerHTML = totalPrice;//총가격 넣기 
 			  },
 	            error: function(result){
 	            	alert("error 는" + result);
@@ -64,6 +84,7 @@ $(function(){
 
 function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 이 함수가 실행 될때 마다 포인트 정보도 초기화 
 	alert(product_name + " " + store_name + " " + price);
+	chain_nameIndex = 0;//초기화
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
 		  url: "cartProductAdd",
@@ -77,7 +98,7 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 			var pointClone = document.getElementById('pointListId').cloneNode( true );//totalListId
 			$('#checkOutCartId').text("");//페이지 코드 refresh 한다. 
 			
-			totalPrice = cartProductElments(array);
+			totalPrice = cartProductElements(array);//총가격
 			var totalPriceElement = "<li id = \"" + "totalListId" +"\" class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 				totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\" onclick=\"checkOutCart()\">&nbsp;주문하기</button>";
 				totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" method =\"post\"></form></li>";
@@ -104,7 +125,7 @@ function addToCartCheckout(product_name,store_name,chain_name,price){//체크아
 	});
 }
 function minusToCartCheckout(product_name,store_name, chain_name,price){//장바구니를 더한다. 그리고 그에 따른 포인트 정보도 뺀다. 
-	alert(store_name);
+	chain_nameIndex = 0;//초기화
 	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
 		  url: "cartProductMinus",
@@ -129,7 +150,7 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 				var totalClone = document.getElementById('totalListId').cloneNode( true );//총가격 엘리먼트 복사 
 				
 				$('#checkOutCartId').text("");//원래있던 엘리먼트 지우기 
-				totalPrice = cartProductElments(array);
+				totalPrice = cartProductElements(array);
 				var totalPriceElement = "<li id = \"" + "totalListId" +"\" class=\"list-group-item d-flex justify-content-between\"><span>총액 : </span>"
 					totalPriceElement += "<strong id=\"strongTotalId\">19000</strong><button id=\"checkOutId\" onclick=\"checkOutCart()\">&nbsp;주문하기</button>";
 					totalPriceElement += "<form id=\"buyProductId\" th:action=\"@{buyProduct}\" th:object=\"${pointlist}\" method =\"post\"></form></li>";
@@ -145,20 +166,23 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 	
 var chain_nameIndex = 0;
 
-function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를 input태그 hidden에 넣기   point --> 포인트 사용 , 체인 이름, 사용 할 지 안 할지 
+function userPoint(point, chain_name, point_id,useOrNot){
+	
+	//문제점 물건 수량이 적어지거나 늘어 날 때마다 페이지 refresh 하는데 chain_name index는 그대로이다. 이도 초기화 해야한다. 
+	//point 사용정보를 form의 input태그 hidden에 넣기   point --> 포인트 사용 , 체인 이름, 사용 할 지 안 할지 
 	var chain_namePoint = document.querySelectorAll("[id=\""+ chain_name + "개"+"\"]");//개를 붙인것은 아래에서 chain_name id가 겹쳐서 
 	var chain_total_price = 0;
-	
 	[].forEach.call( chain_namePoint, function(el) {//체인네임 기준으로 물건의 값을 계산한다. 
 		chain_total_price += parseInt(el.innerHTML);
 	});
 	
-	if(chain_total_price > point){// 체인의 토탈 가겨이 포인트보다 높을 때 
+	if(chain_total_price > point){// 체인의 토탈 가격이 포인트보다 높을 때 
 		
 	}else{//체인 총가격이 point 보다 낮을 때 point = point - chain_total_price가 된다. 
 		point = point - chain_total_price;
 	}
-	if($("#"+ chain_name+"").length == 1){//element 존재할 때  point를 사용 할 것인지 아닌지 판단
+	
+	if($("#"+ chain_name+"").length == 1){//포인트 쓰거나 안쓰거나를 한번 눌렀을 때 element 존재할 때  point를 사용 할 것인지 아닌지 판단
 		if(useOrNot == 1){//사용하기
 			$("#"+ chain_name).val("1");
 		}
@@ -172,11 +196,12 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 		var pointNum = "point[" +chain_nameIndex +"]";
 		var point_idNum =  "point_id[" +chain_nameIndex +"]";
 		var totalPriceNum = "totalPrice[" +chain_nameIndex +"]";
-
+		
+		//Cart에 프로덕트 내용이 있으니 여기서 필요 x
 		//아래 두개의 변수는 특정 체인의 프로덕트 이름과 가격의 엘리먼트를 가져오기 위한 변수이다. 
-		var chain_productName = document.querySelectorAll("[id^=\""+chain_name+"_name\"]");//banapresso_name
-		var chain_productPrice = document.querySelectorAll("[id^=\""+chain_name+"_price\"]");//banapresso_price
-		var chain_productQuantity = document.querySelectorAll("[id^=\""+chain_name+"_quantity\"]");//banapresso_quantity
+		//var chain_productName = document.querySelectorAll("[id^=\""+chain_name+"_name\"]");//banapresso_name
+		//var chain_productPrice = document.querySelectorAll("[id^=\""+chain_name+"_price\"]");//banapresso_price
+		//var chain_productQuantity = document.querySelectorAll("[id^=\""+chain_name+"_quantity\"]");//banapresso_quantity
 
 		if(useOrNot == 1){//사용하기
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
@@ -184,14 +209,18 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point+"\" name = \"" + pointNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +point_id+"\" name = \"" + point_idNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_total_price+"\" name = \"" + totalPriceNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-			var store_name = document.querySelector("[id^=\"my"+ chain_name+"\"]");//한개
+			
+			var store_name = document.querySelector("[id^=\"my"+ chain_name+"\"]");// banapresso 행신, banapresso 신촌 중 한개만 넣는다. 편리를 위하여 
 			var store_nameNum = "store_name[0]";// store_name[0] store_name[1] 이런식이 컨트롤러의 pointlist 옵젝트에 들어간다. 
 			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
-			var productNameNum;
+			
+			
+/* 			var productNameNum;
 			var productPriceNum;
 			var productQuantityNum;
-			var indexCall = 0;
+			
+			var indexCall = 0;////// productQuantity 
 			[].forEach.call( chain_productName, function(el) {
 				var callName = el.innerHTML;
 				productNameNum = "productName[" +chain_nameIndex +"]";
@@ -199,7 +228,8 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 				indexCall++;
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callName+"\" name = \"" + productNameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
-			indexCall = 0;
+			
+			indexCall = 0;//// productQuantity 
 			[].forEach.call( chain_productPrice, function(el) {
 				var callPrice = el.innerHTML;
 				productPriceNum = "productPrice[" +chain_nameIndex +"]";
@@ -208,7 +238,9 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callPrice+"\" name = \"" + productPriceNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
-			indexCall = 0;
+			
+
+			indexCall = 0;// productQuantity 
 			[].forEach.call( chain_productQuantity, function(el) {
 				var callQuantity = el.innerHTML;
 				productQuantityNum = "productQuantity[" +chain_nameIndex +"]";
@@ -217,6 +249,10 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 				console.log(productQuantityNum + " ");
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callQuantity+"\" name = \"" + productQuantityNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
+ */			
+			
+			
+			
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);//원래 값으로 돌리기 
 		}
 		else{//미사용하기  value=\"yes&"+chain_name+"\"    th:value=\"*{" +chain_name+"}\"
@@ -230,7 +266,9 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 			store_name = store_name.innerHTML;//banapresso, 행신감자탕 등등 
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +store_name+"\" name = \"" + store_nameNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 		
-			var productNameNum;
+			
+			
+/* 			var productNameNum;
 			var productPriceNum;
 			var productQuantityNum;
 			var indexCall = 0;
@@ -259,21 +297,34 @@ function userPoint(point, chain_name, point_id,useOrNot){//point 사용정보를
 				console.log(productQuantityNum + " ");
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callQuantity+"\" name = \"" + productQuantityNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
-			
+ */			
 		}
 		chain_nameIndex++;//포인트 체인이름 
 	}
 }
+
 function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
-	//서버에서 point_store를 만들고
+	//서버에서 point_store를 만들고, point도
 	//orders, ordersdetail 만든다. 
+	//체인이름을 form 에 넣기  by chain_nameDict
+	var keyIndex = 0;
+	for(var key in chain_nameDict ){//체인에 해당하는 총 가격과 이름 
+		var all_chain_name = "all_chain_name[" + keyIndex + "]";
+		var all_chain_price = "all_chain_price[" + keyIndex + "]";
+		keyIndex++;
+		$('#buyProductId').append("<input type=\"hidden\" value=\"" +key+"\" name = \"" + all_chain_name +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
+		$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_nameDict[key]+"\" name = \"" + all_chain_price +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
+		//key를 form에 더한다. 
+	}
+	
+	alert($('#buyProductId').text());
 	var allTotalPrice = parseInt($('#strongTotalId').text());
 	$('#buyProductId').append("<input type=\"hidden\" value=\"" +allTotalPrice+"\" name = \"" + "allTotalPrice" +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
-	$("span.badge.bg-danger").html("")  ;
-
+	$("span.badge.bg-danger").html("")  ;//장바구니 
 	document.getElementById("buyProductId").submit();//사용한 point정보, 사는 물건정보를 컨트롤러에 올린다. 
 }
+
 </script>
 <body>
 	    <div class="col-md-4 order-md-2 mb-4">
@@ -281,6 +332,7 @@ function checkOutCart(){
             <span class="text-muted">장바구니</span>
           </h4>
           <ul class="list-group mb-3" id = "checkOutCartId">
+          
             <!-- thymeleaf 로 point 정보를 가져오겠다 장바구니 아이템의 chain_name 기반으로  -->
             <li id = "pointListId" class="list-group-item d-flex justify-content-between" th:each= "data, iterStat: ${arrayList}">
               <div th:if="${data != null}"><!-- 한번이라도 사용해서 point가 null이 아닐 때 -->
@@ -293,9 +345,9 @@ function checkOutCart(){
             </li>
             <li id = "totalListId" class="list-group-item d-flex justify-content-between">
               <span>총액 : </span>
-              <strong id = "strongTotalId"> </strong>
+              <strong id = "strongTotalId"> </strong><!-- 총가격 -->
               <button id = "checkOutId" onclick="checkOutCart()" >&nbsp주문하기</button>
-              <form id="buyProductId" th:action="@{buyProduct}"  method ="post">
+              <form id="buyProductId" th:action="@{buyProduct}"  method ="post"><!-- 여기 form에 여러 데이터가 들어간다.  -->
 			  </form>
             </li>
 			<li id = "li1"></li>
