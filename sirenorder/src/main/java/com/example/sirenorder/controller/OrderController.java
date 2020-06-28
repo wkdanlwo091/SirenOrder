@@ -127,9 +127,10 @@ public class OrderController {
 	}
 
 	public void usePoint(PointList pointlist, String users_id) throws Exception {// 체인별로 포인트 사용하기
-		
-		if(pointlist.getChain_name() == null) {//point를 쓰는 것이 없으면 return ;
-			return ;
+
+		if (pointlist.getChain_name() == null) {// point를 쓰는 것이 없으면 return ;
+
+			return;
 		}
 		for (int i = 0; i < pointlist.getChain_name().length; i++) {// 포인트의 개수에 따라서 point를 update한다.
 			if (pointlist.getUseOrNot()[i] == 1) {// 포인트를 사용할 것이면
@@ -151,11 +152,25 @@ public class OrderController {
 		}
 	}
 
+	public void addPoint(PointList pointlist, String users_id) throws Exception {// 체인별로 포인트 사용하기
+		for (int i = 0; i < pointlist.getAll_chain_name().length; i++) {// 포인트의 개수에 따라서 point를 update한다.
+			String chain_name = pointlist.getAll_chain_name()[i];
+			String point_id = pointlist.getPoint_id()[i];
+			PointVO pointVO = new PointVO();
+			double point_rate = pointbiz.getByChain_name(chain_name).getPoint_rate();
+			pointVO.setPoint((int)(pointlist.getAll_chain_price()[i] *  point_rate));
+			pointVO.setPoint_id(point_id);
+			pointVO.setChain_name(chain_name);
+			pointVO.setUsers_id(users_id);
+			pointbiz.update(pointVO);// point를 add하기
+		}
+	}
+	
 	public void makePoint_store(PointList pointlist, String users_id) throws Exception {
 		// 두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장
-		
-		if(pointlist.getChain_name() == null) {//point를 쓰는 것이 없으면 return ;
-			return ;
+
+		if (pointlist.getChain_name() == null) {// point를 쓰는 것이 없으면 return ;
+			return;
 		}
 		for (int i = 0; i < pointlist.getChain_name().length; i++) {
 			String chain_name = pointlist.getChain_name()[i];
@@ -187,13 +202,13 @@ public class OrderController {
 		// 포인트 비율 어떻게 ?? 구매액의 0.5%?
 		// point가 없는 경우 만든다.
 		// 포인트 검색
-		
+
 		double point_rate = chainbiz.getByChain_name(chain_name).getPoint_rate();
 		PointVO pointVO = new PointVO();
 		pointVO.setChain_name(chain_name);
 		pointVO.setUsers_id(users_id);
 		pointVO.setPoint_rate(point_rate);
-		pointVO.setPoint((int) ( all_chain_price  * point_rate));// 포인트는 구매액* point_rate
+		pointVO.setPoint((int) (all_chain_price * point_rate));// 포인트는 구매액* point_rate
 		pointVO.setPoint_id("point_id");
 		pointbiz.register(pointVO);
 
@@ -216,7 +231,7 @@ public class OrderController {
 		System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
-		
+
 		while (itr.hasNext()) {
 			CartVO tmp = itr.next();
 			Orders_detailVO orders_detailVO = new Orders_detailVO();
@@ -232,6 +247,7 @@ public class OrderController {
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
 		}
 	}
+
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST) // 물건을 살 때 부르는 컨트롤러
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList, HttpServletRequest request)
 			throws Exception {
@@ -242,15 +258,18 @@ public class OrderController {
 		for (int i = 0; i < pointList.getAll_chain_name().length; i++) {
 			// 포인트 있나 없나 체크
 			if (pointbiz.getByChain_name(pointList.getAll_chain_name()[i]) == null) {
-				// point 없으면
+				// point 없으면 System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
+				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
+
 				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
 			} else {// 포인트 있으면 체인 이름에 따라서
-				System.out.println(pointList.getAll_chain_name()[i]);
-				usePoint(pointList, users_id);
+				System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
+				usePoint(pointList, users_id);// 포인트 사용
+				addPoint(pointList, users_id);							// 포인트 쌓기
 				makePoint_store(pointList, users_id);
 			}
 		}
-		
+
 		makeOrders(users_id, httpSession, pointList.getAllTotalPrice());
 		makeOrders_detail(httpSession);
 
@@ -306,7 +325,6 @@ public class OrderController {
 			return model;
 		}
 
-		System.out.println("get에 들어왔습니다.");
 		if (from == null && to == null) { // 페이지네이션 아니고 아예 처음 들어왔을 때
 			// 맨 처음 페이지에 들어왔을 때
 			System.out.println("다른 스테이트 입니다. ");

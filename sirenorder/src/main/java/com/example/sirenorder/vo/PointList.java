@@ -15,6 +15,7 @@ public class PointList {
 	int [] useOrNot;//i번째 체인의 포인트를 쓸것인지 
 	int [] point;// 포인트 
 	int [] totalPrice;
+	
 	/////////////////
 	String [] all_chain_name;//포인트 관계 없이 모든 체인 이름 
 	int [] all_chain_price;//체인당 총가격 

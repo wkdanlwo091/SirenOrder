@@ -309,16 +309,18 @@ function checkOutCart(){
 	//orders, ordersdetail 만든다. 
 	//체인이름을 form 에 넣기  by chain_nameDict
 	var keyIndex = 0;
+	alert("start");
 	for(var key in chain_nameDict ){//체인에 해당하는 총 가격과 이름 
 		var all_chain_name = "all_chain_name[" + keyIndex + "]";
 		var all_chain_price = "all_chain_price[" + keyIndex + "]";
+		alert("key is + "  + key);
 		keyIndex++;
 		$('#buyProductId').append("<input type=\"hidden\" value=\"" +key+"\" name = \"" + all_chain_name +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
 		$('#buyProductId').append("<input type=\"hidden\" value=\"" +chain_nameDict[key]+"\" name = \"" + all_chain_price +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
 		//key를 form에 더한다. 
 	}
+	alert("finish")
 	
-	alert($('#buyProductId').text());
 	var allTotalPrice = parseInt($('#strongTotalId').text());
 	$('#buyProductId').append("<input type=\"hidden\" value=\"" +allTotalPrice+"\" name = \"" + "allTotalPrice" +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
 	$("span.badge.bg-danger").html("")  ;//장바구니 
