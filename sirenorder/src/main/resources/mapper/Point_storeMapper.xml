@@ -4,19 +4,59 @@
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.sirenorder.mapper.Point_storeMapper">
-    <select id="selectPoint_store" resultType="point_store">
-		SELECT * 
+<mapper
+	namespace="com.example.sirenorder.mapper.Point_storeMapper">
+	<select id="selectPoint_store" resultType="point_store">
+		SELECT *
 		FROM POINT_STORE
-		WHERE USERS_ID = #{users_id} AND CHAIN_NAME = #{chain_name}
-    </select>	
-    <insert id ="insert" parameterType = "point_store">	
-        <selectKey keyProperty="seq" resultType="int"  order="BEFORE">
-    		select point_store_seq.nextval from dual
-    	</selectKey>
-    	
-    	INSERT INTO POINT_STORE
-        	 VALUES( #{point_store_id}||#{seq}, #{point_id}, #{store_id},
-    	  #{users_id}, #{chain_name}, #{point_date}, #{used_point})
-    </insert>
+		WHERE USERS_ID = #{users_id} AND CHAIN_NAME =
+		#{chain_name}
+	</select>
+	
+	<resultMap id="store" type="Point_StoreJoinStore">
+		<result property="point_store_id" column="POINT_STORE_ID" />
+		<result property="point_id" column="POINT_ID" />
+		<result property="store_id" column="STORE_ID" />
+		<result property="users_id" column="USERS_ID" />
+		<result property="chain_name" column="CHAIN_NAME" />
+		<result property="point_date" column="POINT_DATE" />
+		<result property="used_point" column="USED_POINT" />
+		<result property="seq" column="SEQ" />
+		<!-- javaType : "객체를 속성으로 가지고있는 해당 객체의 CamelCase명 또는, @Alias("키값")" -->
+		<!-- property : "객체참조변수명" -->
+		<!-- id : "PK" -->
+		<association property="storeVO" javaType="store">
+			<id property="store_id" column="STORE_ID" />
+			<result property="store_name" column="STORE_NAME" />
+			<result property="chain_id" column="CHAIN_ID" />
+			<result property="chain_name" column="CHAIN_NAME" />
+			<result property="gps_latitude" column="GPS_LATITUDE" />
+			<result property="gps_longtitude" column="GPS_LONGTITUDE" />
+			<result property="point_rate" column="POINT_RATE" />
+		</association>
+	</resultMap>
+
+	<select id="selectByDateFromToJoin" resultMap="store">
+		SELECT P.*, S.STORE_NAME
+		FROM POINT_STORE P , STORE S 
+		WHERE P.USERS_ID = #{users_id} AND
+		P.POINT_DATE &gt;=  #{firstDate}  AND 
+		P.POINT_DATE &lt;=  #{secondDate} 
+	</select>
+
+	<select id="selectByUsers_id" resultMap="store">
+		SELECT P.*, S.STORE_NAME
+		FROM POINT_STORE P , STORE S
+		WHERE P.USERS_ID = #{users_id}
+	</select>
+
+	<insert id="insert" parameterType="point_store">
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			select point_store_seq.nextval from dual
+		</selectKey>
+
+		INSERT INTO POINT_STORE
+		VALUES( #{point_store_id}||#{seq}, #{point_id}, #{store_id},
+		#{users_id}, #{chain_name}, #{point_date}, #{used_point})
+	</insert>
 </mapper>

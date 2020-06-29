@@ -27,8 +27,21 @@ public class UserController {
 //	public String login() {
 //		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 //	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
+		HttpSession temp = request.getSession();
+		if(temp.getAttribute("userId") == null) {
+			System.out.println("session null");
+		}else {
+			System.out.println("session not null");
+			return "redirect:/main.html";
+		}
+		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
+	}
+	
+	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
+	public String loginIndex(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
 		if(temp.getAttribute("userId") == null) {
 			System.out.println("session null");

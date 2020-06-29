@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.Point_storeVO;
 
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
@@ -20,18 +22,14 @@ public interface Dao<Id, Model> {
 	default public ArrayList<Model> selectChain(String name) throws Exception {
 		return null;
 	}
-
 	default public ArrayList<Model> selectProduct(String  name, int num) throws Exception {
 		return null;
 	}
-
 	default public Model select(String  name, String name2) throws Exception {
 		return null;
 	}
-
 	default public void deleteProduct(Model m) throws Exception {
 	}
-	
 	default public Model selectByChain_name(Id id) throws Exception {
 		return null;
 	}
@@ -54,16 +52,20 @@ public interface Dao<Id, Model> {
 	default public int selectOrders_detailCnt( ){
 		return (Integer) null;
 	}
-
 	default public ArrayList<Model> selectByDateFromTo(String users_id, Date firstDate, Date secondDate){
 		return null;
 	}
 	default public ArrayList<Model> selectOrders_detailByOrdersId(String orders_id ){
 		return null;
 	}
-	
-
+	default public ArrayList<Point_storeJoinStoreVO> selectByUsers_id(String users_id ) throws Exception {
+		return null;
+	}
+	default public ArrayList<Point_storeJoinStoreVO> selectByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
+		return null;
+	}
 	public Model select(Id id);
 
 	public ArrayList<Model> selectall();
+
 }

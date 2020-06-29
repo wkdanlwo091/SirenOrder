@@ -1,9 +1,6 @@
 package com.example.sirenorder.vo;
-
 import java.sql.Date;//util 보다 oracle에 넣기 편하다 .but 둘다 사장된 api
-
 import org.apache.ibatis.type.Alias;
-
 import lombok.Data;
 
 @Data

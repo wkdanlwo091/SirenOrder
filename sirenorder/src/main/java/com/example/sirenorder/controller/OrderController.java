@@ -102,10 +102,10 @@ public class OrderController {
 		}
 		return arrayList;
 	}
-
+	
 	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET) // 주문하기 페이지
 	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
-		System.out.println("checkout에 들어왔다. ");
+		System.out.println("checkout에 들어왔다.");
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -125,24 +125,20 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-
+	
 	public void usePoint(PointList pointlist, String users_id) throws Exception {// 체인별로 포인트 사용하기
-
 		if (pointlist.getChain_name() == null) {// point를 쓰는 것이 없으면 return ;
-
 			return;
 		}
 		for (int i = 0; i < pointlist.getChain_name().length; i++) {// 포인트의 개수에 따라서 point를 update한다.
 			if (pointlist.getUseOrNot()[i] == 1) {// 포인트를 사용할 것이면
-
 				String chain_name = pointlist.getChain_name()[i];
 				int point = pointlist.getPoint()[i];
 				String point_id = pointlist.getPoint_id()[i];
-
 				System.out.println(users_id);
 
 				PointVO pointVO = new PointVO();
-				pointVO.setPoint(point);
+				pointVO.setPoint(-point);
 				pointVO.setPoint_id(point_id);
 				pointVO.setChain_name(chain_name);
 				pointVO.setUsers_id(users_id);
@@ -151,24 +147,23 @@ public class OrderController {
 			}
 		}
 	}
-
+	
 	public void addPoint(PointList pointlist, String users_id) throws Exception {// 체인별로 포인트 사용하기
 		for (int i = 0; i < pointlist.getAll_chain_name().length; i++) {// 포인트의 개수에 따라서 point를 update한다.
 			String chain_name = pointlist.getAll_chain_name()[i];
-			String point_id = pointlist.getPoint_id()[i];
-			PointVO pointVO = new PointVO();
-			double point_rate = pointbiz.getByChain_name(chain_name).getPoint_rate();
+			PointVO pointVO = pointbiz.getByChain_name(chain_name);
+			double point_rate = pointVO.getPoint_rate();
 			pointVO.setPoint((int)(pointlist.getAll_chain_price()[i] *  point_rate));
-			pointVO.setPoint_id(point_id);
+			pointVO.setPoint_id(pointVO.getPoint_id());
 			pointVO.setChain_name(chain_name);
 			pointVO.setUsers_id(users_id);
+			System.out.println(pointVO);
 			pointbiz.update(pointVO);// point를 add하기
 		}
 	}
 	
 	public void makePoint_store(PointList pointlist, String users_id) throws Exception {
 		// 두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장
-
 		if (pointlist.getChain_name() == null) {// point를 쓰는 것이 없으면 return ;
 			return;
 		}
@@ -214,15 +209,15 @@ public class OrderController {
 
 		System.out.println("made point");
 	}
-
+	
 	public void makeOrders(String users_id, HttpSession httpSession, int allTotalPrice) throws Exception {// orders 테이블에
-																											// insert
 		OrdersVO ordersVO = new OrdersVO();
 		ordersVO.setOrders_id("orders_id");
 		ordersVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
 		ordersVO.setPayment_way("before_card");
 		ordersVO.setUsers_id(users_id);
 		ordersVO.setTotal_price(allTotalPrice);
+		System.out.println(ordersVO);
 		ordersbiz.register(ordersVO);
 	}
 
@@ -248,6 +243,12 @@ public class OrderController {
 		}
 	}
 
+	@RequestMapping(value = "buyProduct", method = RequestMethod.GET) // 가게 이름을 return 한다.
+	public String buyProductGet(HttpServletRequest request) throws Exception {
+		
+		return "redirect:/index.html";// 로그인 첫 페이지로 /index.html
+	}
+
 	@RequestMapping(value = "buyProduct", method = RequestMethod.POST) // 물건을 살 때 부르는 컨트롤러
 	public ModelAndView buyProduct(@ModelAttribute("pointlist") PointList pointList, HttpServletRequest request)
 			throws Exception {
@@ -269,7 +270,6 @@ public class OrderController {
 				makePoint_store(pointList, users_id);
 			}
 		}
-
 		makeOrders(users_id, httpSession, pointList.getAllTotalPrice());
 		makeOrders_detail(httpSession);
 

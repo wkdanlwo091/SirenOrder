@@ -200,7 +200,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 						<li><a href="main.html" class="active"><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
 						<li><a href="currentOrderStatus.html" class=""><i class="lnr lnr-code"></i> <span>주문현황</span></a></li>
 						<li><a href="ordersHistory.html" class=""><i class="lnr lnr-chart-bars"></i> <span>사용량보기</span></a></li>
-						<li><a href="panels.html" class=""><i class="lnr lnr-cog"></i> <span>포인트 보기</span></a></li>
+						<li><a href="pointHistory.html" class=""><i class="lnr lnr-cog"></i> <span>포인트 보기</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -217,6 +217,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 		<div th:if = "${currentOrderStatus != null}"><div th:replace="/thymeleaf/currentOrderStatus"></div></div>
 		<div th:if = "${ordersHistory != null}"><div th:replace="/thymeleaf/ordersHistory"></div></div>
 		<div th:if = "${checkout != null}"><div th:replace="/thymeleaf/checkout"></div></div>
+		<div th:if = "${pointHistory != null}"><div th:replace="/thymeleaf/pointHistory"></div></div>
 		
 		
 		</div>

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.Point_storeVO;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -74,6 +76,17 @@ public interface Biz<Id, Model> {
 	}
 	@Transactional
 	default public ArrayList<Model> getOrders_detailByOrdersId(String orders_id ){
+		return null;
+	}
+	
+	@Transactional
+	default public ArrayList<Point_storeJoinStoreVO> getByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
+		return null;
+	}
+
+	
+	@Transactional
+	default public ArrayList<Point_storeJoinStoreVO> getByUsers_id(String users_id ) throws Exception {
 		return null;
 	}
 

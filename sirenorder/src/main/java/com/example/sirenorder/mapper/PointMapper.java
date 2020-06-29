@@ -1,5 +1,7 @@
 package com.example.sirenorder.mapper;
 
+import java.sql.Date;
+
 import com.example.sirenorder.vo.PointVO;
 
 public interface PointMapper {

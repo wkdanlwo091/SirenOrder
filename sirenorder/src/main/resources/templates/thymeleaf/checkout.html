@@ -15,6 +15,7 @@
 var pointsArray = new Array();//포인트 정보 저장 
 var chain_nameDict = {}; 
 //banapresso 
+
 function cartProductElements(array){//카트에 담긴 상품들을 넣고 총 가격을 계산해서 return 해주는 함수 
 	var totalPrice =0;
 	var chain_index = 0;//체인이 몇개나 있는지 세는 변수 
@@ -29,7 +30,7 @@ function cartProductElements(array){//카트에 담긴 상품들을 넣고 총 �
       	alert(typeof(array[i]["price"]));
         
       	if(!(array[i]["chain_name"] in chain_nameDict)){//체인 이름이 존재 하지 않으면  map에 key로 넣기  value는 가격 
-        	chain_nameDict[array[i]["chain_name"]] = array[i]["price"] *array[i]["number"];
+        	chain_nameDict[array[i]["chain_name"]] = array[i]["price"] *array[i]["number"];// 상품의 가격 * 상품의 개수 
         }else{
         	chain_nameDict[array[i]["chain_name"]] += array[i]["price"] *array[i]["number"];
         }
@@ -302,7 +303,6 @@ function userPoint(point, chain_name, point_id,useOrNot){
 		chain_nameIndex++;//포인트 체인이름 
 	}
 }
-
 function checkOutCart(){
 	//포인트 차감 정보를 서버에 올리고
 	//서버에서 point_store를 만들고, point도
@@ -320,7 +320,6 @@ function checkOutCart(){
 		//key를 form에 더한다. 
 	}
 	alert("finish")
-	
 	var allTotalPrice = parseInt($('#strongTotalId').text());
 	$('#buyProductId').append("<input type=\"hidden\" value=\"" +allTotalPrice+"\" name = \"" + "allTotalPrice" +"\"  id=\"none" +"\"></input>");//포인트 쓸거다라고 하는 것 
 	$("span.badge.bg-danger").html("")  ;//장바구니 
