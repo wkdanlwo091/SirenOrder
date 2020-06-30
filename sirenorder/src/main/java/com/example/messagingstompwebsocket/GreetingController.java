@@ -6,8 +6,8 @@ import org.springframework.web.util.HtmlUtils;
 
 @Controller
 public class GreetingController {
-  @MessageMapping("/hello")
-  @SendTo("/topic/greetings")
+  @MessageMapping("/hello")//자바스크립트 front에서 /app/hello로 송신하면 여기로 들어온다. 
+  @SendTo("/topic/greetings")// 
   public Greeting greeting(HelloMessage message) throws Exception {
     Thread.sleep(1000); // simulated delay
     return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");

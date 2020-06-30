@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Owner mainPage</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
+</head>
+
+<body>
+<script th:inline="javascript">//script for product list 
+var myProduct= 5;
+//
+$(function() {
+	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
+	//장바구니 정보 refresh한다. 
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProductBring",
+		  method: "POST", 
+		  success: function(result){
+			if(result == "noCart"){
+				alert("noCart");
+				return;
+			}
+			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
+				alert("hidden");
+				return;
+			}else{alert("visible")}
+			
+			var array = JSON.parse(result);
+			var number = array[0]["number"];
+			var numOfArrays = array.length;
+			var totalPrice = 0;
+			var totalIndex = 0;
+			console.log(array.length);
+			console.log("kaka" + JSON.parse(result)[0]["price"]);
+			console.log("haha" + array[0]["product_name"]);
+			console.log("jaja" + array[0]["number"]);
+		  	var cartHistory = document.getElementById("cartList");
+		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+			for(var i in array){//iteration을 한다. 
+			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+			  	totalPrice += array[i]["price"] * array[i]["number"];
+			  	totalIndex += array[i]["number"];
+			}
+			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
+		  },
+            error: function(result){
+            	alert("error 는" + result);
+            }
+	});
+});
+
+function addToCart(product_name,store_name,chain_name,price){
+	alert(product_name + " " + store_name + " " + price);
+	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProductAdd",
+		  method: "POST", 
+		  data : data,
+		  success: function(result){
+			var array = JSON.parse(result);
+			var number = array[0]["number"];
+			var numOfArrays = array.length;
+			var totalPrice = 0;
+			var totalIndex = 0;
+		  	var cartHistory = document.getElementById("cartList");
+		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+			for(var i in array){//iteration을 한다. 
+			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] + "','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+			  	totalPrice += array[i]["price"] * array[i]["number"];
+			  	totalIndex += array[i]["number"];
+			}
+			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+		  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
+		  },
+            error: function(result){
+            	alert("error 는" + result);
+            }
+	});
+}
+function minusToCart(product_name,store_name, chain_name,price){
+	alert(store_name);
+	
+	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name + "&chain_name=" + chain_name;
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProductMinus",
+		  method: "POST", 
+		  data : data,
+		  success: function(result){
+			  	if(result == "notExisting"){
+			  		alert("notExistgin");
+					return;	
+			  	}else if(result == "noData"){// 모든 데이터 삭제한 경우 
+			  		alert("noData");
+
+				  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = 0;
+				  	document.getElementById("cartList").innerHTML = "<li><a href=\"/checkOut.html\" class=\"more\" >장바구니</a></li>";//먼저 있던 내용을 다 지운다 
+				  	return;
+			  	}
+			  	var array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				var totalIndex = 0;
+				
+			  	var cartHistory = document.getElementById("cartList");
+			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+			  	
+				for(var i in array){//iteration을 한다. 
+				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+					tmp += array[i]["store_name"] + " " +  array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+				  	totalPrice += array[i]["price"] * array[i]["number"];
+				  	totalIndex += array[i]["number"];
+				}
+				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+			  	document.querySelector("#navbar-menu > ul > li:nth-child(1) > a > span").innerHTML = totalIndex;
+		  },
+          error: function(result){
+          }
+	});
+}
+
+</script>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="brand">
+				<a href="/main.html"><img src="assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+			</div>
+			<div class="container-fluid">
+				<div class="navbar-btn">
+					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+				</div>
+				<!-- 
+				<form class="navbar-form navbar-left">
+					<div class="input-group">
+						<input type="text" value="" class="form-control" placeholder="매장검색">
+						<span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
+					</div>
+				</form>
+				 -->
+				<div class="navbar-btn navbar-btn-right">
+				</div>
+				<div id="navbar-menu">
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+								<i class="lnr lnr-cart"></i>
+								<span class="badge bg-danger" th:text = "${session.totalIndex }">0</span>
+							</a>
+							<ul class="dropdown-menu notifications" id = "cartList" style= "background-color:#FFFFFF !important;">
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							    <span class="badge bg-danger" th:text="${session.userId}" th:unless="${session == null}">[...]</span>
+							  <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<ul class="dropdown-menu" style= "background-color:#FFFFFF !important;"> 
+								<li><a href="/profile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
+								<li><a href="/logout.html"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
+							</ul>
+						</li>
+						<!-- <li>
+							<a class="update-pro" href="https://www.themeineed.com/downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>UPGRADE TO PRO</span></a>
+						</li> -->
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+						<li><a href="main.html" class="active"><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
+						<li><a href="currentOrderStatus.html" class=""><i class="lnr lnr-code"></i> <span>주문현황</span></a></li>
+						<li><a href="ordersHistory.html" class=""><i class="lnr lnr-chart-bars"></i> <span>사용량보기</span></a></li>
+						<li><a href="pointHistory.html" class=""><i class="lnr lnr-cog"></i> <span>포인트 보기</span></a></li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- END LEFT SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+		<!-- 기본으로 주문하기가 들어가있다. -->
+		<!-- profile에 나의정보가 있다. -->
+		
+		<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
+		<div th:if = "${product != null}"><div th:replace="/thymeleaf/product"></div></div>
+		<div th:if = "${order != null}"><div th:replace="/thymeleaf/order"></div></div>
+		<div th:if = "${currentOrderStatus != null}"><div th:replace="/thymeleaf/currentOrderStatus"></div></div>
+		<div th:if = "${ordersHistory != null}"><div th:replace="/thymeleaf/ordersHistory"></div></div>
+		<div th:if = "${checkout != null}"><div th:replace="/thymeleaf/checkout"></div></div>
+		<div th:if = "${pointHistory != null}"><div th:replace="/thymeleaf/pointHistory"></div></div>
+		
+		
+		</div>
+		<!-- END MAIN -->
+		<div class="clearfix"></div>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="assets/vendor/jquery/jquery.min.js"></script> 
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+	<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+	<script src="assets/scripts/klorofil-common.js"></script>
+</body>
+
+</html>

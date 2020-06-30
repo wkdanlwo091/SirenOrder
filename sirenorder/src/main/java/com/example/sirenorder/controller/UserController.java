@@ -1,4 +1,6 @@
 package com.example.sirenorder.controller;
+import java.util.Scanner;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -69,7 +71,11 @@ public class UserController {
 				httpSession.setAttribute("userId", result.getUsers_id());
 				httpSession.setAttribute("userName", result.getUsers_name());
 				//model.setViewName("thymeleaf/main");
-				model.setViewName("redirect:/main.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
+				if(result.getRole().equals("user")) {//유저
+					model.setViewName("redirect:/main.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
+				}else if(result.getRole().equals("owner")) {//사업자 
+					model.setViewName("redirect:/ownermain.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
+				}
 				return model;
 			}else{
 				System.out.println("비번이 틀립니다.");
@@ -159,7 +165,7 @@ public class UserController {
     	m.setUsers_password(user.getUsers_password());
     	m.setUsers_address(user.getUsers_address());
     	m.setSex(user.getSex());
-    	m.setRole("user");
+    	m.setRole(user.getRole());
     	userbiz.register(m);
     	return "redirect:/";//여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로 msg값을 줘도 된
 	}
