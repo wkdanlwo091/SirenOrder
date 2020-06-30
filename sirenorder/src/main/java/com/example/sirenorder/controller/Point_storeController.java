@@ -62,6 +62,7 @@ public class Point_storeController {
 		model.setViewName("thymeleaf/points");
 		return model;
 	}
+	
 	@RequestMapping(value = "pointHistory.html", method = RequestMethod.GET)//pointHistory에 처음 들어왔을 때, 페이지네이션으로 범위검색 했을 때 
 	public ModelAndView pointHistorybefore(HttpServletRequest request,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date from,
@@ -76,7 +77,6 @@ public class Point_storeController {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
 		}
-		
 		
 		if (from == null && to == null) { // 페이지네이션 아니고 아예 처음 들어왔을 때
 			// 맨 처음 페이지에 들어왔을 때
@@ -97,10 +97,18 @@ public class Point_storeController {
 				httpSession.setAttribute("to", "");
 				model.addObject("pointHistory", "clicked");
 				model.setViewName("thymeleaf/main");
+				return model;
 			}
 			
 			if (to != null)
 				currentToState = formatter.format(to);// 새로 들어온 마침일
+			else {
+				httpSession.setAttribute("from", "");
+				httpSession.setAttribute("to", "");
+				model.addObject("pointHistory", "clicked");
+				model.setViewName("thymeleaf/main");
+				return model;
+			}
 			
 			System.out.println("start");
 			System.out.println(beforeFromState);
@@ -112,7 +120,7 @@ public class Point_storeController {
 			if (beforeFromState.equals(currentFromState) && beforeToState.equals(currentToState)) // 전의 스테이트 현재 스테이트 같으면
 			{// 같은 시작일, 끝일에 페이지네이션을 사용한 경우 들어온다.
 				ArrayList<Point_storeJoinStoreVO> detailTemp = null;
-				detailTemp = (ArrayList<Point_storeJoinStoreVO>) httpSession.getAttribute("pointList");
+				detailTemp = (ArrayList<Point_storeJoinStoreVO>) httpSession.getAttribute("pointList");//세션에서 가져오기 
 				// 전의 스테이트에서 받은 orders_detailList 세션을 사용한다.
 				System.out.println(page + " " + range + " ");
 				int listCnt = detailTemp.size();// 주문 상품 각각의 개수

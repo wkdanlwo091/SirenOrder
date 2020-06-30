@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class MainController {
+public class MessageController {
 	
-	@RequestMapping(value = "/main.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/message.html", method = RequestMethod.GET)
 	public ModelAndView mainView(HttpServletRequest request) {
 		//로그인 안됐으면 바로 로그인 페이지로 가야지 
 		HttpSession httpSession = request.getSession();
@@ -22,16 +22,8 @@ public class MainController {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
 		}
-		model.addObject("order", "clicked");
-		model.setViewName("thymeleaf/main");
+		model.setViewName("/message.html");
 		return model;
 	}
-	@RequestMapping(value = "/tables.html", method = RequestMethod.GET)
-	public String example() {
-		return "thymeleaf/notifications";//로그인 첫 페이지로 /index.html
-	}
-	@RequestMapping(value = "table_index", method = RequestMethod.GET)
-	public String table_index() {
-		return "/table_index.html";
-	}
+
 }
