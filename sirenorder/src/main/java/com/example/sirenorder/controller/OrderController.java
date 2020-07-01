@@ -41,24 +41,18 @@ public class OrderController {
 
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
-
 	@Resource(name = "pointbiz")
 	Biz<String, PointVO> pointbiz;
-
 	@Resource(name = "point_storebiz")
 	Biz<String, Point_storeVO> point_storebiz;
-
 	@Resource(name = "ordersbiz")
 	Biz<String, OrdersVO> ordersbiz;
-
 	@Resource(name = "orders_detailbiz")
 	Biz<String, Orders_detailVO> orders_detailbiz;
 	@Resource(name = "orders_detailjoinproductbiz")
 	Biz<String, Orders_detailJoinProductVO> orders_detailjoinproductbiz;
-
 	@Resource(name = "productbiz")
 	Biz<String, ProductVO> productbiz;
-
 	@Resource(name = "chainbiz")
 	Biz<String, ChainVO> chainbiz;
 
@@ -78,7 +72,6 @@ public class OrderController {
 
 	public ArrayList<PointVO> bringPointInfo(HttpSession httpSession) throws Exception {// 카트에 대한 포인트 정보를 넣는다.
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
-
 		Iterator<CartVO> itr;
 		if (cartProduct != null) {
 			itr = cartProduct.keySet().iterator();
@@ -220,13 +213,11 @@ public class OrderController {
 		System.out.println(ordersVO);
 		ordersbiz.register(ordersVO);
 	}
-
 	public void makeOrders_detail(HttpSession httpSession) throws Exception {// orders_detail 테이블에 insert
 		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된
 		System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
-
 		while (itr.hasNext()) {
 			CartVO tmp = itr.next();
 			Orders_detailVO orders_detailVO = new Orders_detailVO();
@@ -238,14 +229,14 @@ public class OrderController {
 			orders_detailVO.setProduct_id(productbiz.getProduct_id(tmp.getProduct_name()));
 			orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
 			orders_detailVO.setStatus("not_done");// 주문이 들어갔고 아직 주문완료 전이다.
+			orders_detailVO.setStore_name(tmp.getStore_name());
 			orders_detailbiz.register(orders_detailVO);
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
 		}
 	}
-
+	
 	@RequestMapping(value = "buyProduct", method = RequestMethod.GET) // 가게 이름을 return 한다.
 	public String buyProductGet(HttpServletRequest request) throws Exception {
-		
 		return "redirect:/index.html";// 로그인 첫 페이지로 /index.html
 	}
 
@@ -282,7 +273,6 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-
 	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET) // 현재 주문들어간 상품 보기 (주문 완료전) not_done
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,

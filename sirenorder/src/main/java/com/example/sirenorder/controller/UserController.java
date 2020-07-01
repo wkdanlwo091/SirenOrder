@@ -36,7 +36,7 @@ public class UserController {
 			System.out.println("session null");
 		}else {
 			System.out.println("session not null");
-			if(temp.getAttribute("owner") == null) {
+			if(temp.getAttribute("owner") != null) {
 				return "redirect:ownermain.html";
 			}
 			return "redirect:/main.html";

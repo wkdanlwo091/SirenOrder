@@ -18,4 +18,6 @@ public class Orders_detailVO {
 	String product_name;//개발의 간편화를 위해 역정규화 하였다. 
 	String status;
 	int seq;
+	String store_id;//owner가 orders_detail 볼 수 있게 
+	String store_name;
 }

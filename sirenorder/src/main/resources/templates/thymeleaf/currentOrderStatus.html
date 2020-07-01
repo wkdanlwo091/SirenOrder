@@ -25,34 +25,30 @@
 </head>
 <script>
 //이전 버튼 이벤트
-function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
+function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
 		var range = range - 1;// 6
 		var url = "/currentOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
 		location.href = url;
 	}
 	
   //페이지 번호 클릭
-	function fn_pagination(page, range, rangeSize, chain_name ) {
-	 	alert(page + " " + range + " " + rangeSize + " " + chain_name );
+	function fn_pagination(page, range, rangeSize ) {
 		var url = "/currentOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
 		location.href = url;	
 	}
 
   //다음 버튼 이벤트
-	function fn_next(page, range, rangeSize, chain_name ) {
+	function fn_next(page, range, rangeSize ) {
 		var page = parseInt((range * rangeSize)) + 1;
 		var range = parseInt(range) + 1;
 		var url = "/currentOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
 		location.href = url;
 	}
 
@@ -79,7 +75,8 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
                                 <div class="single_product_text">
                                     <h4 th:text="${list.productVO.product_name}"></h4>
                                     <h4 th:text="${list.price}"></h4>
-                                    <h4 th:text="${list.productVO.chain_name}"></h4>
+                                    <h4  th:inline="text">:[[${list.store_name}]]</h4><!-- store_name 없는 경우의 css를 위해서 ..을 둠 -->
+                                    <h4 th:inline="text">[[${list.productVO.chain_name}]]</h4>
                                 </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>
@@ -87,17 +84,17 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 						<div id="paginationBox">
 							<ul class="pagination">
 									<li th:if="${pagination.prev}" class="page-item">
-										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
+										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')|">Prev
 										</a>
 									</li>
 									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
 										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
+											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')|" th:text="${idx}"> ${idx} 
 											</a>
 										</li>
 									</th:block>	
 									<li th:if="${pagination.next}" class="page-item">
-										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">next
+										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}' )|">next
 										</a>
 									</li>
 							</ul>

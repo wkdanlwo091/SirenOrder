@@ -35,7 +35,6 @@ public class ProductController {
 	public ModelAndView showProduct(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
-		
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		if(httpSession.getAttribute("userId") == null) {//아이디 로그인 안 했을 시 로그인 해라로 간다. 
@@ -57,7 +56,7 @@ public class ProductController {
 		pagination.pageInfo(page, range, listCnt);
 		startList = pagination.getStartList();
 		listSize =  pagination.getListSize();
-		 
+		
 		List<Store_productJoinProductVO> List = store_productbiz.getProductListJoin(store_name, startList, listSize);
 		model.addObject("pagination", pagination);
 		model.addObject("chain_name", chain_name);
@@ -111,7 +110,6 @@ public class ProductController {
 		jo.put("number", cartProduct.get(tmp));//물건 개수
 		return jo;
 	}
-	
 	
 	//세션에 카트 정보를 저장하는 컨트롤러  plus minus 둘다 담당 --> 이 둘 나눠야지
 	@RequestMapping(value = "cartProductAdd", method = RequestMethod.POST)
