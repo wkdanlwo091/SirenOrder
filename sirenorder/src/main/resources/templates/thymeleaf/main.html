@@ -68,6 +68,27 @@ $(function() {
             	alert("error 는" + result);
             }
 	});
+	
+	
+	var order =/*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
+	var pointHistory= /*[[${pointHistory}]]*/ 'default';
+	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
+	
+	if(order == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
+	if(currentOrderStatus == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
+		}
+	if(pointHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
+
+	}
+	if(orderHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
+	}
 });
 
 function addToCart(product_name,store_name,chain_name,price){
@@ -197,10 +218,10 @@ function minusToCart(product_name,store_name, chain_name,price){
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="main.html" class="active"><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
-						<li><a href="currentOrderStatus.html" class=""><i class="lnr lnr-code"></i> <span>주문현황</span></a></li>
-						<li><a href="ordersHistory.html" class=""><i class="lnr lnr-chart-bars"></i> <span>사용량보기</span></a></li>
-						<li><a href="pointHistory.html" class=""><i class="lnr lnr-cog"></i> <span>포인트 보기</span></a></li>
+						<li><a href="main.html" class="active" ><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
+						<li><a href="currentOrderStatus.html" class=""   ><i class="lnr lnr-code"></i> <span>주문현황</span></a></li>
+						<li><a href="ordersHistory.html" class=""  ><i class="lnr lnr-chart-bars"></i> <span>사용량보기</span></a></li>
+						<li><a href="pointHistory.html" class=""   ><i class="lnr lnr-cog"></i> <span>포인트 보기</span></a></li>
 					</ul>
 				</nav>
 			</div>
