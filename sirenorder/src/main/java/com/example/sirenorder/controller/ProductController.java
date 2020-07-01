@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -15,14 +17,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ProductVO;
+import com.example.sirenorder.vo.Store_productJoinProductVO;
+import com.example.sirenorder.vo.Store_productVO;
 @Controller
 public class ProductController {
 	@Resource(name = "productbiz")	
 	Biz<String, ProductVO> productbiz;
+	@Resource(name = "store_productbiz")	
+	Biz<String, Store_productVO> store_productbiz;
+	
 	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다.   . pagination 구현
 	public ModelAndView showProduct(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
@@ -34,26 +42,29 @@ public class ProductController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+
 		String chain_name = request.getParameter("chain_name");
 		String store_name = request.getParameter("store_name");
-		
 		int listCnt;
 		int startList;
 		int listSize;
-		listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
+		//스토어에 해당하는 상품을 가져와야 한다. 
+		//banapresso 신촌과 홍대의 판매 item이 다를 수 있다. 
+		//따라서 다대다 관계를 위해 store_product를 만들었다.  
+		listCnt = store_productbiz.getListCnt(store_name);
+		//listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		startList = pagination.getStartList();
 		listSize =  pagination.getListSize();
 		 
-		List<ProductVO> List = productbiz.getProductList(chain_name, startList, listSize);
+		List<Store_productJoinProductVO> List = store_productbiz.getProductListJoin(store_name, startList, listSize);
 		model.addObject("pagination", pagination);
 		model.addObject("chain_name", chain_name);
 		model.addObject("store_name", store_name);
 
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");
-		model.addObject("store_name", store_name);//체인점 중 가게를 구분하기 위한 변수 
 		if(List.size() == 0) {
 			//System.out.println("가게에 물건이 없습니다.");
 			model.addObject("List", List);
@@ -64,7 +75,6 @@ public class ProductController {
 		}
 		return model;
 	}
-	
 	//가게의 판매 물건을 가져오는 컨트롤러이다
 	@RequestMapping(value = "getProduct", method = RequestMethod.POST)
 	@ResponseBody
@@ -82,11 +92,6 @@ public class ProductController {
 		}
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
-	
-	
-	
-	
-	
 	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {
 		int num = 1;
 		CartVO cartVO = new CartVO();//작업 중인 것 

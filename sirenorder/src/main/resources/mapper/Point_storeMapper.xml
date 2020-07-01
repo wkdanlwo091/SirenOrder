@@ -54,7 +54,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
 			select point_store_seq.nextval from dual
 		</selectKey>
-
 		INSERT INTO POINT_STORE
 		VALUES( #{point_store_id}||#{seq}, #{point_id}, #{store_id},
 		#{users_id}, #{chain_name}, #{point_date}, #{used_point})

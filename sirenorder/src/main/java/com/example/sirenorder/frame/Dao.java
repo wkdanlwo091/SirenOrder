@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Point_storeVO;
+import com.example.sirenorder.vo.Store_productJoinProductVO;
 
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
@@ -20,6 +21,10 @@ public interface Dao<Id, Model> {
 	}
 
 	default public ArrayList<Model> selectChain(String name) throws Exception {
+		return null;
+	}
+	default public ArrayList<Model> selectByStore_name(String store_name) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	default public ArrayList<Model> selectProduct(String  name, int num) throws Exception {
@@ -62,6 +67,10 @@ public interface Dao<Id, Model> {
 		return null;
 	}
 	default public ArrayList<Point_storeJoinStoreVO> selectByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
+		return null;
+	}
+	default public ArrayList<Store_productJoinProductVO> selectProductListJoin(String store_name, int startList, int listSize) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 	public Model select(Id id);

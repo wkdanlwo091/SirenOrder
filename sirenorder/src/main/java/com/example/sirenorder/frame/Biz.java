@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
-import com.example.sirenorder.vo.Point_storeVO;
+import com.example.sirenorder.vo.Store_productJoinProductVO;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -23,6 +23,12 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getChain(Id id) throws Exception{
 		return null;
 	}
+	@Transactional
+	default public ArrayList<Model> getByStore_name(String store_name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Transactional 
 	default public ArrayList<Model> getProduct(String name, int num) throws Exception{
 		return null;
@@ -78,18 +84,18 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getOrders_detailByOrdersId(String orders_id ){
 		return null;
 	}
-	
 	@Transactional
 	default public ArrayList<Point_storeJoinStoreVO> getByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
 		return null;
 	}
-
-	
+	@Transactional
+	default public ArrayList<Store_productJoinProductVO> getProductListJoin(String store_name, int startList, int listSize)  {
+		return null;
+	}
 	@Transactional
 	default public ArrayList<Point_storeJoinStoreVO> getByUsers_id(String users_id ) throws Exception {
 		return null;
 	}
-
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

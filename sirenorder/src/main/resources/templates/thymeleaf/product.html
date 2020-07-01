@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<!-- 상품을 보여주는 웹페이지 -->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <title></title>
@@ -58,7 +59,6 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 
 </script>
 <body>
-
     <!--================Category Product Area =================-->
         <div class="container">
             <div class="row">
@@ -78,14 +78,14 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 									-->		
                         <div class="col-lg-4 col-sm-6" th:each="list : ${List}">
                             <div class="single_product_item">
-                                <img th:src="${list.image}" alt="" width="300" height="350">
+                                <img th:src="${list.productVO.image}" alt="" width="300" height="350">
                                 <div class="single_product_text">
                                     <h4 th:text="${list.product_name}"></h4>
-                                    <h4 th:text="${list.price}"></h4>
-                                    <h4 th:text="${store_name}"></h4>
+                                    <h4 th:text="${list.store_name}"></h4>
                                     <h4 th:text="${list.chain_name}"></h4>
-                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.price}')|" class="add_cart">+ 물건 담기</a>
-                                    <a href="#"  th:attr="onclick=|minusToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.price}')|" class="add_cart">- 물건 빼기</a>
+                                    <h4 th:text="${list.productVO.price}"></h4>
+                                    <a href="#"  th:attr="onclick=|addToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.productVO.price}')|" class="add_cart">+ 물건 담기</a>
+                                    <a href="#"  th:attr="onclick=|minusToCart('${list.product_name}','${store_name}','${list.chain_name}' ,'${list.productVO.price}')|" class="add_cart">- 물건 빼기</a>
                                 </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>

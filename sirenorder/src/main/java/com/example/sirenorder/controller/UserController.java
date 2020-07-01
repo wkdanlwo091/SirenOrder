@@ -29,7 +29,6 @@ public class UserController {
 //	public String login() {
 //		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 //	}
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
@@ -37,11 +36,13 @@ public class UserController {
 			System.out.println("session null");
 		}else {
 			System.out.println("session not null");
+			if(temp.getAttribute("owner") == null) {
+				return "redirect:ownermain.html";
+			}
 			return "redirect:/main.html";
 		}
 		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 	}
-	
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public String loginIndex(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
@@ -74,6 +75,7 @@ public class UserController {
 				if(result.getRole().equals("user")) {//유저
 					model.setViewName("redirect:/main.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
 				}else if(result.getRole().equals("owner")) {//사업자 
+					httpSession.setAttribute("owner", "owner");
 					model.setViewName("redirect:/ownermain.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
 				}
 				return model;
