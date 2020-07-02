@@ -41,5 +41,18 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		<select id = "selectOrders_detailCnt" resultType="int">
 			select count(*) from orders_detail where status = 'not_done'
 	</select>
+	
+	<!-- owner가 store_name 기반으로 주문현황 보기  -->
+	<select id = "selectOrders_detailJoinProductByStore_name"  parameterType="paginationowner" resultMap="product">
+		select * from 
+		(
+			select A.orders_detail_id, A.quantity, A.orders_id, A.status,A.store_name, rownum r, B.*
+			from orders_detail A, product B
+			where A.status = 'not_done' and A.product_id = B.product_id and store_name = #{store_name}
+		)
+		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
+		 <!-- where r &gt;= #{startList} and r &lt; #{startList} + #{listSize} -->
+	</select>
+	
 </mapper>
 

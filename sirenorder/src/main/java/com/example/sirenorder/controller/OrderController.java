@@ -276,8 +276,8 @@ public class OrderController {
 	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET) // 현재 주문들어간 상품 보기 (주문 완료전) not_done
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range,
-			@RequestParam(required = false, defaultValue = "none") String chain_name) throws Exception {
+			@RequestParam(required = false, defaultValue = "1") int range 
+			 ) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();

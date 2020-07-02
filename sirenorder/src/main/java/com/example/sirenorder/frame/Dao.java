@@ -3,11 +3,9 @@ package com.example.sirenorder.frame;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
-import com.example.sirenorder.vo.Point_storeVO;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 
 public interface Dao<Id, Model> {
@@ -54,6 +52,12 @@ public interface Dao<Id, Model> {
 		
 		return null;
 	}
+	default public ArrayList<Model> selectOrders_detailJoinProductByStore_name(PaginationOwner pagination){
+		
+		return null;
+	}
+	
+	
 	default public int selectOrders_detailCnt( ){
 		return (Integer) null;
 	}
@@ -73,6 +77,14 @@ public interface Dao<Id, Model> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	default public ArrayList<Model> selectOrders_detailByStore_name(String store_name ) throws Exception {
+		return null;
+	}
+	default public int selectOrders_detailCntByStore_name(String store_name) { 
+		return (Integer) null;
+	}
+
+	
 	public Model select(Id id);
 
 	public ArrayList<Model> selectall();

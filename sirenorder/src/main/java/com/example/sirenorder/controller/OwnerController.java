@@ -14,7 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
-import com.example.sirenorder.vo.ProductVO;
+import com.example.sirenorder.vo.Orders_detailJoinProductVO;
+import com.example.sirenorder.vo.Orders_detailVO;
+import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.UserVO;
 
 
@@ -23,6 +25,12 @@ import com.example.sirenorder.vo.UserVO;
 public class OwnerController {
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
+	
+	@Resource(name = "orders_detailbiz")
+	Biz<String, Orders_detailVO> orders_detailbiz;
+
+	@Resource(name = "orders_detailjoinproductbiz")
+	Biz<String, Orders_detailJoinProductVO> orders_detailjoinproductbiz;
 
 	@RequestMapping(value = "/ownermain.html", method=RequestMethod.GET) //처음 들어 왔을 때 
 	public String ownermain(HttpServletRequest request) throws Exception {
@@ -43,30 +51,42 @@ public class OwnerController {
 	@RequestMapping(value = "/ownerOrderStatus.html", method=RequestMethod.GET) //
 	public ModelAndView ownerOrderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
-			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception{
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "nothing") String orders_detail_id 
+			) throws Exception{
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
+		String store_name = (String) httpSession.getAttribute("store_name");
 		if(httpSession.getAttribute("userId") == null) {//아이디 로그인 안 했을 시 로그인 해라로 간다. 
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-
+		if(orders_detail_id.equals("nothing")) {
+			
+		}else {//not_done에서 done으로 바꾼다. 
+			Orders_detailVO m = new Orders_detailVO();
+			m.setOrders_detail_id(orders_detail_id);
+			orders_detailbiz.update(m);
+		}
+		
 		int listCnt;
 		int startList;
 		int listSize;
-		listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
+		listCnt = orders_detailbiz.getOrders_detailCntByStore_name(store_name);
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		startList = pagination.getStartList();
 		listSize =  pagination.getListSize();
-		 
-		List<ProductVO> List = productbiz.getProductList(chain_name, startList, listSize);
-		model.addObject("pagination", pagination);
-		model.addObject("chain_name", chain_name);
-		model.addObject("store_name", store_name);
 
+		PaginationOwner paginationOwner = new PaginationOwner();
+		paginationOwner.setStartList(startList);
+		paginationOwner.setStore_name(store_name);
+		List<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz.getOrders_detailJoinProductByStore_name(paginationOwner);
+		model.addObject("pagination", pagination);
+		model.addObject("store_name", store_name);
+		 
 		model.addObject("ownerOrderStatus", "clicked");
-		model.setViewName("thymeleaf/main");
+		model.setViewName("thymeleaf/ownermain");
 		model.addObject("store_name", store_name);//체인점 중 가게를 구분하기 위한 변수 
 		if(List.size() == 0) {
 			//System.out.println("가게에 물건이 없습니다.");
@@ -81,6 +101,7 @@ public class OwnerController {
 	
 	@RequestMapping(value = "/ownerOrderStatus.html", method=RequestMethod.POST) //가입 신청 했을 때
 	public ModelAndView ownerOrderStatusPost() throws Exception {
-    	return "thymeleaf/ownermain";
+		ModelAndView model = new ModelAndView();
+    	return model;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
@@ -22,6 +24,12 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 		return null;
 	}
 	@Override
+	public void update(Orders_detailVO m) throws Exception {
+		dao.update(m);
+		return;
+	}
+
+	@Override
 	public void register(Orders_detailVO orders_detailVO) throws Exception {
 		dao.insert(orders_detailVO);
 	}
@@ -36,5 +44,13 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	@Override
 	public ArrayList<Orders_detailVO> getOrders_detailByOrdersId(String orders_id) {
 		return dao.selectOrders_detailByOrdersId(orders_id);
+	}
+	@Override
+	public ArrayList<Orders_detailVO> getOrders_detailByStore_name(String store_name ) throws Exception {
+		return dao.selectOrders_detailByStore_name(store_name);
+	}
+	@Override
+	public int getOrders_detailCntByStore_name(String store_name) { 
+		return dao.selectOrders_detailCntByStore_name(store_name);
 	}
 }

@@ -40,5 +40,17 @@ public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
 	public ArrayList<Orders_detailVO> selectOrders_detailByOrdersId(String orders_id) {
 		return orders_detailMapper.selectOrders_detailByOrdersId(orders_id);
 	}
+	@Override
+	public ArrayList<Orders_detailVO> selectOrders_detailByStore_name(String store_name) {
+		return orders_detailMapper.selectOrders_detailByStore_name(store_name);
+	}
+	@Override
+	public int selectOrders_detailCntByStore_name(String store_name) { 
+		return orders_detailMapper.selectOrders_detailCntByStore_name(store_name);
+	}
+	@Override
+	public void update(Orders_detailVO m) { 
+		orders_detailMapper.update(m);
+	}
 
 }

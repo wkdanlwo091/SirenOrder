@@ -29,6 +29,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <insert id = "insert"><!-- 가능하다 parameterType이 없어도  -->
     	INSERT INTO USERS
     	 VALUES(#{users_id}, #{users_password}, #{users_name},
-    	  #{users_address}, #{sex}, #{role})
+    	  #{users_address}, #{sex}, #{role}, #{store_name})
     </insert>
 </mapper>

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 
@@ -92,10 +93,25 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Store_productJoinProductVO> getProductListJoin(String store_name, int startList, int listSize)  {
 		return null;
 	}
+	
+	@Transactional
+	default public ArrayList<Model> getOrders_detailByStore_name(String store_name ) throws Exception {
+		return null;
+	}
 	@Transactional
 	default public ArrayList<Point_storeJoinStoreVO> getByUsers_id(String users_id ) throws Exception {
 		return null;
 	}
+	@Transactional
+	default public int getOrders_detailCntByStore_name(String store_name) { 
+		return (Integer)null;
+	}
+	@Transactional
+	default public ArrayList<Model> getOrders_detailJoinProductByStore_name(PaginationOwner pagination){
+		
+		return null;
+	}
+
 	public Model get(Id id);
 	public ArrayList<Model> get();
 }

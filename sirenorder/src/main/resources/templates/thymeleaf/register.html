@@ -8,6 +8,27 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="css/my-login.css">
 </head>
+<script>
+	//사업자 일 때 필요한 것 
+	function ownerfunction(number){
+		if(number == 1){
+			//store_name은 owner 일때만 필요하다. 
+			document.getElementById("store_name").style.visibility="visible";
+			document.getElementById("store_nameLabel").style.visibility="visible";
+			/*
+			var temp =  document.createElement("input");
+			temp.setAttribute("type", "text");
+			temp.setAttribute("name", "store_name");
+			document.querySelector("body > section > div > div > div > div.card.fat > div > form > div:nth-child(5)").appendChild(temp);
+			*/
+		}//owner
+		else if(number == 2){
+			document.getElementById("store_name").style.visibility="hidden";
+			document.getElementById("store_nameLabel").style.visibility="hidden";
+		}//user
+	}
+	
+</script>
 <body class="my-login-page">
 	<section class="h-100">
 		<div class="container h-100">
@@ -60,10 +81,12 @@
 								  <label for="female">Female</label><br>
 								</div>
 								<div class="form-group">
-								  <input type="radio" id="owner" name="role" value="owner" checked="checked">
 								  <label for="owner">owner</label>
-								  <input type="radio" id="user" name="role" value="user">
-								  <label for="user">user</label><br>
+								  <input type="radio" id="owner" name="role" value="owner"  onclick = "ownerfunction(1)">
+  								  <label for="user">user</label><br>
+								  <input type="radio" id="user" name="role" value="user" checked = "checked" onclick = "ownerfunction(2)">
+								  <label for="store_name" id="store_nameLabel"  style = "visibility: hidden">store_name</label><br>
+								  <input type="text" id="store_name" name="store_name" style = "visibility: hidden">
 								</div>
 								<div class="form-group">
 									<label for="address">주소지 </label>

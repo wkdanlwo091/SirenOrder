@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+<!-- owner가 주문현황에서 not_done을 보는 것 not_done을 done으로 바꾼다.이를 디비에 저장  웹소켓으로 서버에 전달 후 fcm 메시지 푸시 -->
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <title></title>
@@ -26,80 +27,38 @@
 </head>
 <script>
 //이전 버튼 이벤트
-function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
+function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 		var page = ((range - 2) * rangeSize) + 1;// (7-2) * 6 = 31 
 		var range = range - 1;// 6
-		var url = "/ordersHistory.html";
-		var startDate = $('#from').val();
-		var endDate = $('#to').val();
+		var url = "/ownerOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
-		url = url + "&from=" + startDate;
-		url = url + "&to=" + endDate;
-		url = url + "&none=" + endDate;
 		location.href = url;
 	}
   //페이지 번호 클릭
-	function fn_pagination(page, range, rangeSize, chain_name ) {
-		var url = "/ordersHistory.html";
-		var startDate = $('#from').val();
-		var endDate = $('#to').val();
+	function fn_pagination(page, range, rangeSize ) {
+		var url = "/ownerOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
-		url = url + "&from=" + startDate;
-		url = url + "&to=" + endDate;
-		url = url + "&none=" + endDate;
-		alert("pagination page " + page);
-		location.href = url;	
+		location.href = url;//get 방식 
 	}
 	//다음 버튼 이벤트
-	function fn_next(page, range, rangeSize, chain_name ) {
+	function fn_next(page, range, rangeSize ) {
 		var page = parseInt((range * rangeSize)) + 1;
 		var range = parseInt(range) + 1;
-		var url = "/ordersHistory.html";
-		var startDate = $('#from').val();
-		var endDate = $('#to').val();
+		var url = "/ownerOrderStatus.html";
 		url = url + "?page=" + page;
 		url = url + "&range=" + range;
-		url = url + "&chain_name=" + chain_name;
-		url = url + "&from=" + startDate;
-		url = url + "&to=" + endDate;
-		url = url + "&none=" + endDate;
-
 		location.href = url;
 	}
-    var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
-	  j( function() {
-		    var dateFormat = "yyyy-mm-dd";
-		    var from = j( "#from" )
-		        .datepicker({
-		          defaultDate: "+1w",
-		          changeMonth: true,
-		          changeYear: true,
-		          numberOfMonths: 1
-		        }) 
-		    var to = j( "#to" ).datepicker({
-		        defaultDate: "+1w",
-		        changeMonth: true,
-		        changeYear: true,
-		        numberOfMonths: 1
-		      }) 
-	  	} );
-    
-    	function submitOrdersHistoryDate(){
-    		var startDate = $('#from').val();
-    		var endDate = $('#to').val();
-    		if(startDate == null || endDate == null){
-    			alert("기간을 설정하세요 ");
-    		}
-			if(startDate > endDate){
-				alert("올바른 기간을 설정하세요");
-			}else{
-				document.getElementById("OrdersHistoryId").submit();
-			}
-    	}
+	function sendOrders_detailId(orders_detail_id){
+		var url = "/ownerOrderStatus.html?orders_detail_id=";
+		url = url + orders_detail_id;
+		location.href = url;
+	}
+	$(function(){
+		alert("dd");
+	});
 </script>
 <body>
         <div class="container">
@@ -107,40 +66,35 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
                 <div class="col-lg-9">
                     <div class="row align-items-center latest_product_inner">
                     	<div>
-							<form method="post" action="/ordersHistory.html" id = "OrdersHistoryId">
-								<label for="from">From</label>
-								<input type="date" id="from"  th:value="${from}" name="from"><!-- 스프링 컨트롤러에서 date준다.  -->
-								<label for="to">to</label>
-								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
-							</form>
-							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
 						</div>
 						<!-- ELSE -->
-							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
+							<div class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
 	                                <img th:src="${list.productVO.image}" alt="" width="333" height="333"><!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
 	                                <div class="single_product_text">
+	                                	<h4 th:text="${list.orders_detail_id}"></h4>
 	                                    <h4 th:text="${list.productVO.product_name}"></h4>
 	                                    <h4 th:text="${list.price}"></h4>
 	                                    <h4 th:text="${list.orders_date}"></h4>
-	                                    <h4 th:text="${list.productVO.chain_name}"></h4>
+	                                    <h4 th:text="${store_name}"></h4>
+	                                    <button onclick = "sendOrders_detailId(${list.orders_detail_id})">주문 완료</button><!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
 	                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
 	                            </div>
 	                        </div>
-							<div th:if="${!from.equals('')}" id="paginationBox">
+							<div id="paginationBox">
 								<ul class="pagination">
 										<li th:if="${pagination.prev}" class="page-item">
-											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">Prev
+											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}' )|">Prev
 											</a>
 										</li>
 										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
 											<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
+												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}' )|" th:text="${idx}"> ${idx} 
 												</a>
 											</li>
 										</th:block>	
 										<li th:if="${pagination.next}" class="page-item">
-											<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|">next
+											<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}' )|">next
 											</a>
 										</li>
 								</ul>
@@ -177,5 +131,4 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
     <script src="js/price_rangs.js"></script>
     <!-- custom js -->
     <script src="js/custom.js"></script>
-    
 </html>

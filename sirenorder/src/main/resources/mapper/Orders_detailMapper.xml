@@ -4,37 +4,63 @@
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.sirenorder.mapper.Orders_detailMapper">
+<mapper
+	namespace="com.example.sirenorder.mapper.Orders_detailMapper">
 	<select id="selectOrders_detail" resultType="orders_detail">
 		SELECT *
-		FROM ORDERS_DETAIL
-		WHERE ORDERS_ID = #{orders_id} AND PRODUCT_ID = #{product_id}
+		FROM
+		ORDERS_DETAIL
+		WHERE ORDERS_ID = #{orders_id} AND PRODUCT_ID =
+		#{product_id}
 	</select>
-	<select id="selectOrders_detailByOrdersId" resultType="orders_detail">
+	<update id="update" parameterType="orders_detail">
+
+		update orders_detail
+		set status = 'done'
+		where orders_detail_id = #{orders_detail_id}
+
+	</update>
+
+
+	<select id="selectOrders_detailByOrdersId"
+		resultType="orders_detail">
 		SELECT *
 		FROM ORDERS_DETAIL
-		WHERE ORDERS_ID = #{orders_id} 
+		WHERE ORDERS_ID = #{orders_id}
+	</select>
+	<select id="selectOrders_detailByStore_name"
+		resultType="orders_detail">
+		SELECT *
+		FROM ORDERS_DETAIL
+		WHERE STORE_NAME = #{store_name}
+	</select>
+	<select id="selectOrders_detailCntByStore_name" resultType="int">
+		SELECT count(*) as ordersCnt
+		FROM ORDERS_DETAIL
+		WHERE STORE_NAME = #{store_name}
 	</select>
 	<insert id="insert">
-		<selectKey keyProperty="seq" resultType="int" order="BEFORE"><!-- keyProperty는 sequence 뜻한다. -->
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE"><!-- keyProperty는 
+				sequence 뜻한다. -->
 			select orders_detail_seq.nextval as seq from dual
 		</selectKey>
-		INSERT INTO ORDERS_DETAIL (orders_detail_id, price, quantity, orders_id,
-		product_id, status, product_name, orders_date, store_name, store_id) 
-		select  
-		#{orders_detail_id}||#{seq}, #{price},#{quantity}, #{orders_id}, #{product_id}, #{status}, 
+		INSERT INTO ORDERS_DETAIL (orders_detail_id, price, quantity,
+		orders_id,
+		product_id, status, product_name, orders_date, store_name,
+		store_id)
+		select
+		#{orders_detail_id}||#{seq}, #{price},#{quantity}, #{orders_id}, #{product_id}, #{status},
 		#{product_name}, #{orders_date} , #{store_name}, store_id
 		from store
 		where store_name = #{store_name}
-		<!--  아래 코드는 진행됨
-		INSERT INTO ORDERS_DETAIL (orders_detail_id, price, quantity, orders_id, product_id, status, product_name, orders_date, store_name, store_id) 
-		select 
-		    'orders_detail_id'||orders_detail_seq.nextval, 10000, 1,'orders_id101','product_id114','not_done','greentea114','06/29/2020','banapresso_sinchon', store_id
-		from store
-		where store_name = 'banapresso_sinchon';
-		-->
+		<!-- 아래 코드는 진행됨 INSERT INTO ORDERS_DETAIL (orders_detail_id, price, quantity, 
+			orders_id, product_id, status, product_name, orders_date, store_name, store_id) 
+			select 'orders_detail_id'||orders_detail_seq.nextval, 10000, 1,'orders_id101','product_id114','not_done','greentea114','06/29/2020','banapresso_sinchon', 
+			store_id from store where store_name = 'banapresso_sinchon'; -->
 	</insert>
-	<select id="selectOrders_seq" resultType="int"><!-- orders의 마지막 시퀸스 번호를 찾기 -->
-		select last_number from user_sequences where sequence_name = 'ORDERS_SEQ'
+	<select id="selectOrders_seq" resultType="int"><!-- orders의 마지막 시퀸스 번호를 
+			찾기 -->
+		select last_number from user_sequences where sequence_name =
+		'ORDERS_SEQ'
 	</select>
 </mapper>

@@ -76,6 +76,7 @@ public class UserController {
 					model.setViewName("redirect:/main.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
 				}else if(result.getRole().equals("owner")) {//사업자 
 					httpSession.setAttribute("owner", "owner");
+					httpSession.setAttribute("store_name", result.getStore_name());
 					model.setViewName("redirect:/ownermain.html");//메인 컨트롤러의 thymeleaf/main으로 간다. 
 				}
 				return model;
@@ -168,13 +169,18 @@ public class UserController {
     	m.setUsers_address(user.getUsers_address());
     	m.setSex(user.getSex());
     	m.setRole(user.getRole());
+    	if(user.getRole().equals("owner")) {
+        	m.setStore_name(user.getStore_name());
+    	}
     	userbiz.register(m);
     	return "redirect:/";//여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로 msg값을 줘도 된
 	}
+	
     @RequestMapping(value = "/register.html", method=RequestMethod.GET)//register 페이지 왔을 때
 	public String register() {
 		return "thymeleaf/register";
 	}
+    
 	@RequestMapping("/logout.html")//별 문제 없다. 
 	public String logout(HttpServletRequest request) {
 		System.out.println("entered login.top");
