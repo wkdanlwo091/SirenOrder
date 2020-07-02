@@ -56,8 +56,15 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 		url = url + orders_detail_id;
 		location.href = url;
 	}
-	$(function(){
-		alert("dd");
+	$(function(){/*
+		var parentNode = document.querySelector(".row align-items-center.latest_product_inner");
+		var divCnt = $(".col-lg-4.col-sm-6").length;
+		if(divCnt < 6){
+			for(var i = divCnt ;i < 6 ; i++ ){
+				parentNode.insertBefore(, parentNode.lastElementChild);				
+			}			
+		}
+		*/
 	});
 </script>
 <body>
@@ -65,10 +72,8 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
             <div class="row">
                 <div class="col-lg-9">
                     <div class="row align-items-center latest_product_inner">
-                    	<div>
-						</div>
 						<!-- ELSE -->
-							<div class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
+							<div style="height:333px; width:333px;" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
 	                                <img th:src="${list.productVO.image}" alt="" width="333" height="333"><!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
 	                                <div class="single_product_text">
@@ -81,7 +86,11 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 	                                </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
 	                            </div>
 	                        </div>
-							<div id="paginationBox">
+	                        <div class="col-lg-4 col-sm-6" style="height:333px; width:333px;"  ><!-- from이 시간을 포함할 때 -->
+	                        	<img src="https://www.nespresso.com/ncp/res/uploads/recipes/nespresso-recipes-Cafe-Latte-Do-Brazil.jpg" alt="" width="333" height="333">
+	                        </div>
+	                        
+							<div style="height:333px; width:333px;" id="paginationBox"><!-- css 포지션을 위해서 style지정해줌   -->
 								<ul class="pagination">
 										<li th:if="${pagination.prev}" class="page-item">
 											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}' )|">Prev
