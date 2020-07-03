@@ -53,15 +53,22 @@
 	}
 	
 	$(function() {
-		if(document.querySelector("#form1 > div:nth-child(1)") ){
-			var copyNode = document.querySelector("#form1 > div:nth-child(1)").cloneNode(true);
-			console.log("copy Node는 " + copyNode);
-			var parentNode = document.querySelector(".row.align-items-center.latest_product_inner");
-			alert(parentNode.lastElementChild);
-			parentNode.insertBefore(copyNode, parentNode.lastElementChild);
+		//상품 개수가 6개 미만일 때 css lining 위해서  1개면 hidden 된 5개를 뽑는다. 
+		for(var i = 1 ;i <= 6;i++){
+			var temp = "#form1 > div:nth-child(" + i +")";
+			if( document.querySelector(temp) ){
+				
+			}else{
+				var copyNode = document.querySelector("#form1 > div:nth-child(1)").cloneNode(true);
+				copyNode.style.visibility = "hidden";
+				console.log("copy Node는 " + copyNode);
+				var parentNode = document.querySelector(".row.align-items-center.latest_product_inner");
+				alert(parentNode.lastElementChild);
+				parentNode.insertBefore(copyNode, parentNode.lastElementChild);
+			}
 		}
-		//css lining을 위한 코드 
 		
+		//css lining을 위한 코드 
 		/*
 		var parentNode = document
 				.querySelector(".row.align-items-center.latest_product_inner");
@@ -89,7 +96,7 @@
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
 					<button type="submit" form="form1" value="Submit">주문 완료</button>
-					<form action="/action_page.php" method="post" id="form1">
+					<form action="/ownerOrderStatus.html" method="post" id="form1">
 						<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6"
 							th:each="list,iter : ${List}">
 							<!-- from이 시간을 포함할 때 -->
@@ -103,9 +110,8 @@
 									<h4 th:inline="text">날짜: [[${list.orders_date}]] </h4>
 									<h4 th:inline="text">가게이름: [[${store_name}]] </h4>
 									<!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
-									<input type="checkbox" name="orders_detail_id[${iter.index}]"
-										value="${list.orders_detail_id}"> <label> 주문
-										완료 체크</label><br>
+									<input type="checkbox" th:name="orders_detail_id[+${iter.index}+]" th:value="${list.orders_detail_id}"> 
+									<label> 주문 완료 체크</label><br>
 								</div>
 								<!-- th:attr="onclick=|upload('${gallery}')|"  -->
 							</div>

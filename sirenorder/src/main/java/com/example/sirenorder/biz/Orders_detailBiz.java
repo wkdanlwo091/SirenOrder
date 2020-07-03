@@ -26,7 +26,6 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	@Override
 	public void update(Orders_detailVO m) throws Exception {
 		dao.update(m);
-		return;
 	}
 
 	@Override
