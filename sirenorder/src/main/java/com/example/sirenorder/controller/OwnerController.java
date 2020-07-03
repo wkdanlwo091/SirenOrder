@@ -151,5 +151,26 @@ public class OwnerController {
 		}
 		return model;
 	}
+	
+	@RequestMapping(value = "/incomeChart.html", method = RequestMethod.GET) //
+	public ModelAndView ownerIncome(HttpServletRequest request
+			// 주문완료 되었다고 변경하는 정보를 담은 배열 클래스
+	) throws Exception {
+		ModelAndView model = new ModelAndView();
+		HttpSession httpSession = request.getSession();
+		String store_name = (String) httpSession.getAttribute("store_name");
+		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		
+		System.out.println("entered");
+		Scanner scan = new Scanner(System.in);
+		scan.next();
+		model.addObject("incomeChart", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
+		return model;
+	}
 
 }
