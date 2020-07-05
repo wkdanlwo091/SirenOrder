@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 
 public interface Biz<Id, Model> {
@@ -111,6 +112,17 @@ public interface Biz<Id, Model> {
 		
 		return null;
 	}
+	
+	@Transactional
+	default public ArrayList<Integer> getIncomeByStore_nameDay(Store_nameAndDate a) { 
+		return null;
+	}
+	@Transactional
+	default public ArrayList<Integer> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+		return null;
+	}
+
+
 
 	public Model get(Id id);
 	public ArrayList<Model> get();

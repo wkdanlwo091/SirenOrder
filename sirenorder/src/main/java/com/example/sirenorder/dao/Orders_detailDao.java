@@ -1,5 +1,6 @@
 package com.example.sirenorder.dao;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.mapper.Orders_detailMapper;
 import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailVO;
+import com.example.sirenorder.vo.Store_nameAndDate;
 
 @Repository("orders_detaildao")
 public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
@@ -52,5 +54,14 @@ public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
 	public void update(Orders_detailVO m) { 
 		orders_detailMapper.update(m);
 	}
+	@Override
+	public ArrayList<Integer> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+		return orders_detailMapper.selectIncomeBystore_nameDayRange(a);
+	}
+	@Override
+	public ArrayList<Integer> selectIncomeByStore_nameDay(Store_nameAndDate a) { 
+		return orders_detailMapper.selectIncomeBystore_nameDayRange(a);
+	}
 
+	
 }

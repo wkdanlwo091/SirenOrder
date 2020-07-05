@@ -1,9 +1,11 @@
 package com.example.sirenorder.mapper;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
+import com.example.sirenorder.vo.Store_nameAndDate;
 
 public interface Orders_detailMapper {
 	public Orders_detailVO select(String orders_id);
@@ -14,4 +16,6 @@ public interface Orders_detailMapper {
 	public ArrayList<Orders_detailVO> selectOrders_detailByOrdersId(String orders_id);
 	public ArrayList<Orders_detailVO> selectOrders_detailByStore_name(String store_name);
 	public int selectOrders_detailCntByStore_name(String store_name);
+	public ArrayList<Integer> selectIncomeBystore_nameDayRange(Store_nameAndDate a); 
+    public ArrayList<Integer> selectIncomeByStore_nameDay(Store_nameAndDate a);
 }

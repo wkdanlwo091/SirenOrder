@@ -152,6 +152,7 @@ public class OwnerController {
 		return model;
 	}
 	
+	//매출액 보기 
 	@RequestMapping(value = "/incomeChart.html", method = RequestMethod.GET) //
 	public ModelAndView ownerIncome(HttpServletRequest request
 			// 주문완료 되었다고 변경하는 정보를 담은 배열 클래스

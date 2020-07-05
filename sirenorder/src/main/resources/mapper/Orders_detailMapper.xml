@@ -67,9 +67,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<!-- 오늘 하루의 매출 보기 -->
 		select sum(price * quantity) from orders_detail
 		where store_name = #{store_name} and orders_date = #{date}
-		
+	</select>
+	<select id = "selectIncomeBystore_nameDayRange" resultType = "int">
 		select sum(price * quantity) from orders_detail 
-		where store_name = #{store_name} and orders_date &gt;#{fromDate}  &lt;#{toDate} 
+		where store_name = #{store_name} and orders_date &gt;#{from}  &lt;#{to} 
 		group by orders_date;
 	</select>
 </mapper>

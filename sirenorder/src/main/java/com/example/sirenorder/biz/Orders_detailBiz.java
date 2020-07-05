@@ -3,13 +3,13 @@ package com.example.sirenorder.biz;
 import java.util.ArrayList;
 
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
-import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
+import com.example.sirenorder.vo.Store_nameAndDate;
 
 @Service("orders_detailbiz")
 public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
@@ -51,5 +51,13 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	@Override
 	public int getOrders_detailCntByStore_name(String store_name) { 
 		return dao.selectOrders_detailCntByStore_name(store_name);
+	}
+	@Override
+	public ArrayList<Integer> getIncomeByStore_nameDay(Store_nameAndDate a) { 
+		return dao.selectIncomeByStore_nameDay(a);
+	}
+	@Override
+	public ArrayList<Integer> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+		return dao.selectIncomeBystore_nameDayRange(a);
 	}
 }

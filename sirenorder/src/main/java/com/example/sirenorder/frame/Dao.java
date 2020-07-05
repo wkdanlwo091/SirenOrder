@@ -3,9 +3,12 @@ package com.example.sirenorder.frame;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 
 public interface Dao<Id, Model> {
@@ -83,7 +86,14 @@ public interface Dao<Id, Model> {
 	default public int selectOrders_detailCntByStore_name(String store_name) { 
 		return (Integer) null;
 	}
-
+	
+	default public ArrayList<Integer> selectIncomeByStore_nameDay(Store_nameAndDate a) { 
+		return null;
+	}
+	
+	default public ArrayList<Integer> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+		return null;
+	}
 	
 	public Model select(Id id);
 
