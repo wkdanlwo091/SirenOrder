@@ -1,10 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="EUC-KR">
-<title>Insert title here</title>
-</head>
-<body>
+<!-- store owner가  -->
 
+<meta charset="utf-8">
+<title></title>
+<!-- animate CSS -->
+<link rel="stylesheet" href="css/animate.css">
+<!-- owl carousel CSS -->
+<link rel="stylesheet" href="css/owl.carousel.min.css">
+<!-- nice select CSS -->
+<link rel="stylesheet" href="css/nice-select.css">
+<!-- font awesome CSS -->
+<link rel="stylesheet" href="css/all.css">
+<!-- flaticon CSS -->
+<link rel="stylesheet" href="css/flaticon.css">
+<link rel="stylesheet" href="css/themify-icons.css">
+<!-- font awesome CSS -->
+<link rel="stylesheet" href="css/magnific-popup.css">
+<!-- swiper CSS -->
+<link rel="stylesheet" href="css/slick.css">
+<!-- style CSS -->
+<!-- date picker전용  -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+<script th:inline="javascript">// th:inline 항상 필요하다. 
+	function submitButton(){
+	
+}
+	
+</script>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="row align-items-center latest_product_inner">
+					<!-- ELSE -->
+					<!-- 여기다가 그래프를 넣어라 -->
+					<!-- 구간 설정 datePicker -->
+					    <div>
+					    	<form action="/addItem.html" method = "post" id = "submitProductSpecId">
+							  <label for="fname">상품 명: </label>
+							  <input type="text" id="fname" name="product_name"><br><br>
+							  <label for="lname">이미지 url: </label>
+							  <input type="text" id="lname" name="image_url"><br><br>
+							  <label for="lname">가격 : </label>
+							  <input type="text" id="lname" name="price" value=><br><br>
+					    	</form>
+					    	<button onclick = "submitButton()"></button>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<!-- jquery plugins here-->
+<script src="js/jquery-1.12.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- easing js -->
+<script src="js/jquery.magnific-popup.js"></script>
+<!-- swiper js -->
+<script src="js/swiper.min.js"></script>
+<!-- swiper js -->
+<script src="js/masonry.pkgd.js"></script>
+<!-- particles js -->
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.nice-select.min.js"></script>
+<!-- slick js -->
+<script src="js/slick.min.js"></script>
+<script src="js/jquery.counterup.min.js"></script>
+<script src="js/waypoints.min.js"></script>
+<script src="js/jquery.ajaxchimp.min.js"></script>
+<script src="js/jquery.form.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/mail-script.js"></script>
+<script src="js/stellar.js"></script>
+<script src="js/price_rangs.js"></script>
+<!-- custom js -->
+<script src="js/custom.js"></script>
 </html>
