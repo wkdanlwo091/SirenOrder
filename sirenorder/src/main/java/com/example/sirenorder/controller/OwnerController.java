@@ -199,6 +199,7 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+		
 		Store_nameAndDate temp = new Store_nameAndDate();
 		temp.setStore_name(store_name);
 		temp.setFrom( new java.sql.Date(from.getTime()));
