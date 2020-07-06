@@ -233,13 +233,8 @@ public class OwnerController {
 				}
 			}
 		}else if(option.equals("월")) {///2017 2018 2019 년 이면  3년치 데이터 다 가져와서 365개의 데이터 평균 내보네  
-			int currentYear = 0;
 			int currentMonth = 0;
-			int currentDay = 0;
 			int currentSum = 0;
-			int currentDate;
-			
-			System.out.println(list);
 			
 			for(int j = 0;  j <  list.size(); j++) {
 				if(j == 0 ) {
@@ -250,7 +245,6 @@ public class OwnerController {
 					jo.put("currentDate", currentMonth);
 					jo.put("currentSum", currentSum);
 					ja.add(jo);
-					System.out.println(ja);
 					currentMonth = list.get(j).getOrders_date().getMonth()+1;
 					currentSum = 0;
 				}
@@ -261,13 +255,18 @@ public class OwnerController {
 					jo.put("currentDate", currentMonth);
 					jo.put("currentSum", currentSum);
 					ja.add(jo);
-					System.out.println(ja);
 				}
 			}
-			System.out.println(ja);
 			///1월 이면 31개의 평균  2월  30개의 평균 치를 데이터로 내보네 
 		}else if(option.equals("일")) {
-			//일일 별 데이터를 가져아와
+			
+			for(int j = 0;  j <  list.size(); j++) {
+					JSONObject jo = new JSONObject();
+					jo.put("currentDate", list.get(j).getOrders_date());
+					jo.put("currentSum", list.get(j).getSum());
+					ja.add(jo);
+			}
+
 		}
 		model.addObject("ja", ja);//javascript에서 string으로 받는다. 
 		model.addObject("message", "exist");
