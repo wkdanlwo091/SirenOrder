@@ -46,7 +46,6 @@ j( function() {
 	        changeYear: true,
 	        numberOfMonths: 1
 	      }) 
-	      
 	      var array = /*[[${ja}]]*/ 'default';//json array를 받아오면 데이터가 생기고 안 받으면    'default' 란 문자열 
 		  var data = {// 차트에 들어가는 데이터 
 			        // The type of chart we want to create
@@ -66,7 +65,6 @@ j( function() {
 			        // Configuration options go here
 			        options: {}
 			    }
-	      
 		  if(array == null){
 			  document.getElementById('myChart').style.visibility = "hidden";
 		  }else{
@@ -74,10 +72,9 @@ j( function() {
 			  data["data"]["datasets"][0]["data"] = [];
 			  
 			for(var i = 0;i < array.length;i++){
-				data["data"]["labels"].push(array[i]["currentYear"]);//데이터 없는 연도 제외
+				data["data"]["labels"].push(array[i]["currentDate"]);//데이터 없는 연도 제외
 				data["data"]["datasets"][0]["data"].push(array[i]["currentSum"]);
 			}
-			
 		  	for(var i = 0;i < length; i++){
 				date["data"]["labels"].push();//2019, 2020  1월 2월 3월 .... 12월,  1일 2일 3일 4일 5일
 			}//2020년 누르면 월이 나오게 , 12월 누르면 그에 해당하는 일일이 나오게 by AJAX

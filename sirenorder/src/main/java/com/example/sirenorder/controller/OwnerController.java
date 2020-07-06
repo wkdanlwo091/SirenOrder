@@ -3,6 +3,7 @@ package com.example.sirenorder.controller;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -199,44 +200,75 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		
 		Store_nameAndDate temp = new Store_nameAndDate();
 		temp.setStore_name(store_name);
 		temp.setFrom( new java.sql.Date(from.getTime()));
 		temp.setTo( new java.sql.Date(to.getTime()));
-
 		JSONArray ja = new JSONArray();
-		JSONObject jo = new JSONObject();
 		ArrayList<SumAndOrders_date> list = orders_detailbiz.getIncomeBystore_nameDayRange(temp);// 디비에서 데이터 가져오는 것
-		
 		if(option.equals("년")) {
 			int currentYear = 0;
 			int currentSum = 0;
+
 			for(int j = 0;  j <  list.size(); j++) {
 				if(j == 0 ) {//첫번 째 년도 
-					currentYear = list.get(j).getOrders_date().getYear();
+					currentYear = list.get(j).getOrders_date().getYear() + 1900;// date가 -1900한 것을 return 하므로 1900 더한다. 
 				}
-				if(list.get(j).getOrders_date().getYear() != currentYear) {// 년도 바뀔 때 전의 sum, year 더한다. 바뀐 연도로 교환, sum 초기화
-					jo.put("currentYear", currentYear);
+				if(list.get(j).getOrders_date().getYear()+1900 != currentYear) {// 년도 바뀔 때 전의 sum, year 더한다. 바뀐 연도로 교환, sum 초기화
+					JSONObject jo = new JSONObject();
+					jo.put("currentDate", currentYear);
 					jo.put("currentSum", currentSum);
 					ja.add(jo);
-					currentYear = list.get(j).getOrders_date().getYear();
+					currentYear = list.get(j).getOrders_date().getYear() + 1900;
 					currentSum = 0;
 				}
+				
 				currentSum += list.get(j).getSum();
 				if(j == list.size()-1) {//마지막에 json object 더하기 
-					jo.put("currentYear", currentYear);
+					JSONObject jo = new JSONObject();
+
+					jo.put("currentDate", currentYear);
 					jo.put("currentSum", currentSum);
 					ja.add(jo);
 				}
 			}
-			///2017 2018 2019 년 이면  3년치 데이터 다 가져와서 365개의 데이터 평균 내보네  
-		}else if(option.equals("월")) {
+		}else if(option.equals("월")) {///2017 2018 2019 년 이면  3년치 데이터 다 가져와서 365개의 데이터 평균 내보네  
+			int currentYear = 0;
+			int currentMonth = 0;
+			int currentDay = 0;
+			int currentSum = 0;
+			int currentDate;
+			
+			System.out.println(list);
+			
+			for(int j = 0;  j <  list.size(); j++) {
+				if(j == 0 ) {
+					currentMonth =  list.get(j).getOrders_date().getMonth()+1 ;//6월이면 5월을 return해서 1을 더해주었다. 
+				}
+				if(list.get(j).getOrders_date().getMonth()+1  != currentMonth) {// 월이 바뀔 때마다 month와 sum을 바꾼다. 
+					JSONObject jo = new JSONObject();
+					jo.put("currentDate", currentMonth);
+					jo.put("currentSum", currentSum);
+					ja.add(jo);
+					System.out.println(ja);
+					currentMonth = list.get(j).getOrders_date().getMonth()+1;
+					currentSum = 0;
+				}
+				currentSum += list.get(j).getSum();
+				
+				if(j == list.size()-1) {//마지막에 json object 더하기 
+					JSONObject jo = new JSONObject();
+					jo.put("currentDate", currentMonth);
+					jo.put("currentSum", currentSum);
+					ja.add(jo);
+					System.out.println(ja);
+				}
+			}
+			System.out.println(ja);
 			///1월 이면 31개의 평균  2월  30개의 평균 치를 데이터로 내보네 
 		}else if(option.equals("일")) {
 			//일일 별 데이터를 가져아와
 		}
-		
 		model.addObject("ja", ja);//javascript에서 string으로 받는다. 
 		model.addObject("message", "exist");
 		model.addObject("incomeChart", "clicked");
