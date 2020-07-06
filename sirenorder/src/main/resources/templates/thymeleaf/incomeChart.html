@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
 <!-- owner가 주문현황에서 not_done을 보는 것 not_done을 done으로 바꾼다.이를 디비에 저장  웹소켓으로 서버에 전달 후 fcm 메시지 푸시 -->
@@ -25,7 +25,82 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
 <script>
+var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
+j( function() {
+	    var dateFormat = "yyyy-mm-dd";
+	    var from = j( "#from" )
+	        .datepicker({
+	          defaultDate: "+1w",
+	          changeMonth: true,
+	          changeYear: true,
+	          numberOfMonths: 1
+	        }) 
+	    var to = j( "#to" ).datepicker({
+	        defaultDate: "+1w",
+	        changeMonth: true,
+	        changeYear: true,
+	        numberOfMonths: 1
+	      }) 
+	      
+	      var ja = /*[[${ja}]]*/ 'default';//json array를 받아오면 데이터가 생기고 안 받으면    'default' 란 문자열 
+	      
+	      var array = JSON.parse(ja);
+	      
+		  if(ja == 'default'){
+			  document.getElementById('myChart').style.visibility = "hidden";
+		  }else{
+			  date["data"]["labels"] = [];//배열 초기화 
+			  date["data"]["datasets"][0]["data"] = [];
+			for(var i = 0;i < array.length;i++){
+				data["data"]["labels"].push(array[i]["currentYear"]);//데이터 없는 연도 제외
+				date["data"]["datasets"][0]["data"].push(array[i]["currentSum"]);
+			}
+			
+		  	for(var i = 0;i < length; i++){
+				date["data"]["labels"].push();//2019, 2020  1월 2월 3월 .... 12월,  1일 2일 3일 4일 5일
+			}//2020년 누르면 월이 나오게 , 12월 누르면 그에 해당하는 일일이 나오게 by AJAX
+			
+		    var ctx = document.getElementById('myChart').getContext('2d');
+			
+		    var data = {
+		        // The type of chart we want to create
+		        type: 'line',
+		        // The data for our dataset
+		        data: {
+		            labels: ["January", "February", "March", "April", "May", "June", "July"],//기간을 정해야 한다. 
+		            datasets: [{
+		                label: "매출",
+		                backgroundColor: 'rgb(255, 99, 132)',
+		                fill:false, // line의 아래쪽을 색칠할 것인가? 
+		                borderColor: 'rgb(255, 99, 132)',
+		                lineTension:0.1, // 값을 높이면, line의 장력이 커짐.
+		                data: [0, 10, 5, 2, 20, 30, 45],
+		            }]
+		        },
+		        // Configuration options go here
+		        options: {}
+		    }
+		    
+		    var chart = new Chart(ctx, data);//차트를 그린다. 
+		  }
+	} );
+
+	function submitOrdersHistoryDate(){
+		var startDate = $('#from').val();
+		var endDate = $('#to').val();
+		if(startDate == null || endDate == null){
+			alert("기간을 설정하세요 ");
+		}
+		if(startDate > endDate){
+			alert("올바른 기간을 설정하세요");
+		}else{
+			document.getElementById("incomeChartId").submit();
+		}
+	}
 </script>
 <body>
 	<div class="container">
@@ -34,6 +109,26 @@
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
 					<!-- 여기다가 그래프를 넣어라 -->
+					<!-- 구간 설정 datePicker -->
+					    <div>
+							<form method="post" action="/incomeChart.html" id = "incomeChartId">
+								<label for="from">From</label>
+								<input type="date" id="from"  th:value="${from}" name="from"><!-- 스프링 컨트롤러에서 date준다.  -->
+								<label for="to">to</label>
+								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
+								<label>그래프 옵션: </label> 
+						        <input list="options" name = "option"> 
+						        <datalist id="options"> 
+						            <option value="년" /> <!-- 2018 2019 2022 -->
+						            <option value="월" /> <!-- 1, 2, 3, 4, 5월 -->
+						            <option value="일" /> <!-- 1,2,3,4, 5일 -->
+						        </datalist> 
+							</form>
+							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
+							<!-- 아래에서 차트 출력   -->
+						</div>
+						<canvas id="myChart">
+						</canvas>
 				</div>
 			</div>
 		</div>

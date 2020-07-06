@@ -11,6 +11,7 @@ import com.example.sirenorder.mapper.Orders_detailMapper;
 import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
+import com.example.sirenorder.vo.SumAndOrders_date;
 
 @Repository("orders_detaildao")
 public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
@@ -54,14 +55,14 @@ public class Orders_detailDao  implements Dao<String, Orders_detailVO>{
 	public void update(Orders_detailVO m) { 
 		orders_detailMapper.update(m);
 	}
+	
 	@Override
-	public ArrayList<Integer> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+	public ArrayList<SumAndOrders_date> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return orders_detailMapper.selectIncomeBystore_nameDayRange(a);
 	}
+	
 	@Override
 	public ArrayList<Integer> selectIncomeByStore_nameDay(Store_nameAndDate a) { 
-		return orders_detailMapper.selectIncomeBystore_nameDayRange(a);
+		return orders_detailMapper.selectIncomeByStore_nameDay(a);
 	}
-
-	
 }

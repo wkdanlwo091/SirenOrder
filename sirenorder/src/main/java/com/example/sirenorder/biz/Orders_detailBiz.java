@@ -10,6 +10,7 @@ import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
+import com.example.sirenorder.vo.SumAndOrders_date;
 
 @Service("orders_detailbiz")
 public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
@@ -52,12 +53,14 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	public int getOrders_detailCntByStore_name(String store_name) { 
 		return dao.selectOrders_detailCntByStore_name(store_name);
 	}
+	
 	@Override
 	public ArrayList<Integer> getIncomeByStore_nameDay(Store_nameAndDate a) { 
 		return dao.selectIncomeByStore_nameDay(a);
 	}
+	
 	@Override
-	public ArrayList<Integer> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+	public ArrayList<SumAndOrders_date> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return dao.selectIncomeBystore_nameDayRange(a);
 	}
 }

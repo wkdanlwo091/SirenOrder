@@ -28,8 +28,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM ORDERS_DETAIL
 		WHERE ORDERS_ID = #{orders_id}
 	</select>
-	<select id="selectOrders_detailByStore_name"
-		resultType="orders_detail">
+	<select id="selectOrders_detailByStore_name" resultType="orders_detail">
 		SELECT *
 		FROM ORDERS_DETAIL
 		WHERE STORE_NAME = #{store_name}
@@ -63,14 +62,18 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		select last_number from user_sequences where sequence_name =
 		'ORDERS_SEQ'
 	</select>
+	
 	<select id="selectIncomeByStore_nameDay" resultType="int">
 	<!-- 오늘 하루의 매출 보기 -->
 		select sum(price * quantity) from orders_detail
 		where store_name = #{store_name} and orders_date = #{date}
 	</select>
-	<select id = "selectIncomeBystore_nameDayRange" resultType = "int">
-		select sum(price * quantity) from orders_detail 
-		where store_name = #{store_name} and orders_date &gt;#{from}  &lt;#{to} 
-		group by orders_date;
+	
+	<select id = "selectIncomeBystore_nameDayRange"  resultType = "sumandorders_date">
+		select sum(price * quantity) as sum, orders_date from orders_detail 
+		where store_name = #{store_name} and orders_date &gt;= #{from} and orders_date &lt;= #{to} 
+		group by orders_date
+		order by orders_date
 	</select>
+	
 </mapper>

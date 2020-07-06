@@ -3,13 +3,12 @@ package com.example.sirenorder.frame;
 import java.sql.Date;
 import java.util.ArrayList;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
+import com.example.sirenorder.vo.SumAndOrders_date;
 
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
@@ -91,7 +90,7 @@ public interface Dao<Id, Model> {
 		return null;
 	}
 	
-	default public ArrayList<Integer> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+	default public ArrayList<SumAndOrders_date> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return null;
 	}
 	

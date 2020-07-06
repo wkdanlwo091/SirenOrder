@@ -91,6 +91,7 @@ public class ProductController {
 		}
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
+
 	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {
 		int num = 1;
 		CartVO cartVO = new CartVO();//작업 중인 것 
@@ -101,6 +102,7 @@ public class ProductController {
 		cartVO.setStore_name(store_name);
 		return cartVO;
 	}
+	
 	public JSONObject putJSONObject(CartVO tmp, HashMap<CartVO, Integer> cartProduct) {
 		JSONObject jo = new JSONObject();
 		jo.put("product_name", tmp.getProduct_name());
@@ -143,6 +145,7 @@ public class ProductController {
 		int index = 0;
 		int totalPrice = 0;
 		int totalIndex = 0;
+		
 		while (itr.hasNext()) {
 			System.out.println("created" + index++);
 			CartVO tmp = itr.next();
@@ -152,6 +155,7 @@ public class ProductController {
 			totalIndex += (cartProduct.get(tmp));
 			totalPrice += tmp.getPrice()* (cartProduct.get(tmp));
 		}
+		
 		httpSession.setAttribute("totalPrice", totalPrice);
 		httpSession.setAttribute("totalIndex", totalIndex);
 		if(index == 0) {

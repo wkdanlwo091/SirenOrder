@@ -10,6 +10,7 @@ import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
+import com.example.sirenorder.vo.SumAndOrders_date;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -118,7 +119,7 @@ public interface Biz<Id, Model> {
 		return null;
 	}
 	@Transactional
-	default public ArrayList<Integer> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+	default public ArrayList<SumAndOrders_date> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return null;
 	}
 

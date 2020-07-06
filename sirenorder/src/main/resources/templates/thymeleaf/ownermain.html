@@ -24,22 +24,23 @@
 </head>
 
 <body>
-<script th:inline="javascript">//script for product list 
+<script th:inline="javascript">
 
+	$(function(){
+		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
+		var incomeChart = /*[[${incomeChart}]]*/ 'default';
+		var addItem= /*[[${addItem}]]*/ 'default';
+		
+		if(incomeChart == "clicked"){
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
+		}
+		if(addItem == "clicked"){
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
+		}
+	});
 //좌측 상단 메뉴 focus css 변경 하는 코드 
-var ownerOrderStatus =/*[[${ownerOrderStatus}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
-var incomeChart =/*[[${incomeChart}]]*/ 'default';
-var addItem= /*[[${addItem}]]*/ 'default';
-
-
-if(incomeChart == "clicked"){
-	document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-	document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
-}
-if(addItem == "clicked"){
-	document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-	document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
-}
 
 </script>
 	<!-- WRAPPER -->
@@ -99,11 +100,9 @@ if(addItem == "clicked"){
 		<div class="main">
 		<!-- 기본으로 주문하기가 들어가있다. -->
 		<!-- profile에 나의정보가 있다. -->
-		
 			<div th:if="${ownerOrderStatus != null}"><div th:replace="/thymeleaf/ownerOrderStatus"></div></div>
 			<div th:if = "${incomeChart != null}"><div th:replace="/thymeleaf/incomeChart"></div></div>
 			<div th:if = "${addItem != null}"><div th:replace="/thymeleaf/addItem"></div></div>
-		
 		</div>
 		<!-- END MAIN -->
 		<div class="clearfix"></div>

@@ -24,4 +24,5 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		INSERT INTO ORDERS VALUES( #{orders_id}||#{seq}, #{orders_date},
 		#{payment_way}, #{total_price}, #{users_id})
 	</insert>
+	
 </mapper>

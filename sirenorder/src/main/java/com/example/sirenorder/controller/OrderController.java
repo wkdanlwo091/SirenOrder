@@ -391,12 +391,10 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true, 10));
 	}
-
 	@RequestMapping(value = "/ordersHistory.html", method = RequestMethod.POST) // 물건을 산 기록을 보는 컨트롤러 (날짜 검색 후
 	public ModelAndView ordersHistoryAfter(HttpServletRequest request,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date from,
