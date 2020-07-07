@@ -20,8 +20,8 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script><!-- 부트스트랩 -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
 </head>
 
 <body>
@@ -32,13 +32,14 @@
 		var incomeChart = /*[[${incomeChart}]]*/ 'default';
 		var addItem= /*[[${addItem}]]*/ 'default';
 		
+		
 		if(incomeChart == "clicked"){
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
 		}
 		if(addItem == "clicked"){
-			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
+			document.querySelector("#sidebar-nav > div > nav > ul > li:nth-child(1) > a").className = "";
+			document.querySelector("#sidebar-nav > div > nav > ul > li:nth-child(3) > a").className = "active";
 		}
 	});
 //좌측 상단 메뉴 focus css 변경 하는 코드 

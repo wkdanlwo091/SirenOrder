@@ -3,6 +3,7 @@ package com.example.sirenorder.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +24,11 @@ import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Orders_detail_idList;
 import com.example.sirenorder.vo.PaginationOwner;
+import com.example.sirenorder.vo.ProductNames;
 import com.example.sirenorder.vo.ProductVO;
 import com.example.sirenorder.vo.StoreVO;
-import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
+import com.example.sirenorder.vo.Store_productVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
 import com.example.sirenorder.vo.UserVO;
 
@@ -47,6 +49,9 @@ public class OwnerController {
 	
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
+	
+	@Resource(name = "store_productbiz")
+	Biz<String, Store_productVO> store_productbiz;
 
 	@RequestMapping(value = "/ownermain.html", method = RequestMethod.GET) // 처음 들어 왔을 때
 	public ModelAndView ownermain(HttpServletRequest request) throws Exception {
@@ -77,7 +82,6 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
 		}
-		
 		if (userbiz.get(users_id).getRole().equals("owner")) {
 
 		} else {
@@ -85,10 +89,46 @@ public class OwnerController {
 			return model;
 		}
 		
+		//스토어 이름 기반으로 상품 리스트를 가져왔다. 
+		ArrayList<Store_productVO> list= store_productbiz.getByStore_name((String)httpSession.getAttribute("store_name"));
+		
+		
+		System.out.println(list.size());
+		System.out.println(list.get(0));
+		
+		model.addObject("product", list);
 		model.addObject("addItem", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	
+	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다. 
+	public ModelAndView excludeItem(HttpServletRequest request,
+			@RequestParam(required = false ) ProductNames product_name
+			) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}
+		
+		if (userbiz.get(users_id).getRole().equals("owner")) {
+		} else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		System.out.println("came");
+		System.out.println(product_name.getProduct_names());
+		
+		Scanner scan = new Scanner(System.in);
+		scan.next();
+		model.addObject("addItem", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+
 	@RequestMapping(value = "/addItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다. 
 	public ModelAndView addItemPost(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") String product_name,

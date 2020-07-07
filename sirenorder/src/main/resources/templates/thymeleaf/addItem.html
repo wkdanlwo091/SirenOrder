@@ -28,6 +28,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
+
+$(function(){
+	var mine = /*[[${product}]]*/ 'default'; 
+	console.log(mine);
+	
+
+});
+
 </script>
 <body>
 	<div class="container">
@@ -39,40 +47,39 @@
 					<!-- 구간 설정 datePicker -->
 					    <div>	
 					    	<h3>상품 추가</h3>
-					    	<form action="/addItem.html" method = "post" >
-							  <label for="fname">상품 명: </label>
-							  <input type="text" name="product_name"><br><br>
-							  <label for="lname">이미지 url: </label>
-							  <input type="text" name="image_url"><br><br>
-							  <label for="lname">가격 : </label>
-							  <input type="text" name="price"><br><br>
-							  <input type="submit" value="Submit">
-					    	</form>
-					    	
+					    	<div style="overflow: auto;">
+						    	<form action="/addItem.html" method = "post" >
+						    		<div   class = "form-group col-md-6">
+										  <label for="fname">상품 명: </label>
+										  <input class="form-control" type="text" name="product_name"><br><br>
+										  <label for="lname">이미지 url: </label>
+										  <input class="form-control" type="text" name="image_url"><br><br>
+										  <label for="lname">가격 : </label>
+										  <input class="form-control" type="text" name="price"><br><br>
+										  <button type = "submit" class="btn btn-primary mb-2" >submit</button>
+									 </div>
+						    	</form>
+					    	</div>
 					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<!-- bootstrap -->
 					    	<form action="/excludeItem.html" method = "post" >
 						    	<div class="form-group">
 								    <label for="exampleFormControlSelect2">다중 선택</label>
-								    <select multiple class="form-control" id="excludeId" th:each="prod : ${prods}">
-								      <option>1</option>
-								      <option>2</option>
-								      <option>3</option>
-								      <option>4</option>
-								      <option>5</option>
-								      <td th:text="${prod.name}">Onions</td>
-								      <td th:text="${prod.price}">2.41</td>
-								      <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
-								      
+								    <select multiple="mutiple" class="form-control" name = "products" id="excludeId">
+								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
 								    </select>
 						    	</div>
+						    	<input type="submit" value="Submit">
 					    	</form>
-					    	
+					    	<!-- none bootstrap -->
 					    	<form action="/excludeItem.html" method = "post" >
-							  <label for="fname">상품 명: </label>
-							  <input type="text" name="product_name" th:value = ""><br><br>
-							  
+								<label for="exampleFormControlSelect2">다중 선택</label>
+								<select th:field="*{products}" multiple="mutiple" class="form-control"  >
+									<option  th:each="prod : ${product}"  th:value="${prod.product_name}"
+									 th:text="${prod.product_name}"></option>
+								</select>
+						    	<input type="submit" value="Submit">
 					    	</form>
-					    	
 						</div>
 				</div>
 			</div>

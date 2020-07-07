@@ -6,7 +6,7 @@ import org.apache.ibatis.type.Alias;
 
 import lombok.Data;
 
-@Data
+@Data//lombok
 @Alias("point_store")	
 public class Point_storeVO {
 	String point_store_id;
