@@ -54,7 +54,7 @@ public class UserController {
 		}
 		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 	}
-
+	
 	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
 	public ModelAndView loginFail(UserVO user, HttpServletRequest request) {//
 		String users_id = user.getUsers_id();
@@ -89,6 +89,7 @@ public class UserController {
 		model.addObject("login", "fail");
 		return model;//id 없다. 
 	}
+	
 //	@RequestMapping(value = "/", method = RequestMethod.POST)//로그인 실패한 경우
 //	public String loginView(UserVO user, HttpServletRequest request ,RedirectAttributes redirect) {//
 //		String users_id = user.getUsers_id();
@@ -246,14 +247,10 @@ public class UserController {
         	newUserVO.setUsers_name(users_new_name);
         	newUserVO.setUsers_id(users_id);
     		
-        	System.out.println("newUserVO란" + newUserVO);
         	userbiz.update(newUserVO);
-    		
     		return "success";
     	}else {
-    		
     	}
-    	
         return "fail";
     }
     @RequestMapping(value="quitProfile", method=RequestMethod.POST)

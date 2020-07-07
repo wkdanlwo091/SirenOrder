@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- store owner가  -->
-
+<!-- store owner가 체인에  아이템을 추가하고 체인의 아이템을 제거할 수 있는 페이지-->
 <meta charset="utf-8">
 <title></title>
 <!-- animate CSS -->
@@ -29,10 +28,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
-	function submitButton(){
-	
-}
-	
 </script>
 <body>
 	<div class="container">
@@ -42,16 +37,42 @@
 					<!-- ELSE -->
 					<!-- 여기다가 그래프를 넣어라 -->
 					<!-- 구간 설정 datePicker -->
-					    <div>
-					    	<form action="/addItem.html" method = "post" id = "submitProductSpecId">
+					    <div>	
+					    	<h3>상품 추가</h3>
+					    	<form action="/addItem.html" method = "post" >
 							  <label for="fname">상품 명: </label>
-							  <input type="text" id="fname" name="product_name"><br><br>
+							  <input type="text" name="product_name"><br><br>
 							  <label for="lname">이미지 url: </label>
-							  <input type="text" id="lname" name="image_url"><br><br>
+							  <input type="text" name="image_url"><br><br>
 							  <label for="lname">가격 : </label>
-							  <input type="text" id="lname" name="price" value=><br><br>
+							  <input type="text" name="price"><br><br>
+							  <input type="submit" value="Submit">
 					    	</form>
-					    	<button onclick = "submitButton()"></button>
+					    	
+					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<form action="/excludeItem.html" method = "post" >
+						    	<div class="form-group">
+								    <label for="exampleFormControlSelect2">다중 선택</label>
+								    <select multiple class="form-control" id="excludeId" th:each="prod : ${prods}">
+								      <option>1</option>
+								      <option>2</option>
+								      <option>3</option>
+								      <option>4</option>
+								      <option>5</option>
+								      <td th:text="${prod.name}">Onions</td>
+								      <td th:text="${prod.price}">2.41</td>
+								      <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
+								      
+								    </select>
+						    	</div>
+					    	</form>
+					    	
+					    	<form action="/excludeItem.html" method = "post" >
+							  <label for="fname">상품 명: </label>
+							  <input type="text" name="product_name" th:value = ""><br><br>
+							  
+					    	</form>
+					    	
 						</div>
 				</div>
 			</div>

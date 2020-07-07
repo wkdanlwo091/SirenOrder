@@ -1,11 +1,8 @@
 package com.example.sirenorder.controller;
 
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -13,11 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +23,9 @@ import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Orders_detail_idList;
 import com.example.sirenorder.vo.PaginationOwner;
+import com.example.sirenorder.vo.ProductVO;
+import com.example.sirenorder.vo.StoreVO;
+import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.SumAndOrders_date;
 import com.example.sirenorder.vo.UserVO;
@@ -38,10 +35,18 @@ import com.example.sirenorder.vo.UserVO;
 public class OwnerController {
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
+	
 	@Resource(name = "orders_detailbiz")
 	Biz<String, Orders_detailVO> orders_detailbiz;
+	
+	@Resource(name = "productbiz")
+	Biz<String, ProductVO> productbiz;
+	
 	@Resource(name = "orders_detailjoinproductbiz")
 	Biz<String, Orders_detailJoinProductVO> orders_detailjoinproductbiz;
+	
+	@Resource(name = "storebiz")
+	Biz<String, StoreVO> storebiz;
 
 	@RequestMapping(value = "/ownermain.html", method = RequestMethod.GET) // 처음 들어 왔을 때
 	public ModelAndView ownermain(HttpServletRequest request) throws Exception {
@@ -62,7 +67,59 @@ public class OwnerController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
-	
+
+	@RequestMapping(value = "/addItem.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를 return한다. 
+	public ModelAndView addItem(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}
+		
+		if (userbiz.get(users_id).getRole().equals("owner")) {
+
+		} else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		
+		model.addObject("addItem", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+	@RequestMapping(value = "/addItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다. 
+	public ModelAndView addItemPost(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") String product_name,
+			@RequestParam(required = false, defaultValue = "1") String image_url,
+			@RequestParam(required = false, defaultValue = "1") int price
+			) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}
+		if (userbiz.get(users_id).getRole().equals("owner")) {
+		} else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		ProductVO productVO = new ProductVO();
+		productVO.setChain_name(storebiz.get().get(0).getChain_name());
+		productVO.setImage(image_url);
+		productVO.setPrice(price);
+		productVO.setProduct_id("product_id");
+		productVO.setProduct_name(product_name);
+		productbiz.register(productVO);
+		
+		model.addObject("addItem", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+
 	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.GET) //
 	public ModelAndView ownerOrderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
@@ -185,6 +242,8 @@ public class OwnerController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	
+	
 	//연도 월을 지정한 form 을 받아서 돌려주는 함수 
 	@RequestMapping(value = "/incomeChart.html", method = RequestMethod.POST) //
 	public ModelAndView ownerIncomePost(HttpServletRequest request, 
