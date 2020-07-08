@@ -5,6 +5,17 @@
 <!-- Required meta tags -->
 <meta charset="utf-8">
 <title></title>
+
+
+<!-- 메시징 관련 api  -->
+<link href="/main.css" rel="stylesheet">
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/app.js"></script>
+
+
+
 <!-- animate CSS -->
 <link rel="stylesheet" href="css/animate.css">
 <!-- owl carousel CSS -->
@@ -94,7 +105,7 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
-					<button type="submit" form="form1" value="Submit">주문 완료</button>
+					<button type="submit" form="form1" value="Submit">주문 완료</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 -->
 					<form action="/ownerOrderStatus.html" method="post" id="form1">
 						<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6"
 							th:each="list,iter : ${List}">

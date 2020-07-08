@@ -66,7 +66,15 @@
 				 -->
 				<div class="navbar-btn navbar-btn-right">
 				</div>
-				<div id="navbar-menu">
+				<div id="navbar-menu"  >
+					<ul class="nav navbar-nav navbar-left"  style=" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->					
+						<div class="form-group"  >
+							<label for="connect" style = "font-size: 1.0em;">WebSocket connection:</label>
+							<button id="connect" class="btn btn-default" type="submit">Connect</button>
+							<button id="disconnect" class="btn btn-default" type="submit"
+								disabled="disabled">Disconnect</button>
+						</div>
+					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
