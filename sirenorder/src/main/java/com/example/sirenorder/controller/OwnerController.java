@@ -92,7 +92,7 @@ public class OwnerController {
 		ArrayList<Store_productVO> list= store_productbiz.getByStore_name((String)httpSession.getAttribute("store_name"));
 		System.out.println(list.size());
 		System.out.println(list.get(0));
-        model.addObject("productNames", new ProductNames());
+        model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
 		model.addObject("addItem", "clicked");
 		model.setViewName("thymeleaf/ownermain");
@@ -101,8 +101,9 @@ public class OwnerController {
 	
 	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다. 
 	public ModelAndView excludeItem(HttpServletRequest request,
-			@RequestParam(required = false ) ProductNames product_name
+			ProductNames product_name
 			) throws Exception {
+		
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -117,7 +118,7 @@ public class OwnerController {
 			return model;
 		}
 		System.out.println("came");
-		System.out.println(product_name.getProduct_names());
+		System.out.println(product_name );
 		
 		Scanner scan = new Scanner(System.in);
 		scan.next();
