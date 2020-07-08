@@ -62,15 +62,17 @@ $(function(){
 					    	</div>
 					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
-					    	<form action="/excludeItem.html" method = "post" >
+					    	
+					    	<form action="/excludeItem.html" method = "post" th:object="${productNames}">
 						    	<div class="form-group">
 								    <label for="exampleFormControlSelect2">다중 선택</label>
-								    <select multiple="mutiple" class="form-control" name = "products" id="excludeId">
+								    <select multiple th:field="*{product_names}" class="form-control" name = "products" id="excludeId">
 								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
 								    </select>
 						    	</div>
 						    	<input type="submit" value="Submit">
 					    	</form>
+					    	
 					    	<!-- none bootstrap -->
 					    	<form action="/excludeItem.html" method = "post" >
 								<label for="exampleFormControlSelect2">다중 선택</label>

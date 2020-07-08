@@ -63,7 +63,6 @@ public class OwnerController {
 			return model;//로그인 첫 페이지로 /index.html
 		}
 		if (userbiz.get(users_id).getRole().equals("owner")) {
-
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
@@ -88,14 +87,12 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		
+
 		//스토어 이름 기반으로 상품 리스트를 가져왔다. 
 		ArrayList<Store_productVO> list= store_productbiz.getByStore_name((String)httpSession.getAttribute("store_name"));
-		
-		
 		System.out.println(list.size());
 		System.out.println(list.get(0));
-		
+        model.addObject("productNames", new ProductNames());
 		model.addObject("product", list);
 		model.addObject("addItem", "clicked");
 		model.setViewName("thymeleaf/ownermain");
