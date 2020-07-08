@@ -8,4 +8,6 @@ public interface StoreMapper {
 	public StoreVO select(String name);
 	public ArrayList<StoreVO> selectall();
 	public ArrayList<StoreVO> selectchain(String name);
+	public String selectStore_id(String store_name);
+
 }

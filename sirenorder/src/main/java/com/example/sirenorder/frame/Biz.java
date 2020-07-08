@@ -20,6 +20,9 @@ public interface Biz<Id, Model> {
 	default public void update(Model id) throws Exception{
 	}
 	@Transactional 
+	default public void deleteStore_productByProduct_name(String product_name) {
+	}
+	@Transactional 
 	default public void delete(Id id) throws Exception{
 	}
 	@Transactional 
@@ -120,6 +123,10 @@ public interface Biz<Id, Model> {
 	}
 	@Transactional
 	default public ArrayList<SumAndOrders_date> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
+		return null;
+	}
+	@Transactional
+	default public String getStore_id(String store_name) {
 		return null;
 	}
 

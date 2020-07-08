@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,12 +66,11 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		model.addObject("ownerOrderStatus", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
 
-	@RequestMapping(value = "/addItem.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를 return한다. 
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를 return한다. 
 	public ModelAndView addItem(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
@@ -82,7 +80,6 @@ public class OwnerController {
 			return model;//로그인 첫 페이지로 /index.html
 		}
 		if (userbiz.get(users_id).getRole().equals("owner")) {
-
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
@@ -94,7 +91,7 @@ public class OwnerController {
 		System.out.println(list.get(0));
         model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
-		model.addObject("addItem", "clicked");
+		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
@@ -117,41 +114,65 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		System.out.println("came");
-		System.out.println(product_name );
 		
-		Scanner scan = new Scanner(System.in);
-		scan.next();
-		model.addObject("addItem", "clicked");
+		//store_product에서 지운다. product는 남아있다. 
+		for(int i= 0 ;i< product_name.getProduct_names().length;i++) {
+			store_productbiz.deleteStore_productByProduct_name(product_name.getProduct_names()[i]);
+		}
+		
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
 
-	@RequestMapping(value = "/addItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다. 
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) // 추가할 상품 받는 컨트롤러, store_product만들기 
 	public ModelAndView addItemPost(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") String product_name,
 			@RequestParam(required = false, defaultValue = "1") String image_url,
 			@RequestParam(required = false, defaultValue = "1") int price
 			) throws Exception {
 		HttpSession httpSession = request.getSession();
+		String store_name = (String) httpSession.getAttribute("store_name");
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
 		}
+		
 		if (userbiz.get(users_id).getRole().equals("owner")) {
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
+		
+		String chain_name = storebiz.get().get(0).getChain_name();
+		String store_id = storebiz.getStore_id(store_name);
+		
 		ProductVO productVO = new ProductVO();
-		productVO.setChain_name(storebiz.get().get(0).getChain_name());
+		
+		productVO.setChain_name(chain_name);
 		productVO.setImage(image_url);
 		productVO.setPrice(price);
-		productVO.setProduct_id("product_id");
+		productVO.setProduct_id("product_id2");
 		productVO.setProduct_name(product_name);
+		
+		System.out.println("추가 데이터는  " + productVO);
 		productbiz.register(productVO);
+		String product_id = productbiz.getProduct_id(product_name);
+
+		System.out.println(product_id);
+		
+		//이 store에 chain의 제품을 추가한다. 
+		Store_productVO store_productVO = new Store_productVO();
+		store_productVO.setStore_product_id("store_product_id");
+		store_productVO.setStore_id(store_id);
+		store_productVO.setProduct_id(product_id);
+		store_productVO.setProduct_name(product_name);
+		store_productVO.setChain_name(chain_name);
+		store_productVO.setStore_name(store_name);
+		store_productbiz.register(store_productVO);
+		
+		System.out.println("done");
 		
 		model.addObject("addItem", "clicked");
 		model.setViewName("thymeleaf/ownermain");

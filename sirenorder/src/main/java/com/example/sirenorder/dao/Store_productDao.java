@@ -22,6 +22,12 @@ public class Store_productDao implements Dao<String, Store_productVO>{
 		return null;
 	}
 	@Override
+	public void insert(Store_productVO store_productVO) {
+		// TODO Auto-generated method stub
+		store_productMapper.insert(store_productVO);
+	}
+
+	@Override
 	public ArrayList<Store_productVO> selectall() {
 		// TODO Auto-generated method stub
 		return null;
@@ -41,6 +47,12 @@ public class Store_productDao implements Dao<String, Store_productVO>{
 		// TODO Auto-generated method stub
 		return store_productMapper.selectProductList(store_name,startList,listSize);
 	}
+	@Override
+	public void deleteStore_productByProduct_name(String product_name) {
+		// TODO Auto-generated method stub
+		store_productMapper.deleteStore_productByProduct_name(product_name);
+	}
+
 	@Override
 	public ArrayList<Store_productJoinProductVO> selectProductListJoin(String store_name, int startList, int listSize) {
 		// TODO Auto-generated method stub

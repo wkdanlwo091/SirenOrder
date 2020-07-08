@@ -27,6 +27,10 @@ public class StoreBiz implements Biz<String, StoreVO> {
 		return dao.selectall();
 	}
 	@Override
+	public String getStore_id(String store_name) {
+		return dao.selectStore_id(store_name);
+	}
+	@Override
 	public ArrayList<StoreVO> getChain(String name) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.selectChain(name);

@@ -24,6 +24,12 @@ public class StoreDao implements Dao<String,StoreVO>{
 		return storemapper.selectall();
 	}
 	@Override
+	public String selectStore_id(String store_name) {
+		return storemapper.selectStore_id(store_name);
+	}
+
+	
+	@Override
 	public ArrayList<StoreVO> selectChain(String name) {
 		return storemapper.selectchain(name);
 	}

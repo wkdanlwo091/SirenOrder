@@ -3,6 +3,8 @@ package com.example.sirenorder.frame;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
@@ -16,11 +18,16 @@ public interface Dao<Id, Model> {
 
 	default public void update(Model m) throws Exception {
 	}
+	default public void deleteStore_productByProduct_name(String product_name) {
+	}
 
 	default public void delete(String id) throws Exception {
 	}
 
 	default public ArrayList<Model> selectChain(String name) throws Exception {
+		return null;
+	}
+	default public String selectStore_id(String store_name) {
 		return null;
 	}
 	default public ArrayList<Model> selectByStore_name(String store_name) {

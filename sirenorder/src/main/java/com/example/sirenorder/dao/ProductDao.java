@@ -28,6 +28,7 @@ public class ProductDao implements Dao<String,ProductVO>{
 	
 	@Override
 	public void insert(ProductVO product) {
+		productmapper.insert(product);
 	}
 
 	@Override

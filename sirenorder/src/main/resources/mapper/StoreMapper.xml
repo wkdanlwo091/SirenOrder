@@ -17,6 +17,12 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM STORE
     </select>
     
+    <select id="selectStore_id" resultType="string">
+    	SELECT store_id
+		FROM STORE
+		where store_name=#{store_name}
+    </select>
+    
     <select id="selectchain" resultType="store">
 		SELECT * 
 		FROM STORE
