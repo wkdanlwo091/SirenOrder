@@ -41,11 +41,13 @@ function sendName() {//app/hello로 보낸다.
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
+
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
+    $( "#connect" ).click(function() { connect();});
     $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $( "#send" ).click(function() { sendName(); });//이름 보내기
+    $( "#sendDoneProduct_name" ).click(function() { sendName(); });//완료된 이름 보내기 
 });
