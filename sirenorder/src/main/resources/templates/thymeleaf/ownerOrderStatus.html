@@ -62,7 +62,6 @@
 			}else{
 				var copyNode = document.querySelector("#form1 > div:nth-child(1)").cloneNode(true);
 				copyNode.style.visibility = "hidden";
-				console.log("copy Node는 " + copyNode);
 				var parentNode = document.querySelector(".row.align-items-center.latest_product_inner");
 				parentNode.insertBefore(copyNode, parentNode.lastElementChild);
 			}
@@ -86,7 +85,9 @@
 			}
 		}
 		*/
-		
+
+		//체크 박스 표시에 따라서 id 명을 바꾼다. 바뀐 id 명을 가지고 websocket 전송한다. 
+
 	});
 </script>
 <body>
@@ -105,13 +106,13 @@
 								<img th:src="${list.productVO.image}" alt="" width="100%" height="40%">
 								<!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
 								<div class="single_product_text">
-									<h4 th:inline="text">주문번호 : [[${list.orders_detail_id}]] </h4>
+									<h4 th:inline="text" th:id="${list.orders_detail_id}">주문번호 : [[${list.orders_detail_id}]] </h4>
 									<h4 th:inline="text">상품명: [[${list.productVO.product_name}]] </h4>
 									<h4 th:inline="text">가격: [[${list.price}]] </h4>
 									<h4 th:inline="text">날짜: [[${list.orders_date}]] </h4>
 									<h4 th:inline="text">가게이름: [[${store_name}]] </h4>
 									<!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
-									<input type="checkbox" th:name="orders_detail_id[+${iter.index}+]" th:value="${list.orders_detail_id}"> 
+									<input type="checkbox" th:id = "'checkBoxId' + ${list.orders_detail_id}" th:name="orders_detail_id[+${iter.index}+]" th:value="${list.orders_detail_id}"> 
 									<label> 주문 완료 체크</label><br>
 								</div>
 								<!-- th:attr="onclick=|upload('${gallery}')|"  -->

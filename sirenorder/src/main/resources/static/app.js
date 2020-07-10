@@ -35,7 +35,15 @@ function disconnect() {
 }
 
 function sendName() {//app/hello로 보낸다. 
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
+	stompClient.send("/app/hello", {}, JSON.stringify({'name': 'dd'}));
+}
+
+function sendProduct(orders_detail_array) {//app/orders_detailId 로 보낸다. 
+	var jsonObject = {};
+	
+	jsonObject["orders_detail_id"] = orders_detail_array;
+	console.log(orders_detail_array);
+    stompClient.send("/app/orders_detailId", {}, JSON.stringify(jsonObject));
 }
 
 function showGreeting(message) {
@@ -46,8 +54,16 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
+    
     $( "#connect" ).click(function() { connect();});
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });//이름 보내기
-    $( "#sendDoneProduct_name" ).click(function() { sendName(); });//완료된 이름 보내기 
+    $( "#sendDoneProduct_name" ).click(function() { 
+    	//체크된 상품들의 orders_detail_id를 보낸다. 
+    	var orders_detail_array = [];
+        $('*[id*="checkBoxId"]:visible:checked').each(function (i, el) {//체크 된 것만 보내겠다. 
+        	orders_detail_array.push(this.parentNode.firstChild.nextSibling.id);
+        });//'*[id*=mytext]:visible'
+    	sendProduct(orders_detail_array); 
+    });//완료된 product 보내기 
 });

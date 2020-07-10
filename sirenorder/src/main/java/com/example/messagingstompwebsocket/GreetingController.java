@@ -11,5 +11,6 @@ public class GreetingController {
   public Greeting greeting(HelloMessage message) throws Exception {
     Thread.sleep(1000); // simulated delay
     return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    //주문 전달되었습니다. 코드를 owner client한테 전달 
   }
 }

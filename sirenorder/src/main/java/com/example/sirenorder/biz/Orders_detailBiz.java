@@ -49,6 +49,7 @@ public class Orders_detailBiz implements Biz<String, Orders_detailVO>{
 	public ArrayList<Orders_detailVO> getOrders_detailByStore_name(String store_name ) throws Exception {
 		return dao.selectOrders_detailByStore_name(store_name);
 	}
+	
 	@Override
 	public int getOrders_detailCntByStore_name(String store_name) { 
 		return dao.selectOrders_detailCntByStore_name(store_name);
