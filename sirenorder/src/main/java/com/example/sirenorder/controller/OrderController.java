@@ -38,7 +38,6 @@ import com.example.sirenorder.vo.StoreVO;
 
 @Controller
 public class OrderController {
-
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
 	@Resource(name = "pointbiz")

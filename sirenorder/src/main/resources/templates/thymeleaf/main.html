@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
 	<title>SirenOrder mainPage</title>
 	<meta charset="utf-8">
@@ -20,7 +19,7 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어야 profile order.html이 작동한다.  -->
 </head>
 
 <body>
@@ -35,13 +34,15 @@ $(function() {
 		  method: "POST", 
 		  success: function(result){
 			if(result == "noCart"){
-				alert("noCart");
+				//alert("noCart");
 				return;
 			}
 			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
 				alert("hidden");
 				return;
-			}else{alert("visible")}
+			}else{
+				alert("visible")
+			}
 			
 			var array = JSON.parse(result);
 			var number = array[0]["number"];

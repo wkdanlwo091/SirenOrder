@@ -32,7 +32,6 @@ public class GreetingController {
 		}
 		
 		//fcm  날려 
-		
 		Scanner scan = new Scanner(System.in);
 		scan.next();
 		//return 할 때 주문번호 몇번 전달하였습니다.

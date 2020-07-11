@@ -77,13 +77,12 @@ public class Point_storeController {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
 		}
-		
 		if (from == null && to == null) { // 페이지네이션 아니고 아예 처음 들어왔을 때
 			// 맨 처음 페이지에 들어왔을 때
 			model.addObject("from", "");// 페이지에 orders_hitory 안 내놓기 위해
 			model.addObject("to", "");//
 		} else {
-			// 같은 시작일 마침일 내에서 페이지네이션을 했을 경우
+			// 같은 시작일 마침일 내에서 페이지네이션을 했을 경우   ex) 6월 1일 부터 7월 1일 까지 데이터가 많아서 페이지네이션이 된 경우 
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// 프론트의 자바스크립트에 날짜 표시하는 것
 			String beforeFromState = formatter.format(httpSession.getAttribute("from"));// 전의 시작일
 			String beforeToState = formatter.format(httpSession.getAttribute("to"));// 전의 마침일
@@ -152,8 +151,6 @@ public class Point_storeController {
 		}
 
 		
-		
-		
 		//user에 맞는 point_store를 뽑는다. 
 		model.addObject("pointHistory", "clicked");
 		model.setViewName("thymeleaf/main");
@@ -189,7 +186,7 @@ public class Point_storeController {
 		//날짜별로 point_store 가져오기 
 		ArrayList<Point_storeJoinStoreVO> detailTemp = point_storebiz.getByDateFromToJoin(users_id, sqlDateFrom, sqlDateTo);// 여기서 orders_id 가져온다.
 		httpSession.setAttribute("pointList", detailTemp);
-		
+			
 		// 페이지네이션 관련
 		int listCnt = detailTemp.size();// 주문 상품 각각의 개수
 		Pagination pagination = new Pagination();
