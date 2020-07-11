@@ -4,9 +4,13 @@
 
 ## description
 
+정규화된 발표용 ERD
+
 <img width="576" alt="erd_pic" src="https://user-images.githubusercontent.com/12855243/82558589-f4acd580-9ba8-11ea-9b29-6ad8ce9d7e63.PNG">
 
+역정규화된 ERD
 
+<img width="584" alt="develope ERD" src="https://user-images.githubusercontent.com/12855243/87220360-fec7a500-c39d-11ea-8d1b-3610152088d2.PNG">
 
 ##  개발환경 및 기술
 
