@@ -26,7 +26,6 @@ public class Point_storeBiz implements Biz<String, Point_storeVO>{
 	public ArrayList<Point_storeJoinStoreVO> getByUsers_id(String users_id ) throws Exception {
 		return dao.selectByUsers_id(users_id );
 	}
-	
 	@Override
 	public ArrayList<Point_storeJoinStoreVO> getByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
 		return dao.selectByDateFromToJoin(users_id, firstDate, secondDate);

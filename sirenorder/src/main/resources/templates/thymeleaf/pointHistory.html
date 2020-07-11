@@ -117,7 +117,7 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
 						</div>
 						<!-- ELSE -->
-							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
+							<div th:if="${!from.equals('')}}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
 	                                <img  alt="" width="" height=""><!-- 이미지 없는데 css lining 을 위하여  -->
 	                                <div class="single_product_text">
@@ -129,17 +129,17 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 	                            </div>
 	                        </div>
 	                        
-							<div th:if="${!from.equals('')}" id="paginationBox">
+							<div th:if="${!from.equals('') } and ${pagination.endPage != 0}" id="paginationBox"><!-- from( 시작일) 이 있을 때 출력 -->
 								<ul class="pagination">
 										<li th:if="${pagination.prev}" class="page-item">
 											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')|">Prev
 											</a>
 										</li>
-										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
-											<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')|" th:text="${idx}"> ${idx} 
-												</a>
-											</li>
+										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	<!-- thymeleaf에서 startPage 번호부터 endPage 번호까지 진행됨  -->
+												<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
+													<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')|" th:text="${idx}"> ${idx} 
+													</a>
+												</li>
 										</th:block>	
 										<li th:if="${pagination.next}" class="page-item">
 											<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')|">next

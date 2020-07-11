@@ -150,7 +150,6 @@ public class Point_storeController {
 			}
 		}
 
-		
 		//user에 맞는 point_store를 뽑는다. 
 		model.addObject("pointHistory", "clicked");
 		model.setViewName("thymeleaf/main");
@@ -180,15 +179,20 @@ public class Point_storeController {
 		model.addObject("to", formatter.format(to));// to을 페이지의 datepicker의 ${from} value에 넣기 위함
 		httpSession.setAttribute("from", from);
 		httpSession.setAttribute("to", to);
-		java.sql.Date sqlDateFrom = new java.sql.Date(from.getTime());
+		java.sql.Date sqlDateFrom = new java.sql.Date(from.getTime());//java.sql.Date 쓴 이유는 db 접근할 떄 util 보다 낫다. 
 		java.sql.Date sqlDateTo = new java.sql.Date(to.getTime());
 		
+		
+		System.out.println(sqlDateFrom  + " "  + sqlDateTo);
 		//날짜별로 point_store 가져오기 
 		ArrayList<Point_storeJoinStoreVO> detailTemp = point_storebiz.getByDateFromToJoin(users_id, sqlDateFrom, sqlDateTo);// 여기서 orders_id 가져온다.
 		httpSession.setAttribute("pointList", detailTemp);
-			
+		
 		// 페이지네이션 관련
 		int listCnt = detailTemp.size();// 주문 상품 각각의 개수
+		
+		
+		System.out.println(listCnt);
 		Pagination pagination = new Pagination();
 		pagination.pageInfo(page, range, listCnt);
 		int startList = pagination.getStartList();
@@ -211,6 +215,7 @@ public class Point_storeController {
 		}
 		
 		model.addObject("pagination", pagination);
+
 		model.addObject("List", List);
 		model.addObject("pointHistory", "clicked");
 		model.setViewName("thymeleaf/main");
