@@ -11,6 +11,7 @@ import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
+import com.example.sirenorder.vo.UserVO;
 
 public interface Biz<Id, Model> {
 	@Transactional 
@@ -21,6 +22,9 @@ public interface Biz<Id, Model> {
 	}
 	@Transactional 
 	default public void deleteStore_productByProduct_name(String product_name) {
+	}
+	@Transactional
+	default public void updateToken(Model m) throws Exception {
 	}
 	@Transactional 
 	default public void delete(Id id) throws Exception{

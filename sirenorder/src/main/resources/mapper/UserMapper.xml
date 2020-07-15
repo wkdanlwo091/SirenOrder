@@ -22,6 +22,12 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
        	USERS_NAME = #{users_name}
         WHERE USERS_ID = #{users_id}
     </update>
+    <update id="updateToken">
+        UPDATE USERS
+       	SET 
+       	TOKEN = #{token}
+        WHERE USERS_ID = #{users_id}
+    </update>
     <delete id="delete" parameterType="String">
 		DELETE USERS 
 		WHERE USERS_ID = #{users_id}

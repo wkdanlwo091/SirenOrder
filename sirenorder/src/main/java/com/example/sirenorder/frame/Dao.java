@@ -20,6 +20,8 @@ public interface Dao<Id, Model> {
 	}
 	default public void deleteStore_productByProduct_name(String product_name) {
 	}
+	default public void updateToken(Model m) throws Exception {
+	}
 
 	default public void delete(String id) throws Exception {
 	}

@@ -129,7 +129,7 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 	                            </div>
 	                        </div>
 	                        
-							<div th:if="${!from.equals('') } and ${pagination.endPage != 0}" id="paginationBox"><!-- from( 시작일) 이 있을 때 출력 -->
+							<div th:if="${!from.equals('') } and ${pagination.endPage != 0}" id="paginationBox"><!-- from( 시작일) 이 있을 때 출력  끝마침 페이지가 0이면 데이터가 없으니 이 경우 아닐 때 출력-->
 								<ul class="pagination">
 										<li th:if="${pagination.prev}" class="page-item">
 											<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}')|">Prev

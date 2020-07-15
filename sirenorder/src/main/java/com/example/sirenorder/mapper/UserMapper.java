@@ -9,4 +9,5 @@ public interface UserMapper {
 	public void update(UserVO users);
 	public void delete(String users_id);
 	public void insert(UserVO users);
+	public void updateToken(UserVO m) ;
 }

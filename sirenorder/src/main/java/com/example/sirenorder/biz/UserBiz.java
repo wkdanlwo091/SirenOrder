@@ -33,6 +33,10 @@ public class UserBiz implements Biz<String, UserVO> {
 		dao.update(m);
 	}
 	@Override
+	public void updateToken(UserVO m) throws Exception {
+		dao.updateToken(m);
+	}
+	@Override
 	public void delete(String m) throws Exception {
 		dao.delete(m);
 	}

@@ -18,6 +18,10 @@ public class UserDao implements Dao<String, UserVO> {
 	public UserVO select(String users_id) {
 		return usermapper.select(users_id);
 	}
+	@Override
+	public void updateToken(UserVO m) throws Exception {
+		usermapper.updateToken(m);
+	}
 
 	@Override
 	public ArrayList<UserVO> selectall() {

@@ -16,4 +16,5 @@ public class UserVO {//대소
 	String sex;
 	String role;
 	String store_name;
+	String token;
 }
