@@ -53,11 +53,10 @@ public class UserController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		System.out.println("yes " + request.getParameter("token")  + " " + request.getParameter("password") + " " + request.getParameter("id"));
 		return "thymeleaf/main.html";// 로그인 첫 페이지로 /index.html
 	}
-
+	
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public String loginIndex(HttpServletRequest request) {	
 		HttpSession temp = request.getSession();

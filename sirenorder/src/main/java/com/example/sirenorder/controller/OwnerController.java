@@ -2,11 +2,16 @@ package com.example.sirenorder.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
@@ -190,7 +196,6 @@ public class OwnerController {
 			return model;
 		}
 		if (orders_detail_id.equals("nothing")) {
-
 		} else {// not_done에서 done으로 바꾼다.
 			Orders_detailVO m = new Orders_detailVO();
 			m.setOrders_detail_id(orders_detail_id);
@@ -238,17 +243,34 @@ public class OwnerController {
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		String store_name = (String) httpSession.getAttribute("store_name");
+		
 		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+		
+
+		
+		//orders_id 중복되는 것 제거하고 기준으로 orders_id의 user 조회 후 
+		Map<String, Integer> orders_id = new HashMap<String, Integer>();
 		for (int i = 0; i < orders_detail_idList.getOrders_detail_id().length; i++) {
 			if (orders_detail_idList.getOrders_detail_id()[i] != null) {
 				Orders_detailVO temp = new Orders_detailVO();
 				temp.setOrders_detail_id(orders_detail_idList.getOrders_detail_id()[i]);
-				orders_detailbiz.update(temp);
+				orders_detailbiz.update(temp);//완료되었다고 orders_detail 변경 
+				if(orders_id.get(orders_detail_idList.getOrders_id()[i]) != null)
+					orders_id.put(orders_detail_idList.getOrders_id()[i], 1);
 			}
 		}
+		for (Entry<String, Integer> entry : orders_id.entrySet()) {
+			
+		    System.out.println(entry.getKey());// orders_id를 가지고 users를 조회 후 users의 token에 메시지를 날린다. 
+		    String myToken = userbiz.getToken(entry.getKey());//orders_id를 가지고 검색 
+		    
+		    ///firebase token으로 데이터 전송
+		    
+		}
+		
 		
 		int listCnt;
 		int startList;

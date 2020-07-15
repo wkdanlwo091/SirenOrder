@@ -20,6 +20,12 @@ public interface Biz<Id, Model> {
 	@Transactional 
 	default public void update(Model id) throws Exception{
 	}
+	
+	@Transactional
+	default public String getToken(String orders_id) {
+		return null;
+	}
+
 	@Transactional 
 	default public void deleteStore_productByProduct_name(String product_name) {
 	}

@@ -25,6 +25,10 @@ public class UserBiz implements Biz<String, UserVO> {
 		return dao.selectall();
 	}
 	@Override
+	public String getToken(String orders_id) {
+		return dao.selectToken(orders_id);
+	}
+	@Override
 	public void register(UserVO m) throws Exception {
 		dao.insert(m);
 	}

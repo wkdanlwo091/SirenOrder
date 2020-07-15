@@ -89,6 +89,10 @@
 		//체크 박스 표시에 따라서 id 명을 바꾼다. 바뀐 id 명을 가지고 websocket 전송한다. 
 
 	});
+	function sendToServer(){
+		document.getElementById("form1").submit();
+	}
+	
 </script>
 <body>
 	<div class="container">
@@ -96,7 +100,7 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
-					<button id = "sendDoneProduct_name" type="submit" form="form1" value="Submit">주문 완료</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
+					<button onclick = "sendToServer()" id="sendDoneProduct_name" type="submit" form="form1" value="Submit">주문 완료</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
 					
 					<form action="/ownerOrderStatus.html" method="post" id="form1">
 						<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6"
@@ -111,7 +115,9 @@
 									<h4 th:inline="text">가격: [[${list.price}]] </h4>
 									<h4 th:inline="text">날짜: [[${list.orders_date}]] </h4>
 									<h4 th:inline="text">가게이름: [[${store_name}]] </h4>
+									<h4 th:inline="text" hidden>[[${list.orders_id}]]</h4><!-- 이 것은 -->
 									<!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
+									<input hidden th:name="orders_id[+${iter.index}+]" th:value="${list.orders_id}">
 									<input type="checkbox" th:id = "'checkBoxId' + ${list.orders_detail_id}" th:name="orders_detail_id[+${iter.index}+]" th:value="${list.orders_detail_id}"> 
 									<label> 주문 완료 체크</label><br>
 								</div>

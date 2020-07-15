@@ -13,6 +13,11 @@ public class UserDao implements Dao<String, UserVO> {
 	
 	@Autowired
 	UserMapper usermapper;
+	
+	@Override
+	public String selectToken(String orders_id) {
+		return usermapper.selectToken(orders_id);
+	}
 
 	@Override
 	public UserVO select(String users_id) {
