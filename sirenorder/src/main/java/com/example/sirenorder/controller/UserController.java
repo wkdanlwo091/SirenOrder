@@ -26,6 +26,7 @@ public class UserController {
 //	public String login() {
 //		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 //	}
+	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
@@ -224,7 +225,6 @@ public class UserController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
-
 	@RequestMapping(value = "/getProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String getProfile(HttpServletRequest request) {
@@ -235,14 +235,12 @@ public class UserController {
 		String users_id = (String) session.getAttribute("userId");
 		System.out.println(users_id);
 		UserVO user = userbiz.get(users_id);
-
 		jsonObject.put("users_name", user.getUsers_name());
 		jsonObject.put("sex", user.getSex());
 		jsonObject.put("users_address", user.getUsers_address());
 		jsonObject.put("role", user.getRole());
 		return jsonObject.toString();
 	}
-
 	@RequestMapping(value = "updateProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateProfile(HttpServletRequest request) throws Exception {
@@ -272,7 +270,6 @@ public class UserController {
 		}
 		return "fail";
 	}
-
 	@RequestMapping(value = "quitProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String quitProfile(HttpServletRequest request) throws Exception {
@@ -290,7 +287,6 @@ public class UserController {
 		// 포인트에는 외래키가 걸려있어서 지우는게 복잡하다.
 		return "success";
 	}
-
 	@RequestMapping(value = "/requestObject", method = RequestMethod.POST) // simpleWithObject는 연습을 위한 function이다.
 	@ResponseBody
 	public String simpleWithObject(UserVO user) {
@@ -298,5 +294,4 @@ public class UserController {
 		System.out.println("유저의 이름은" + user.getUsers_id());
 		return user.getUsers_id();
 	}
-
 }

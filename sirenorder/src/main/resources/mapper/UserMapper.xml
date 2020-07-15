@@ -10,11 +10,38 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM USERS
 		WHERE USERS_ID = #{users_id}
     </select>
-    <select id="selectToken" resultType="String">
-		SELECT TOKEN 
-		FROM USERS
-		WHERE ORDERS_ID = #{orders_id}
+    
+	<resultMap id="usersjoined" type="OrdersJoinUsers">
+	    <result property="orders_id" column="ORDERS_ID" />
+	    <result property="orders_date" column="ORDERS_DATE" />
+	    <result property="payment_way" column="PAYMENT_WAY" />
+	    <result property="total_price" column="TOTAL_PRICE" />
+	    <result property="users_id" column="USERS_ID" />
+	    <result property="seq" column="SEQ" />
+<!-- javaType : "객체를 속성으로 가지고있는 해당 객체의 CamelCase명 또는, @Alias("키값")" -->
+<!-- property : "객체참조변수명" -->
+<!-- id : "PK" -->
+	    <association property="userVO" javaType="users">
+	         <id property="users_id" column="USERS_ID" />
+	         <result property="users_password" column="USERS_PASSWORD" />
+	         <result property="users_name" column="USERS_NAME" />
+	         <result property="users_address" column="USERS_ADDRESS" />
+	         <result property="sex" column="SEX" />
+	         <result property="role" column="ROLE" />
+	         <result property="store_name" column="STORE_NAME" />
+	         <result property="token" column="TOKEN" />
+	    </association>
+	</resultMap>
+
+
+    <select id="selectToken" resultType="string">
+		SELECT A.TOKEN 
+		FROM USERS A, ORDERS B
+		WHERE B.ORDERS_ID = #{orders_id}
     </select>
+    
+    
+    
     <select id="selectall" resultType="users">
     	SELECT * 
 		FROM USERS
