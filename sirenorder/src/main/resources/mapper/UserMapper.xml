@@ -33,14 +33,11 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	    </association>
 	</resultMap>
 
-
     <select id="selectToken" resultType="string">
 		SELECT A.TOKEN 
 		FROM USERS A, ORDERS B
-		WHERE B.ORDERS_ID = #{orders_id}
+		WHERE B.ORDERS_ID = #{orders_id} and B.USERS_ID = A.USERS_ID
     </select>
-    
-    
     
     <select id="selectall" resultType="users">
     	SELECT * 

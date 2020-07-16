@@ -11,4 +11,5 @@ import lombok.Data;
 public class Orders_detail_idList {//
 	String [] orders_detail_id = new String[6];
 	String [] orders_id = new String[6];
+	String [] store_name = new String[6];
 }

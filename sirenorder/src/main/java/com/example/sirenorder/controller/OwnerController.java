@@ -1,13 +1,16 @@
 package com.example.sirenorder.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +42,9 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 
 //사업자 웹페이지 담당	
 @Controller
@@ -237,12 +242,45 @@ public class OwnerController {
 		}
 		return model;
 	}
+	//파이어베이스로 notification 보내기 
+	public void firebaseSend(Map<String, String> orders_id) throws IOException, FirebaseMessagingException {
+		//fcm 설정 관련 부분 fcm json파일의 절대 경로  ---> 상대경로로 처리해야한다. 
+		System.out.println(new File("").getAbsolutePath());
+		FileInputStream refreshToken  = new FileInputStream("src\\main\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		//FileInputStream refreshToken = new FileInputStream("..\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		 FirebaseOptions options = new FirebaseOptions.Builder()
+				 .setCredentials(GoogleCredentials.fromStream(refreshToken))
+				 .setDatabaseUrl("https://sirenorderclient.firebaseio.com")
+				 .build();
+				 //Firebase 처음 호출시에만 initializing 처리
+		if(FirebaseApp.getApps().isEmpty()) {
+				 FirebaseApp.initializeApp(options);
+		}
+		
+		///ordesr_id 기준으로 users_id 조회 후 users_id의 token에 데이터 전달 
+		for (Entry<String, String> entry : orders_id.entrySet()) {
+			String myToken = userbiz.getToken(entry.getKey());// orders_id를 가지고 검색 --> orders와 users join 한다. 
+			System.out.println(myToken);
+			// See documentation on defining a message payload.
+			///여기다가  주문 상품 번호를 넣고 싶어 
+			Message message = Message.builder().setNotification(new Notification(entry.getValue() + " +주문번호 : "+ entry.getKey(), "주문한 상품 완료"))
+					.setToken(myToken).build();
 
+			// Send a message to the device corresponding to the provided
+			// registration token.
+			String response = FirebaseMessaging.getInstance().send(message);
+			// Response is a message ID string.
+			System.out.println("Successfully sent message: " + response);
+			/// firebase token으로 데이터 전송
+		}
+	}
+	
 	// 물건을 not_done에서 done으로 변환
 	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.POST) //
 	public ModelAndView ownerOrderFinsh(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range, Orders_detail_idList orders_detail_idList
+			@RequestParam(required = false, defaultValue = "1") int range, 
+			Orders_detail_idList orders_detail_idList//여기서 RequestParam 쓰면 안되더라 
 	// 주문완료 되었다고 변경하는 정보를 담은 배열 클래스
 	) throws Exception {
 		ModelAndView model = new ModelAndView();
@@ -253,56 +291,23 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-
 		
 		System.out.println(orders_detail_idList);
 		// orders_id 중복되는 것 제거하고 기준으로 orders_id의 user 조회 후
-		Map<String, Integer> orders_id = new HashMap<String, Integer>();
+		Map<String, String> orders_id = new HashMap<String, String>();
 		for (int i = 0; i < orders_detail_idList.getOrders_detail_id().length; i++) {
 			if (orders_detail_idList.getOrders_detail_id()[i] != null) {
 				Orders_detailVO temp = new Orders_detailVO();
 				temp.setOrders_detail_id(orders_detail_idList.getOrders_detail_id()[i]);
 				//orders_detailbiz.update(temp);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
-				System.out.println("after update");
 				if (orders_id.get(orders_detail_idList.getOrders_id()[i]) == null) {
-					orders_id.put(orders_detail_idList.getOrders_id()[i], 1);
+					orders_id.put(orders_detail_idList.getOrders_id()[i], orders_detail_idList.getStore_name()[i]);//hashmap 에 orders_id를 넣는다. 
 				}
 			}
 		}
 		
-		
-		//fcm 설정 관련 부분
-		FileInputStream refreshToken = new FileInputStream("C:\\Users\\wkdan\\Desktop\\SirenOrder\\sirenorder\\src\\main\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
-		
-		 FirebaseOptions options = new FirebaseOptions.Builder()
-				 .setCredentials(GoogleCredentials.fromStream(refreshToken))
-				 .setDatabaseUrl("https://sirenorderclient.firebaseio.com")
-				 .build();
-				 //Firebase 처음 호출시에만 initializing 처리
-		if(FirebaseApp.getApps().isEmpty()) {
-				 FirebaseApp.initializeApp(options);
-		}
-		
-		System.out.println("start");
-		System.out.println("size is" + orders_id.entrySet().size());;
-
-		///ordesr_id 기준으로 users_id 조회 후 users_id의 token에 데이터 전달 
-		for (Entry<String, Integer> entry : orders_id.entrySet()) {
-			
-			System.out.println("orders_id는" + entry.getKey());// orders_id를 가지고 users를 조회 후 users의 token에 메시지를 날린다.
-			String myToken = userbiz.getToken(entry.getKey());// orders_id를 가지고 검색 --> orders와 users join 한다. 
-			// See documentation on defining a message payload.
-			Message message = Message.builder().putData("score", "850").putData("time", "2:45")
-					.setToken(myToken).build();
-
-			// Send a message to the device corresponding to the provided
-			// registration token.
-			String response = FirebaseMessaging.getInstance().send(message);
-			// Response is a message ID string.
-			System.out.println("Successfully sent message: " + response);
-			/// firebase token으로 데이터 전송
-
-		}
+		//파이어베이스 메시지 보내기 
+		firebaseSend(orders_id);
 
 		int listCnt;
 		int startList;

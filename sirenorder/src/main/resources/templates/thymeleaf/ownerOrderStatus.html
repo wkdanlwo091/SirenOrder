@@ -66,7 +66,6 @@
 				parentNode.insertBefore(copyNode, parentNode.lastElementChild);
 			}
 		}
-		
 		//css lining을 위한 코드 
 		/*
 		var parentNode = document
@@ -85,9 +84,7 @@
 			}
 		}
 		*/
-
 		//체크 박스 표시에 따라서 id 명을 바꾼다. 바뀐 id 명을 가지고 websocket 전송한다. 
-
 	});
 	function sendToServer(){
 		document.getElementById("form1").submit();
@@ -117,6 +114,7 @@
 									<h4 th:inline="text">가게이름: [[${store_name}]] </h4>
 									<h4 th:inline="text" hidden>[[${list.orders_id}]]</h4><!-- 이 것은 -->
 									<!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
+									<input hidden th:name="store_name[+${iter.index}+]" th:value="${list.store_name}">
 									<input hidden th:name="orders_id[+${iter.index}+]" th:value="${list.orders_id}">
 									<input type="checkbox" th:id = "'checkBoxId' + ${list.orders_detail_id}" th:name="orders_detail_id[+${iter.index}+]" th:value="${list.orders_detail_id}"> 
 									<label> 주문 완료 체크</label><br>
