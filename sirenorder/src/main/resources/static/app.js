@@ -19,6 +19,7 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
+        alert("yes connected");
         stompClient.subscribe('/topic/greetings', function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
             showGreeting(JSON.parse(greeting.body).content);
             alert(JSON.parse(greeting.body).content);
@@ -58,8 +59,9 @@ $(function () {
     $( "#connect" ).click(function() { connect();});
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });//이름 보내기
+    
     $( "#sendDoneProduct_name" ).click(function() { 
-    	//체크된 상품들의 orders_detail_id를 보낸다. 
+    	//주문 완료 체크된 상품들의 orders_detail_id를 보낸다. 
     	var orders_detail_array = [];
         $('*[id*="checkBoxId"]:visible:checked').each(function (i, el) {//체크 된 것만 보내겠다. 
         	orders_detail_array.push(this.parentNode.firstChild.nextSibling.id);

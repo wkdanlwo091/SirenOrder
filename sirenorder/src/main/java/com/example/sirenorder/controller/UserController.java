@@ -187,7 +187,10 @@ public class UserController {
 		m.setRole(user.getRole());
 		if (user.getRole().equals("owner")) {
 			m.setStore_name(user.getStore_name());
+		}else {
+			m.setStore_name("");
 		}
+		m.setToken("");
 		userbiz.register(m);
 		return "redirect:/";// 여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로
 							// msg값을 줘도 된

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -28,6 +29,7 @@ import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.OrdersVO;
+import com.example.sirenorder.vo.Orders_detailIdMessage;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.PointList;
@@ -212,6 +214,7 @@ public class OrderController {
 		System.out.println(ordersVO);
 		ordersbiz.register(ordersVO);
 	}
+	
 	public void makeOrders_detail(HttpSession httpSession) throws Exception {// orders_detail 테이블에 insert
 		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된
 		System.out.println("orders_id 는 " + orders_id);
@@ -228,6 +231,10 @@ public class OrderController {
 			orders_detailVO.setProduct_id(productbiz.getProduct_id(tmp.getProduct_name()));
 			orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
 			orders_detailVO.setStatus("not_done");// 주문이 들어갔고 아직 주문완료 전이다.
+			//여기서 웹소켓으로 주문이 들어갔다고 알려줘야 할 것 같은데 
+			
+			
+			
 			orders_detailVO.setStore_name(tmp.getStore_name());
 			orders_detailbiz.register(orders_detailVO);
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
@@ -263,6 +270,9 @@ public class OrderController {
 		makeOrders(users_id, httpSession, pointList.getAllTotalPrice());
 		makeOrders_detail(httpSession);
 
+		////여기서 websocket으로 통신해야된다고 생각한다.  goto 287 line
+		greeting();
+		
 		httpSession.removeAttribute("cartProduct");// 구매 후 카트 세션 파괴
 		httpSession.setAttribute("totalIndex", 0);// 장바구니 수 0으로 초기화
 		if (httpSession.getAttribute("cartProduct") == null) {
@@ -272,6 +282,18 @@ public class OrderController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
+	
+	
+	
+	@SendTo("/topic/greetings") //
+	public String greeting() throws Exception {
+		System.out.println("returning");
+		return "order just came!";
+	}
+
+	
+	
+	
 	@RequestMapping(value = "/currentOrderStatus.html", method = RequestMethod.GET) // 현재 주문들어간 상품 보기 (주문 완료전) not_done
 	public ModelAndView orderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,

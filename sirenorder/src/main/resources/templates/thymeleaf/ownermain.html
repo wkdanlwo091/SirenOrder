@@ -11,7 +11,7 @@
 	<script src="/webjars/jquery/jquery.min.js"></script>
 	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
-	<script src="/app.js"></script>
+	<script src="/app.js"></script><!-- 웹소켓 관련 자바스크립트 -->
 		
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
@@ -38,8 +38,6 @@
 		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
 		var incomeChart = /*[[${incomeChart}]]*/ 'default';
 		var addItem= /*[[${addItem}]]*/ 'default';
-		
-		
 		if(incomeChart == "clicked"){
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
