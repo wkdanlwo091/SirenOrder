@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-
+// 이 함수들은 sirenorder.controller와 중복된다 하지만 중복되어도 에러가 나지 않고 test 용으로 놔두었다. 
 //메시징 관련 config
 @Configuration
 @EnableWebSocketMessageBroker

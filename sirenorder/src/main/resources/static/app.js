@@ -27,6 +27,25 @@ function connect() {
         });
     });
 }
+
+function customConnect(store_name) {
+    var socket = new SockJS('/gs-guide-websocket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+        setConnected(true);
+        alert("yes custom connected");
+        
+        //여기서 /topic/store_name 으로 설정한다. 
+        var topic_store_name = "/topic"  + store_name;
+        stompClient.subscribe(topic_store_name, function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
+        	alert(greeting);
+        	console.log(greeting);
+            showGreeting(JSON.parse(greeting.body).content);
+            alert(JSON.parse(greeting.body).content);
+        });
+    });
+}
+
 function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
