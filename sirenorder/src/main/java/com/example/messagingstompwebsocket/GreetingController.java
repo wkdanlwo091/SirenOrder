@@ -26,6 +26,8 @@ public class GreetingController {
   public void greeting1( ) throws Exception {
 	  System.out.println("hahahaahah");
     Thread.sleep(1000); // simulated delay
+    
+    //여기서 /topic/greetings를 개별 사업자 별로 --> /topic/01082834207 한테 메시지를 주고 /topic/01027994207 이런식으로 메시지를 전달한다. 
     this.template.convertAndSend("/topic/greetings", "SentFromServer");
   }
 }
