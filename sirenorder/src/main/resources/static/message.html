@@ -2,15 +2,32 @@
 <html>
 <head>
 <title>Hello WebSocket</title>
-
-<link href="/main.css" rel="stylesheet">
 <script src="/webjars/jquery/jquery.min.js"></script>
 <script src="/webjars/sockjs-client/sockjs.min.js"></script>
 <script src="/webjars/stomp-websocket/stomp.min.js"></script>
 <script src="/app.js"></script>
+<script>
+	function function1() {
+		var form = {
+			name : "jamong",
+			age : 23
+		}
+		$.ajax({
+			url : "requestObject2",
+			type : "POST",
+			data : JSON.stringify(form),
+			contentType : "application/json; charset=utf-8;",
+			success : function(data) {
+				alert("success");
+			},
+			error : function() {
+				alert("restController err");
+			}
+		});
+	}
+</script>
 
 <meta charset="utf-8">
-<title>Insert title here</title>
 </head>
 <body>
 	<noscript>
@@ -40,6 +57,7 @@
 				</form>
 			</div>
 		</div>
+		<button onclick="function1()"></button>
 		<div class="row">
 			<div class="col-md-12">
 				<table id="conversation" class="table table-striped">

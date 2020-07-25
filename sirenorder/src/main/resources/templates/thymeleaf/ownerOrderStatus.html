@@ -86,10 +86,31 @@
 		*/
 		//체크 박스 표시에 따라서 id 명을 바꾼다. 바뀐 id 명을 가지고 websocket 전송한다. 
 	});
+	
 	function sendToServer(){
 		document.getElementById("form1").submit();
 	}
 	
+ 	function testing() {
+ 		var form = {
+                name: "jamong",
+                age: 23
+        }
+        $.ajax({
+            url: "requestObject1",
+            type: "POST",
+            data: form, //data에 별다른 설정을 하지 않았다. 
+            success: function(data){
+                $('#result').text(data);
+            },
+            error: function(){
+                alert("simpleWithObject err");
+            }
+        });
+ 	} 
+
+
+//이하 생략
 </script>
 <body>
 	<div class="container">
@@ -97,6 +118,14 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
+					
+					
+					
+					<!-- testing -->
+					<button onclick = "testing()"></button>
+					
+					<!-- testing -->
+					
 					<button onclick = "sendToServer()" id="sendDoneProduct_name" type="submit" form="form1" value="Submit">주문 완료</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
 					
 					<form action="/ownerOrderStatus.html" method="post" id="form1">

@@ -86,8 +86,7 @@ public class OwnerController {
 		return model;
 	}
 
-	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를
-																					// return한다.
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를																				// return한다.
 	public ModelAndView addItem(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();

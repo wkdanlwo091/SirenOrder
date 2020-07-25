@@ -12,7 +12,6 @@ function setConnected(connected) {
     }
     $("#greetings").html("");
 }
-
 function connect() {
     var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
@@ -21,12 +20,13 @@ function connect() {
         console.log('Connected: ' + frame);
         alert("yes connected");
         stompClient.subscribe('/topic/greetings', function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
+        	alert(greeting);
+        	console.log(greeting);
             showGreeting(JSON.parse(greeting.body).content);
             alert(JSON.parse(greeting.body).content);
         });
     });
 }
-
 function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
