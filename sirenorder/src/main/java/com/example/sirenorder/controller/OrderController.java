@@ -6,11 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -59,7 +57,6 @@ public class OrderController {
 	@Resource(name = "chainbiz")
 	Biz<String, ChainVO> chainbiz;
 
-	
 	@Autowired
 	private SimpMessagingTemplate template;//서버에서 메시지를 보내는 변수 websocket stomp
 	
@@ -221,14 +218,16 @@ public class OrderController {
 		ordersbiz.register(ordersVO);
 	}
 	
+	//orders_detail을 만든다. 
 	public void makeOrders_detail(HttpSession httpSession) throws Exception {// orders_detail 테이블에 insert
 		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된
 		System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
 		
+		//websocket으로 들어갈 메시지 
 		HashMap<String, String> message = new HashMap<String, String>();
-	
+		
 		while (itr.hasNext()) {
 			CartVO tmp = itr.next();
 			Orders_detailVO orders_detailVO = new Orders_detailVO();
@@ -240,33 +239,26 @@ public class OrderController {
 			orders_detailVO.setProduct_id(productbiz.getProduct_id(tmp.getProduct_name()));
 			orders_detailVO.setOrders_date(new java.sql.Date(System.currentTimeMillis()));
 			orders_detailVO.setStatus("not_done");// 주문이 들어갔고 아직 주문완료 전이다.
-			
-			
 			String myStore_name = tmp.getStore_name();
 			
+			
+			//hashmap으로 다른 상점 갯수를 받는다.
 			if(message.get(myStore_name) != null) {
 			}else {
-				message.put(myStore_name, orders_id);
+				message.put(myStore_name, orders_id);// (banapresso_sinchon , orders_id )
 			}
-			//여기서 웹소켓으로 주문이 들어갔다고 알려줘야 할 것 같은데 
-			//hashmap으로 다른 상점 갯수를 받는다. banapresso_sinchon , 행신감자탕  hashmap store_name, orders_id
-			
 			orders_detailVO.setStore_name(myStore_name);
 			orders_detailbiz.register(orders_detailVO);
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
 		}
-		
+		//상점 갯수 별로 조회
 		Iterator<String> itr2 = message.keySet().iterator();
-
 		while(itr2.hasNext()) {
-			String orders_id_message = itr2.next();
 		    Thread.sleep(100); // simulated delay 0.1초 100ms 
 		    System.out.println("hahah sent from server with user ");
-		    //store 이름을 적는다. ex)/topic/banapresso_sinchon , "orders_id"
-		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id_message);// /topic/store_name  , orders_id
+		    //from client to server by websocket;
+		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id);// /topic/store_name  , orders_id
 		}
-		
-		
 		//hashmap에 있는 상점들에게 
 	}
 	

@@ -211,7 +211,7 @@ public class OwnerController {
 			m.setOrders_detail_id(orders_detail_id);
 			orders_detailbiz.update(m);
 		}
-
+		
 		int listCnt;
 		int startList;
 		int listSize;
@@ -221,6 +221,10 @@ public class OwnerController {
 		startList = pagination.getStartList();
 		listSize = pagination.getListSize();
 
+		System.out.println("page cnt는 " + pagination.getPageCnt() + " page end는 " +  pagination.getEndPage());
+		
+		
+		
 		PaginationOwner paginationOwner = new PaginationOwner();
 		paginationOwner.setStartList(startList);
 		paginationOwner.setStore_name(store_name);
@@ -241,6 +245,8 @@ public class OwnerController {
 		}
 		return model;
 	}
+	
+	
 	//파이어베이스로 notification 보내기 
 	public void firebaseSend(Map<String, String> orders_id) throws IOException, FirebaseMessagingException {
 		//fcm 설정 관련 부분 fcm json파일의 절대 경로  ---> 상대경로로 처리해야한다. 

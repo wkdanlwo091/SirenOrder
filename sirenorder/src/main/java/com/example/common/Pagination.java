@@ -18,8 +18,8 @@ public class Pagination {
 	 int endPage;
 	 boolean prev;
 	 boolean next;
+	 
 	public void pageInfo(int page, int range, int listCnt) {
-		
 		this.page = page;// 1
 		this.range = range;// 1
 		this.listCnt = listCnt;// 60
@@ -34,4 +34,5 @@ public class Pagination {
 			this.next = false;
 		}
 	}
+	
 }

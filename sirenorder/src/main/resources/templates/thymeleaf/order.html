@@ -34,7 +34,7 @@
 		
 	});
 	$("#searchId").on("click", function(){
-		data = "chain=" + $('#searchStoreId').val();
+		data = "chain=" + $('#searchStoreId').val().toLowerCase();
 		$.ajax({
             url: "searchStore",
             type: "POST",

@@ -52,7 +52,6 @@
 		url = url + "&range=" + range;
 		location.href = url;
 	}
-	
 	$(function() {
 		//상품 개수가 6개 미만일 때 css lining 위해서  1개면 hidden 된 5개를 뽑는다. 
 		for(var i = 1 ;i <= 6;i++){
@@ -91,6 +90,8 @@
 		document.getElementById("form1").submit();
 	}
 	
+	
+	//testing 을 위한 것 -->  client에서 주문 했을 시 server로 웹소켓  전송되나 체크해봄
  	function testing() {
  		var form = {
                 name: "jamong",
@@ -120,11 +121,6 @@
 					<!-- ELSE -->
 					
 					
-					
-					<!-- testing -->
-					<button onclick = "testing()"></button>
-					
-					<!-- testing -->
 					
 					<button onclick = "sendToServer()" id="sendDoneProduct_name" type="submit" form="form1" value="Submit">주문 완료</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
 					
@@ -159,8 +155,7 @@
 								class="page-link" href="#"
 								th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}' )|">Prev
 							</a></li>
-							<th:block
-								th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">
+							<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">
 								<li class="page-item"
 									th:classapend="${pagination.page == idx ? 'active' : ''}">
 									<a class="page-link" href="#"
