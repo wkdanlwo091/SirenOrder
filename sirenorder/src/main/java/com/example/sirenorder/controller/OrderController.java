@@ -294,12 +294,12 @@ public class OrderController {
 
 		////여기서 websocket으로 통신해야된다고 생각한다.  goto 287 line
 		greeting();
-		
 		httpSession.removeAttribute("cartProduct");// 구매 후 카트 세션 파괴
 		httpSession.setAttribute("totalIndex", 0);// 장바구니 수 0으로 초기화
 		if (httpSession.getAttribute("cartProduct") == null) {
 			System.out.println("session 파괴되었다. ");
 		}
+		
 		model.addObject("order", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;

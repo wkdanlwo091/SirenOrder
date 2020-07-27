@@ -34,5 +34,4 @@ public class Pagination {
 			this.next = false;
 		}
 	}
-	
 }

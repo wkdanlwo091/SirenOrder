@@ -3,14 +3,12 @@ package com.example.sirenorder.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.common.Pagination;
@@ -67,21 +66,49 @@ public class OwnerController {
 	@Resource(name = "store_productbiz")
 	Biz<String, Store_productVO> store_productbiz;
 
-	
+	@RequestMapping(value = "/makeConnectSession", method = RequestMethod.GET) //  connect 세션 만들어 달라고 요청
+	@ResponseBody
+	public void makeConnectSession(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		String connect = request.getParameter("data1");//connect
+		if(connect.equals("connect")) {
+			if( httpSession.getAttribute("connect") == null) {
+				System.out.println("connected");
+				httpSession.setAttribute(connect, "connect");
+			}else {
+			}
+		}	
+	}
+
 	@RequestMapping(value = "/ownermain.html", method = RequestMethod.GET) // 처음 들어 왔을 때
 	public ModelAndView ownermain(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
+		
+		
+		
+		
+		
+		
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
-		if (userbiz.get(users_id).getRole().equals("owner")) {
+		
+		UserVO userVO = userbiz.get(users_id);
+		if (userVO.getRole().equals("owner")) {
+			
+			//
+			httpSession.setAttribute("store_name", userVO.getStore_name());
+			
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
+		
+		
+		
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}

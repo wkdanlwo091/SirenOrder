@@ -12,7 +12,7 @@
 	<script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	<script src="/webjars/stomp-websocket/stomp.min.js"></script>
 	<script src="/app.js"></script><!-- 웹소켓 관련 자바스크립트 -->
-		
+
 	<!-- VENDOR CSS -->
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
@@ -27,12 +27,16 @@
 	<!-- ICONS -->
 	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script><!-- 부트스트랩 -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!-- 이게 있어요 profile order.html이 작동한다.  -->
 </head>
 
 <body>
 <script th:inline="javascript">
+
+	/*<![CDATA[*/
+	var connectSession = /*[[${session.connect}]]*/ 'connectNotExist';
+	var store_name = /*[[${session.store_name}]]*/ 'no_store_name';
+	/*]]>*/
 
 	$(function(){
 		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
@@ -46,11 +50,19 @@
 			document.querySelector("#sidebar-nav > div > nav > ul > li:nth-child(1) > a").className = "";
 			document.querySelector("#sidebar-nav > div > nav > ul > li:nth-child(3) > a").className = "active";
 		}
-		
 	});
+	
+	$(function(){
+		if(connectSession == "connect"){// connection이 있는 상태라면 connect button 을 disabled 시킨다. 
+			$("#customConnect").prop("disabled", true);
+			 $("#disconnect").removeAttr('disabled');
+			 //다시 connect한다. 
+			 if(store_name != 'no_store_name')
+			 	customConnect(store_name);
+		}
+	})
+	
 //좌측 상단 메뉴 focus css 변경 하는 코드 
-
-
 </script>
 	<!-- WRAPPER -->
 	<div id="wrapper">
@@ -78,12 +90,13 @@
 						<form class="form-inline">
 							<div class="form-group"  >
 								<label for="connect" style = "font-size: 1.0em;">WebSocket connection:</label>
-								<button id="connect" class="btn btn-default" type="submit">Connect</button>
+								<button id="customConnect" class="btn btn-default" type="submit">Connect</button>
 								<button id="disconnect" class="btn btn-default" type="submit"
 									disabled="disabled">Disconnect</button>
 							</div>
 						</form>
 					</ul>
+					
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -98,6 +111,7 @@
 							<a class="update-pro" href="https://www.themeineed.com/downloads/klorofil-pro-bootstrap-admin-dashboard-template/?utm_source=klorofil&utm_medium=template&utm_campaign=KlorofilPro" title="Upgrade to Pro" target="_blank"><i class="fa fa-rocket"></i> <span>UPGRADE TO PRO</span></a>
 						</li> -->
 					</ul>
+					
 				</div>
 			</div>
 		</nav>
