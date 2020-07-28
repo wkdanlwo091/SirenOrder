@@ -2,7 +2,7 @@
 var stompClient = null;
 
 function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
+    $("#customConnect").prop("disabled", connected);// 원래 connect 였는데 customConnect로 바꿈 
     $("#disconnect").prop("disabled", !connected);
     if (connected) {
         $("#conversation").show();
@@ -66,6 +66,15 @@ function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 
 }
 
 function disconnect() {
+	$.ajax({ 
+		type : "GET",
+		url : "makeConnectSession",
+		data : {
+			data1 : "disconnect"
+		}
+	});
+
+	
     if (stompClient !== null) {
         stompClient.disconnect();
     }

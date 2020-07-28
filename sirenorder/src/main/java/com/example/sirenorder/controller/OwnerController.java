@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.common.Pagination;
@@ -68,7 +69,7 @@ public class OwnerController {
 
 	@RequestMapping(value = "/makeConnectSession", method = RequestMethod.GET) //  connect 세션 만들어 달라고 요청
 	@ResponseBody
-	public void makeConnectSession(HttpServletRequest request) throws Exception {
+	public void makeConnectSession(HttpServletRequest request, WebRequest request2 ) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String connect = request.getParameter("data1");//connect
 		if(connect.equals("connect")) {
@@ -77,7 +78,10 @@ public class OwnerController {
 				httpSession.setAttribute(connect, "connect");
 			}else {
 			}
-		}	
+		}else if(connect.equals("disconnect")) {
+			httpSession.removeAttribute("connect");
+		    //request2.removeAttribute("connect", WebRequest.SCOPE_SESSION);
+		}
 	}
 
 	@RequestMapping(value = "/ownermain.html", method = RequestMethod.GET) // 처음 들어 왔을 때

@@ -59,7 +59,10 @@
 			 //다시 connect한다. 
 			 if(store_name != 'no_store_name')
 			 	customConnect(store_name);
+		}else{
+			
 		}
+		
 	})
 	
 //좌측 상단 메뉴 focus css 변경 하는 코드 
@@ -103,7 +106,8 @@
 							    <span class="badge bg-danger" th:text="${session.userId}" th:unless="${session == null}">[...]</span>
 							  <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu" style= "background-color:#FFFFFF !important;"> 
-								<li><a href="/profile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
+								<!-- profile도 owner기준  -->
+								<li><a href="/ownerprofile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
 								<li><a href="/logout.html"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
 							</ul>
 						</li>
@@ -133,6 +137,7 @@
 		<div class="main">
 		<!-- 기본으로 주문하기가 들어가있다. -->
 		<!-- profile에 나의정보가 있다. -->
+			<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
 			<div th:if="${ownerOrderStatus != null}"><div th:replace="/thymeleaf/ownerOrderStatus"></div></div>
 			<div th:if = "${incomeChart != null}"><div th:replace="/thymeleaf/incomeChart"></div></div>
 			<div th:if = "${addItemAndDelete != null}"><div th:replace="/thymeleaf/addItemAndDelete"></div></div>
