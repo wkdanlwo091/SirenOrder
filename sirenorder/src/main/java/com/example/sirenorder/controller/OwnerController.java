@@ -3,6 +3,8 @@ package com.example.sirenorder.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -410,6 +412,15 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+		
+		
+		LocalDate dateFrom = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		LocalDate dateTo = to.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+	    LocalDate myObj = LocalDate.now();  // Create a date object
+
+		System.out.println(from  + "  " + myObj);
+		
 		Store_nameAndDate temp = new Store_nameAndDate();
 		temp.setStore_name(store_name);
 		temp.setFrom(new java.sql.Date(from.getTime()));
@@ -443,6 +454,7 @@ public class OwnerController {
 					ja.add(jo);
 				}
 			}
+			model.addObject("selected", "year");
 		} else if (option.equals("월")) {/// 2017 2018 2019 년 이면 3년치 데이터 다 가져와서 365개의 데이터 평균 내보네
 			int currentMonth = 0;
 			int currentSum = 0;
@@ -468,6 +480,8 @@ public class OwnerController {
 					ja.add(jo);
 				}
 			}
+			model.addObject("selected", "month");
+
 			/// 1월 이면 31개의 평균 2월 30개의 평균 치를 데이터로 내보네
 		} else if (option.equals("일")) {
 
@@ -478,7 +492,13 @@ public class OwnerController {
 				ja.add(jo);
 			}
 
+			model.addObject("selected", "day");
 		}
+		
+		model.addObject("from", dateFrom);//시작일
+		model.addObject("to", dateTo);// 마침일을 incomeChart의 datepicker 입력창에 넣어준다. 
+		
+		
 		model.addObject("ja", ja);// javascript에서 string으로 받는다.
 		model.addObject("message", "exist");
 		model.addObject("incomeChart", "clicked");

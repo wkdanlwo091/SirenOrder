@@ -21,15 +21,28 @@
 <!-- swiper CSS -->
 <link rel="stylesheet" href="css/slick.css">
 <!-- style CSS -->
-<!-- date picker전용  -->
+
+
+<!-- date picker전용  --><!-- 아래 두 줄 없애니까 날짜 겹치는 에러 사라지는데??? -->
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+
+
 </head>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
 
+/*<![CDATA[*/
+var from = /*[[${from}]]*/ 'fromNotExist';
+/*]]>*/
+
+alert(from);
 var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
 j( function() {
 	    var dateFormat = "yyyy-mm-dd";
@@ -111,12 +124,12 @@ j( function() {
 								<label for="to">to</label>
 								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
 								<label>그래프 옵션: </label> 
-						        <input list="options" name = "option"> 
-						        <datalist id="options"> 
-						            <option value="년" /> <!-- 2018 2019 2022 -->
-						            <option value="월" /> <!-- 1, 2, 3, 4, 5월 -->
-						            <option value="일" /> <!-- 1,2,3,4, 5일 -->
-						        </datalist> 
+						        <select name = "option"   style="width:20%;" form = "incomeChartId">
+						            <option value="년" th:selected="${selected} == 'year'" > 년</option> <!-- 2018 2019 2022 -->
+						            <option value="월" th:selected="${selected} == 'month'" > 월</option><!-- 1, 2, 3, 4, 5월 -->
+						            <option value="일" th:selected="${selected} == 'day'" > 일</option><!-- 1,2,3,4, 5일 -->
+						        </select> 
+						        
 							</form>
 							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
 							<!-- 아래에서 차트 출력   -->
