@@ -2590,29 +2590,6 @@ body {
 
 <body>
 	<div th:fragment="profile">
-		<script>
-			$('#profileId').on("click",function(){
-				alert("gas");
-				})
-		
-			document.getElementById('profileId').onclick = function() {
-				getProfile(){
-					alert("clicked");
-					$.ajax({
-			            url: "getProfile",
-			            type: "POST",
-			            success: function(data){
-							alert(data);
-			            },
-			            error: function(){
-			                alert("simpleWithObject err");
-			            }
-					});
-				}
-			}​;
-			//자바 스크립트로 ajax를 통하여 profile의 정보를 spring 컨트롤러에서 가져온다.
-		</script>
-	
 		<br>
 		<div class="col-md-12">
 			<div class="col-md-8">
@@ -2663,9 +2640,13 @@ body {
 												placeholder="Last Name">
 										</div>
 									</form>
+									
+									
 									<button type="submit" class="btn btn-default" id="updateId">제출하기</button>
-									<button type="submit" class="btn btn-default" id="quitId">탈퇴하기</button>
-									<form id = "returnToIndexId" action = "index.html" method = "get"></form>
+									<button onclick = "checkPassword()" form = "quitProfileTestId" type="submit" class="btn btn-default" id="quitId">탈퇴하기</button>
+									<form action="quitProfile" method = "POST" id = "quitProfileTestId">
+									</form>
+									
 								</div>
 								<div role="tabpanel" class="tab-pane" id="profile">
 									<div class="form-group">
@@ -2689,8 +2670,27 @@ body {
 		</div>
 
 		<script>
-		
+			function checkPassword(){
+				var txt;
+				var password = prompt("비밀번호를 입력하세요:");
+		        $.ajax({
+		            url: "checkPassword",
+		            type: "POST",
+		            data : 'password='+ password,
+		            success: function(data){
+		            	if(data == "success"){//탈퇴 승인한다. 
+		            		document.getElementById("quitId").submit();
+		            	}else{
+		            		alert("잘 못된 비밀번호 ");
+		            	}
+		            },
+		            error: function(){
+		                alert("simpleWithObject err");
+		            }
+		        });
+			}
 		///아래의 코드는 동작하는 것 확인 
+		
 		profileIdClicked = 0;
 		///below is when you clicked profile, then it gets profile from usercontroller
 		
@@ -2738,7 +2738,6 @@ body {
 					}
 				}else{//비번 같은 경우 
 					//비밀번호 체크 후 업데이트 하기 
-					alert("updateProfile started");
 					password = document.forms['updateForm'].elements[4].value;
 					newUsers_address = document.forms['updateForm'].elements[1].value;
 					newPassword = document.forms['updateForm'].elements[2].value;
@@ -2764,7 +2763,11 @@ body {
 			}
 		});
 		$("#quitId").on("click", function(){
-			alert("about to quit");	        
+			alert("about to quit");	     
+			
+			//탈퇴하기 누르면 팝업창을 뛰워보자 
+			
+			
 			$.ajax({
 	            url: "quitProfile",
 	            type: "POST",

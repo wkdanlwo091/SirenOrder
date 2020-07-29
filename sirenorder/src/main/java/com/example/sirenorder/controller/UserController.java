@@ -1,5 +1,7 @@
 package com.example.sirenorder.controller;
 
+import java.util.Scanner;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -65,6 +67,9 @@ public class UserController {
 			System.out.println("session null");
 		} else {
 			System.out.println("session not null");
+			if (temp.getAttribute("owner") != null) {
+				return "redirect:ownermain.html";
+			}
 			return "redirect:/main.html";
 		}
 		return "thymeleaf/index";// 로그인 첫 페이지로 /index.html
@@ -240,6 +245,7 @@ public class UserController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	
 	@RequestMapping(value = "/getProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String getProfile(HttpServletRequest request) {
@@ -256,15 +262,15 @@ public class UserController {
 		jsonObject.put("role", user.getRole());
 		return jsonObject.toString();
 	}
+	
 	@RequestMapping(value = "updateProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String updateProfile(HttpServletRequest request) throws Exception {
-		System.out.println("update profile started");
 		String users_password = request.getParameter("users_password");
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		UserVO userVO = userbiz.get(users_id);
-
+		
 		if (userVO.getUsers_password().equals(users_password)) {
 			// update한다.
 			String users_new_address = request.getParameter("users_adderss");
@@ -285,22 +291,42 @@ public class UserController {
 		}
 		return "fail";
 	}
+	
 	@RequestMapping(value = "quitProfile", method = RequestMethod.POST)
 	@ResponseBody
 	public String quitProfile(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
-		System.out.println("userId 는 " + users_id);
+		
+		
+		System.out.println("hello QuitProfile" +  users_id);
+		
 		if (users_id == null) {
 			return "fail";
 		} else {
-			httpSession.invalidate();
 			userbiz.delete(users_id);
+			httpSession.invalidate();
 		}
+		
 		// 아이디 지울 때는 포인트 정보 부터 지워야 한다. 아니면 ORA-02292 에러가 난다.
 		// 포인트 지우기 아직 미완
 		// 포인트에는 외래키가 걸려있어서 지우는게 복잡하다.
+		
 		return "success";
+	}
+	@RequestMapping(value = "checkPassword", method = RequestMethod.POST)
+	@ResponseBody
+	public String checkPassword(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		String users_id = (String) httpSession.getAttribute("userId");
+		String password = (String) request.getParameter("password");
+
+		System.out.println(userbiz.get(users_id).getUsers_password()  +"  "  + password);
+		if(userbiz.get(users_id).getUsers_password().equals(password)) {
+			return "success";
+		} 
+		
+		return "fail";
 	}
 	@RequestMapping(value = "/requestObject", method = RequestMethod.POST) // simpleWithObject는 연습을 위한 function이다.
 	@ResponseBody
