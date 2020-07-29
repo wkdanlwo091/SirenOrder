@@ -145,10 +145,9 @@ public class OwnerController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
-
-	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점에 걸린 제품들을 return 한다.
-	public ModelAndView excludeItem(HttpServletRequest request, ProductNames product_name) throws Exception {
-
+	
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
+	public ModelAndView addItemPost(HttpServletRequest request, ProductVO productVO) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -156,72 +155,22 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
-
 		if (userbiz.get(users_id).getRole().equals("owner")) {
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
+		//만들 아이템을 넣는다. 
+		System.out.println(productVO);
 
-		// store_product에서 지운다. product는 남아있다.
-		for (int i = 0; i < product_name.getProduct_names().length; i++) {
-			store_productbiz.deleteStore_productByProduct_name(product_name.getProduct_names()[i]);
-		}
-
-		model.setViewName("thymeleaf/ownermain");
-		return model;
-	}
-
-	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) // 추가할 상품 받는 컨트롤러, store_product만들기
-	public ModelAndView addItemPost(HttpServletRequest request,
-			@RequestParam(required = false, defaultValue = "1") String product_name,
-			@RequestParam(required = false, defaultValue = "1") String image_url,
-			@RequestParam(required = false, defaultValue = "1") int price) throws Exception {
-		HttpSession httpSession = request.getSession();
-		String store_name = (String) httpSession.getAttribute("store_name");
-		ModelAndView model = new ModelAndView();
-		String users_id = (String) httpSession.getAttribute("userId");
-		if (users_id == null) {
-			model.setViewName("redirect:/index.html");
-			return model;// 로그인 첫 페이지로 /index.html
-		}
-
-		if (userbiz.get(users_id).getRole().equals("owner")) {
-		} else {
-			model.setViewName("redirect:/main.html");
-			return model;
-		}
-
-		String chain_name = storebiz.get().get(0).getChain_name();
-		String store_id = storebiz.getStore_id(store_name);
-
-		ProductVO productVO = new ProductVO();
-
-		productVO.setChain_name(chain_name);
-		productVO.setImage(image_url);
-		productVO.setPrice(price);
-		productVO.setProduct_id("product_id2");
-		productVO.setProduct_name(product_name);
-
-		System.out.println("추가 데이터는  " + productVO);
-		productbiz.register(productVO);
-		String product_id = productbiz.getProduct_id(product_name);
-
-		System.out.println(product_id);
-
-		// 이 store에 chain의 제품을 추가한다.
-		Store_productVO store_productVO = new Store_productVO();
-		store_productVO.setStore_product_id("store_product_id");
-		store_productVO.setStore_id(store_id);
-		store_productVO.setProduct_id(product_id);
-		store_productVO.setProduct_name(product_name);
-		store_productVO.setChain_name(chain_name);
-		store_productVO.setStore_name(store_name);
-		store_productbiz.register(store_productVO);
-
-		System.out.println("done");
-
-		model.addObject("addItem", "clicked");
+		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
+		ArrayList<Store_productVO> list = store_productbiz
+				.getByStore_name((String) httpSession.getAttribute("store_name"));
+		System.out.println(list.size());
+		System.out.println(list.get(0));
+		model.addObject("product_name", new ProductNames());
+		model.addObject("product", list);
+		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
@@ -238,12 +187,7 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		if (orders_detail_id.equals("nothing")) {
-		} else {// not_done에서 done으로 바꾼다.
-			Orders_detailVO m = new Orders_detailVO();
-			m.setOrders_detail_id(orders_detail_id);
-			orders_detailbiz.update(m);
-		}
+		
 		
 		int listCnt;
 		int startList;
@@ -255,8 +199,6 @@ public class OwnerController {
 		listSize = pagination.getListSize();
 
 		System.out.println("page cnt는 " + pagination.getPageCnt() + " page end는 " +  pagination.getEndPage());
-		
-		
 		
 		PaginationOwner paginationOwner = new PaginationOwner();
 		paginationOwner.setStartList(startList);
@@ -279,8 +221,7 @@ public class OwnerController {
 		return model;
 	}
 	
-	
-	//파이어베이스로 notification 보내기 
+	//파이어베이스로 안드로이드 기기에 notification 보내기 
 	public void firebaseSend(Map<String, String> orders_id) throws IOException, FirebaseMessagingException {
 		//fcm 설정 관련 부분 fcm json파일의 절대 경로  ---> 상대경로로 처리해야한다. 
 		System.out.println(new File("").getAbsolutePath());
@@ -313,7 +254,7 @@ public class OwnerController {
 		}
 	}
 	
-	// 물건을 not_done에서 done으로 변환
+	//여기서 파이어베이스 전송함수를 호출한다. 
 	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.POST) //
 	public ModelAndView ownerOrderFinsh(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
@@ -329,8 +270,9 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		
+		System.out.println("post came");
 		System.out.println(orders_detail_idList);
+		
 		// orders_id 중복되는 것 제거하고 기준으로 orders_id의 user 조회 후
 		Map<String, String> orders_id = new HashMap<String, String>();
 		for (int i = 0; i < orders_detail_idList.getOrders_detail_id().length; i++) {
@@ -343,6 +285,8 @@ public class OwnerController {
 				}
 			}
 		}
+		
+		
 		
 		//파이어베이스 메시지 보내기 
 		firebaseSend(orders_id);
@@ -391,7 +335,6 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		System.out.println("entered");
 		model.addObject("incomeChart", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;

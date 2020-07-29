@@ -2586,35 +2586,33 @@ body {
 .btn-defau
 </style>
 </head>
-<script>
-	
-	
-	$('#profileId').on("click",function(){
-		alert("gas");
-		})
-
-	document.getElementById('profileId').onclick = function() {
-		getProfile(){
-			alert("clicked");
-			$.ajax({
-	            url: "getProfile",
-	            type: "POST",
-	            success: function(data){
-					alert(data);
-	            },
-	            error: function(){
-	                alert("simpleWithObject err");
-	            }
-			});
-		}
-	}​;
-	​
-		//자바 스크립트로 ajax를 통하여 profile의 정보를 spring 컨트롤러에서 가져온다.
-	</script>
 
 
 <body>
 	<div th:fragment="profile">
+		<script>
+			$('#profileId').on("click",function(){
+				alert("gas");
+				})
+		
+			document.getElementById('profileId').onclick = function() {
+				getProfile(){
+					alert("clicked");
+					$.ajax({
+			            url: "getProfile",
+			            type: "POST",
+			            success: function(data){
+							alert(data);
+			            },
+			            error: function(){
+			                alert("simpleWithObject err");
+			            }
+					});
+				}
+			}​;
+			//자바 스크립트로 ajax를 통하여 profile의 정보를 spring 컨트롤러에서 가져온다.
+		</script>
+	
 		<br>
 		<div class="col-md-12">
 			<div class="col-md-8">
@@ -2630,10 +2628,10 @@ body {
 						<div>
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs" role="tablist">
-								<li role="presentation" class="active"><a href="#home"
-									aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
-								<li role="presentation"><a href="#profile" id="profileId"
-									aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+								<li role="presentation" class="active">
+								<a href="#home" aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
+								<li role="presentation">
+								<a href="#profile" id="profileId" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
 								</li>
 							</ul>
 
@@ -2661,7 +2659,7 @@ body {
 										</div>
 										<div class="form-group">
 											<label for="currentPassword">current Password</label> <input
-												type="text" class="form-control" id="currentPassword"
+												type="password" class="form-control" id="currentPassword"
 												placeholder="Last Name">
 										</div>
 									</form>
@@ -2691,8 +2689,11 @@ body {
 		</div>
 
 		<script>
+		
+		///아래의 코드는 동작하는 것 확인 
 		profileIdClicked = 0;
 		///below is when you clicked profile, then it gets profile from usercontroller
+		
 			console.log("profileClicked는 " + profileIdClicked);
 			$("#profileId").on("click", function(){
 				if(profileIdClicked == 0){//한번 클릭하면 다음번에 다시 ajax 통신 할 필요 없다. 

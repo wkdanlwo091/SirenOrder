@@ -24,13 +24,8 @@
 
 
 <!-- date picker전용  --><!-- 아래 두 줄 없애니까 날짜 겹치는 에러 사라지는데??? -->
-
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script><!-- 이거는 없어도 된다.  -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
-
-
 
 </head>
 
@@ -38,11 +33,6 @@
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
 
-/*<![CDATA[*/
-var from = /*[[${from}]]*/ 'fromNotExist';
-/*]]>*/
-
-alert(from);
 var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
 j( function() {
 	    var dateFormat = "yyyy-mm-dd";

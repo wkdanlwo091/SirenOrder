@@ -14,6 +14,7 @@ function setConnected(connected) {
 }
 
 function connect() {
+	
 	//connect 누르면 ajax로 session 만들어 달라고 요청 
 	$.ajax({ 
 		type : "GET",
@@ -38,9 +39,8 @@ function connect() {
 }
 
 function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 subscribe 한다. 
-	
-	
-	
+
+	alert(store_name);
 	$.ajax({ 
 		type : "GET",
 		url : "makeConnectSession",
@@ -48,12 +48,11 @@ function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 
 			data1 : "connect"
 		}
 	});
-
-    var socket = new SockJS('/gs-guide-websocket');
+	
+	var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
-        
         //여기서 /topic/store_name 으로 설정한다. 
         var topic_store_name = "/topic/"  + store_name;
         stompClient.subscribe(topic_store_name, function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
@@ -97,17 +96,16 @@ function sendProduct(orders_detail_array) {//app/orders_detailId 로 보낸다.
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
-
 $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    
     //$( "#connect" ).click(function() { connect();});
-    $( "#customConnect" ).click(function() { customConnect();});
+    $( "#customConnect" ).click(function() {
+    	var store_name = $("#customConnect").val();
+    	customConnect(store_name);});
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });//이름 보내기
-    
     $( "#sendDoneProduct_name" ).click(function() { 
     	//주문 완료 체크된 상품들의 orders_detail_id를 보낸다. 
     	var orders_detail_array = [];

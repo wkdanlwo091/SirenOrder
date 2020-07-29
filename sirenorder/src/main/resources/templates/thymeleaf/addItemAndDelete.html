@@ -28,15 +28,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
-
 $(function(){
 	var mine = /*[[${product}]]*/ 'default'; 
-	console.log(mine);
-	
-
 });
-
 </script>
+
 <body>
 	<div class="container">
 		<div class="row">
@@ -48,15 +44,15 @@ $(function(){
 					    <div>	
 					    	<h3>상품 추가</h3>
 					    	<div style="overflow: auto;">
-						    	<form action="/addItemAndDelete.html" method = "post" >
-						    		<div   class = "form-group col-md-6">
+						    	<form id = "addItemDeleteId" action="/addItemAndDelete.html" method = "post" >
+						    		<div class = "form-group col-md-6">
 										  <label for="fname">상품 명: </label>
 										  <input class="form-control" type="text" name="product_name"><br><br>
 										  <label for="lname">이미지 url: </label>
-										  <input class="form-control" type="text" name="image_url"><br><br>
+										  <input class="form-control" type="text" name="image"><br><br>
 										  <label for="lname">가격 : </label>
 										  <input class="form-control" type="text" name="price"><br><br>
-										  <button type = "submit" class="btn btn-primary mb-2" >submit</button>
+										  <button form="addItemDeleteId" type = "submit" value = "submit" class="btn btn-primary mb-2" >submit</button>
 									 </div>
 						    	</form>
 					    	</div>

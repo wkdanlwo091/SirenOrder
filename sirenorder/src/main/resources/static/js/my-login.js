@@ -121,13 +121,12 @@ $(function() {
             	password_different = 1;
             	$("#passwordDifferent").html("비밀번호 불일치");
             	$("#passwordDifferent").css("color", "red");
-
             	//div로 뿌려준다. 
             	$('form').submit(false);//form을 submit 불가능하게 만든다. 
-
             }
         }
     });
+    
 	$(".my-login-validation").submit(function() {
 	    var pwd1 = $("#password1").val();
 	    var pwd2 = $("#password2").val();

@@ -32,14 +32,11 @@
 
 <body>
 <script th:inline="javascript">
-
 	/*<![CDATA[*/
 	var connectSession = /*[[${session.connect}]]*/ 'connectNotExist';
 	var store_name = /*[[${session.store_name}]]*/ 'no_store_name';
 	/*]]>*/
 
-	
-	
 	//좌측 바를 눌렀을 때 ui 변경 
 	$(function(){
 		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
@@ -97,7 +94,7 @@
 						<form class="form-inline">
 							<div class="form-group"  >
 								<label for="connect" style = "font-size: 1.0em;">WebSocket connection:</label>
-								<button id="customConnect" class="btn btn-default" type="submit">Connect</button>
+								<button id="customConnect" class="btn btn-default" th:value="${session.store_name}" type="submit">Connect</button>
 								<button id="disconnect" class="btn btn-default" type="submit"
 									disabled="disabled">Disconnect</button>
 							</div>
