@@ -1,11 +1,9 @@
 package com.example.sirenorder.controller;
 
 import java.util.Scanner;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -298,7 +296,6 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		
-		
 		System.out.println("hello QuitProfile" +  users_id);
 		
 		if (users_id == null) {
@@ -308,9 +305,8 @@ public class UserController {
 			httpSession.invalidate();
 		}
 		
-		// 아이디 지울 때는 포인트 정보 부터 지워야 한다. 아니면 ORA-02292 에러가 난다.
-		// 포인트 지우기 아직 미완
-		// 포인트에는 외래키가 걸려있어서 지우는게 복잡하다.
+		
+		//user 지우면 on delete cascade 에 의해서 참조하는 외래키들의 데이터들이 모두 지워진다. 
 		
 		return "success";
 	}
@@ -328,6 +324,7 @@ public class UserController {
 		
 		return "fail";
 	}
+	
 	@RequestMapping(value = "/requestObject", method = RequestMethod.POST) // simpleWithObject는 연습을 위한 function이다.
 	@ResponseBody
 	public String simpleWithObject(UserVO user) {

@@ -74,7 +74,9 @@ public class OrderController {
 	}
 	// checkout 장바구니 보기
 
-	public ArrayList<PointVO> bringPointInfo(HttpSession httpSession) throws Exception {// 카트에 대한 포인트 정보를 넣는다.
+	public ArrayList<PointVO> bringPointInfo(HttpSession httpSession) throws Exception {// 카트에 대한 포인트 정보를 넣는다
+		//카트에 대한 포인트 정보는 point의  users_id 와 cart의 chain_name기반으로 가져와야 한다. 
+		
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr;
 		if (cartProduct != null) {
@@ -82,6 +84,9 @@ public class OrderController {
 		} else {
 			return null;
 		}
+		
+		
+		//체인 이름 가져오기
 		HashMap<String, Boolean> chain_names = new HashMap<String, Boolean>();
 		while (itr.hasNext()) {
 			CartVO tmp = itr.next();
@@ -90,11 +95,15 @@ public class OrderController {
 			}
 		}
 		Iterator<String> itr2 = chain_names.keySet().iterator();
+		
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
 			String chain_names_next = itr2.next();
 			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
-			if (pointVO != null)
+			
+
+			
+			if (pointVO != null && pointVO.getUsers_id().equals(httpSession.getAttribute("userId")))
 				arrayList.add(pointVO);
 		}
 		return arrayList;
@@ -111,7 +120,7 @@ public class OrderController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		ArrayList<PointVO> arrayList = bringPointInfo(httpSession);// 포인트정보를 넣는다.
+		ArrayList<PointVO> arrayList = bringPointInfo(httpSession);// 포인트정보를 넣는다. httpSession 
 		if (arrayList == null) {
 			model.addObject("checkout", "clicked");
 			model.setViewName("thymeleaf/main");

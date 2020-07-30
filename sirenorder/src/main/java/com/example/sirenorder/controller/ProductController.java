@@ -31,7 +31,7 @@ public class ProductController {
 	@Resource(name = "store_productbiz")	
 	Biz<String, Store_productVO> store_productbiz;
 	
-	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다.   . pagination 구현
+	@RequestMapping("/product.html")// 체인의 상점의 물품들을 ajax로 띄운다. pagination 구현
 	public ModelAndView showProduct(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
@@ -92,6 +92,8 @@ public class ProductController {
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
 
+	
+	//카트를 만든다. 
 	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {
 		int num = 1;
 		CartVO cartVO = new CartVO();//작업 중인 것 
