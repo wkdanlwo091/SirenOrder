@@ -296,14 +296,10 @@ public class OrderController {
 				
 			} else {
 				
-				
-				// point 없으면 System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
 				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
-
 				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
-
 			}
-		}
+		}	
 		
 		makeOrders(users_id, httpSession, pointList.getAllTotalPrice());
 		makeOrders_detail(httpSession);

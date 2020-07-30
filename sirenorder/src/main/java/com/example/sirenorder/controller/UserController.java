@@ -291,25 +291,22 @@ public class UserController {
 	}
 	
 	@RequestMapping(value = "quitProfile", method = RequestMethod.POST)
-	@ResponseBody
 	public String quitProfile(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
-		
 		System.out.println("hello QuitProfile" +  users_id);
-		
 		if (users_id == null) {
-			return "fail";
+			return "redirect:profile.html";
 		} else {
 			userbiz.delete(users_id);
 			httpSession.invalidate();
+			//여기서 redirection 해줘야 한다. 
 		}
-		
-		
 		//user 지우면 on delete cascade 에 의해서 참조하는 외래키들의 데이터들이 모두 지워진다. 
 		
-		return "success";
+		return "redirect:index.html";
 	}
+	
 	@RequestMapping(value = "checkPassword", method = RequestMethod.POST)
 	@ResponseBody
 	public String checkPassword(HttpServletRequest request) throws Exception {
