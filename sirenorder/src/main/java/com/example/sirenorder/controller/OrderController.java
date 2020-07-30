@@ -212,7 +212,7 @@ public class OrderController {
 		pointVO.setPoint((int) (all_chain_price * point_rate));// 포인트는 구매액* point_rate
 		pointVO.setPoint_id("point_id");
 		pointbiz.register(pointVO);
-
+		
 		System.out.println("made point");
 	}
 	
@@ -283,18 +283,25 @@ public class OrderController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 
+		//체인에 따라서 포인트 검색
 		for (int i = 0; i < pointList.getAll_chain_name().length; i++) {
-			// 포인트 있나 없나 체크
-			if (pointbiz.getByChain_name(pointList.getAll_chain_name()[i]) == null) {
-				// point 없으면 System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
-				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
-
-				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
-			} else {// 포인트 있으면 체인 이름에 따라서
+			PointVO pointVO = pointbiz.getByChain_name(pointList.getAll_chain_name()[i]);
+			
+			if (pointVO != null && pointVO.getUsers_id().equals(users_id)) {
+				// 포인트 있으면 point_store를 만든다. 
 				System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
 				usePoint(pointList, users_id);// 포인트 사용
 				addPoint(pointList, users_id);							// 포인트 쌓기
 				makePoint_store(pointList, users_id);
+				
+			} else {
+				
+				
+				// point 없으면 System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
+				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
+
+				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
+
 			}
 		}
 		
@@ -303,6 +310,9 @@ public class OrderController {
 
 		////여기서 websocket으로 통신해야된다고 생각한다.  goto 287 line
 		greeting();
+		
+		
+		
 		httpSession.removeAttribute("cartProduct");// 구매 후 카트 세션 파괴
 		httpSession.setAttribute("totalIndex", 0);// 장바구니 수 0으로 초기화
 		if (httpSession.getAttribute("cartProduct") == null) {
