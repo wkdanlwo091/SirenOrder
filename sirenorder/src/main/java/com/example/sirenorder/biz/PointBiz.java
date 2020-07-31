@@ -26,6 +26,11 @@ public class PointBiz implements Biz<String, PointVO>{
 		// TODO Auto-generated method stub
 		return dao.selectByChain_name(chain_name);
 	}
+	@Override
+	public PointVO getByChain_nameWithusers_id(String chain_name, String users_id) {
+		// TODO Auto-generated method stub
+		return dao.selectByChain_nameWithusers_id(chain_name, users_id);
+	}
 	
 	@Override
 	public void update(PointVO m) throws Exception {

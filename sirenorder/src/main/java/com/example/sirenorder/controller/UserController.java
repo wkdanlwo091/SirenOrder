@@ -313,12 +313,10 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		String password = (String) request.getParameter("password");
-
 		System.out.println(userbiz.get(users_id).getUsers_password()  +"  "  + password);
 		if(userbiz.get(users_id).getUsers_password().equals(password)) {
 			return "success";
 		} 
-		
 		return "fail";
 	}
 	

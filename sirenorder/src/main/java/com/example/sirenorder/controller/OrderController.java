@@ -99,8 +99,10 @@ public class OrderController {
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
 			String chain_names_next = itr2.next();
-			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
+			System.out.println(chain_names_next + " !!!!!!!!!!!!!!!! " );
+			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(chain_names_next, (String)httpSession.getAttribute("userId"));
 			
+			System.out.println(pointVO);
 
 			
 			if (pointVO != null && pointVO.getUsers_id().equals(httpSession.getAttribute("userId")))

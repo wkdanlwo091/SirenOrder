@@ -50,6 +50,9 @@ public interface Dao<Id, Model> {
 	default public Model selectByChain_name(Id id) throws Exception {
 		return null;
 	}
+	default public Model selectByChain_nameWithusers_id(String chain_name, String users_id) {
+		return null;
+	}
 	default public int selectOrders_seq() throws Exception {
 		return (Integer) null;
 	}

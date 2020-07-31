@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
+import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
@@ -64,6 +65,11 @@ public interface Biz<Id, Model> {
 	default public void deleteProduct(Model m) throws Exception{
 	}
 	
+	@Transactional
+	default public Model getByChain_nameWithusers_id(String chain_name, String users_id) {
+		return null;
+ 	}
+
 	@Transactional
 	default public int getOrders_seq() throws Exception{
 		return (Integer) null;
