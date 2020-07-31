@@ -99,8 +99,10 @@ public class OrderController {
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
 			String chain_names_next = itr2.next();
-			PointVO pointVO = pointbiz.getByChain_name(chain_names_next);
+			System.out.println(chain_names_next + " !!!!!!!!!!!!!!!! " );
+			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(chain_names_next, (String)httpSession.getAttribute("userId"));
 			
+			System.out.println(pointVO);
 
 			
 			if (pointVO != null && pointVO.getUsers_id().equals(httpSession.getAttribute("userId")))
@@ -157,7 +159,8 @@ public class OrderController {
 	public void addPoint(PointList pointlist, String users_id) throws Exception {// 체인별로 포인트 사용하기
 		for (int i = 0; i < pointlist.getAll_chain_name().length; i++) {// 포인트의 개수에 따라서 point를 update한다.
 			String chain_name = pointlist.getAll_chain_name()[i];
-			PointVO pointVO = pointbiz.getByChain_name(chain_name);
+			
+			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(chain_name, users_id);
 			double point_rate = pointVO.getPoint_rate();
 			pointVO.setPoint((int)(pointlist.getAll_chain_price()[i] *  point_rate));
 			pointVO.setPoint_id(pointVO.getPoint_id());
@@ -179,7 +182,7 @@ public class OrderController {
 			int useOrNot = pointlist.getUseOrNot()[i];// 1이면 point 사용 0이면 사용 안함
 			if (useOrNot == 1) {// 포인트 사용
 				Point_storeVO point_storeVO = new Point_storeVO();
-				PointVO temp = pointbiz.getByChain_name(chain_name);
+				PointVO temp = pointbiz.getByChain_nameWithusers_id(chain_name, users_id);
 				point_storeVO.setPoint_store_id("point_store_id");
 				point_storeVO.setPoint_id(temp.getPoint_id());
 				StoreVO storeVO = storebiz.get(pointlist.getStore_name()[i]);// store_name 으로 store_id 얻기
@@ -285,7 +288,7 @@ public class OrderController {
 
 		//체인에 따라서 포인트 검색
 		for (int i = 0; i < pointList.getAll_chain_name().length; i++) {
-			PointVO pointVO = pointbiz.getByChain_name(pointList.getAll_chain_name()[i]);
+			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(pointList.getAll_chain_name()[i], users_id);
 			
 			if (pointVO != null && pointVO.getUsers_id().equals(users_id)) {
 				// 포인트 있으면 point_store를 만든다. 
@@ -293,9 +296,7 @@ public class OrderController {
 				usePoint(pointList, users_id);// 포인트 사용
 				addPoint(pointList, users_id);							// 포인트 쌓기
 				makePoint_store(pointList, users_id);
-				
 			} else {
-				
 				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
 				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
 			}
@@ -314,7 +315,6 @@ public class OrderController {
 		if (httpSession.getAttribute("cartProduct") == null) {
 			System.out.println("session 파괴되었다. ");
 		}
-		
 		model.addObject("order", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;

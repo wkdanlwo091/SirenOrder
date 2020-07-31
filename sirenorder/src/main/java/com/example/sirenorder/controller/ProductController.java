@@ -24,6 +24,7 @@ import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ProductVO;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 import com.example.sirenorder.vo.Store_productVO;
+
 @Controller
 public class ProductController {
 	@Resource(name = "productbiz")	
@@ -65,11 +66,10 @@ public class ProductController {
 		model.addObject("product", "clicked");
 		model.setViewName("thymeleaf/main");
 		if(List.size() == 0) {
-			//System.out.println("가게에 물건이 없습니다.");
+			System.out.println("가게에 물건이 없읍니다.");
 			model.addObject("List", List);
 		}
 		else {
-			//System.out.println("가게에 물건이 있습니다.");
 			model.addObject("List", List);
 		}
 		return model;
@@ -91,7 +91,6 @@ public class ProductController {
 		}
 		return "fail";//로그인 첫 페이지로 /index.html
 	}
-
 	
 	//카트를 만든다. 
 	public CartVO makeCart(String product_name,String store_name, String chain_name, String price) {

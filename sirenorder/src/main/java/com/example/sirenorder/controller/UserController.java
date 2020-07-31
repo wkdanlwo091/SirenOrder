@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.UserVO;
 
@@ -36,6 +35,8 @@ public class UserController {
 			System.out.println("session not null");
 			if (temp.getAttribute("owner") != null) {
 				return "redirect:ownermain.html";
+			}else if(temp.getAttribute("admin") != null) {
+				return "redirect:adminmain.html";
 			}
 			return "redirect:/main.html";
 		}
@@ -95,6 +96,9 @@ public class UserController {
 					httpSession.setAttribute("owner", "owner");
 					httpSession.setAttribute("store_name", result.getStore_name());//store 이름 지정해주었다. 
 					model.setViewName("redirect:/ownermain.html");// 메인 컨트롤러의 thymeleaf/ownermain으로 간다.
+				} else if (result.getRole().equals("admin")) {// 사업자
+					httpSession.setAttribute("admin", "admin");
+					model.setViewName("redirect:/adminmain.html");// 메인 컨트롤러의 thymeleaf/ownermain으로 간다.
 				}
 				return model;
 			} else {
@@ -230,6 +234,7 @@ public class UserController {
 		model.setViewName("thymeleaf/main");
 		return model;
 	}
+	
 	@RequestMapping("/ownerprofile.html") // 내 정보 보기
 	public ModelAndView ownerprofile(HttpServletRequest request) {
 		HttpSession httpSession = request.getSession();
@@ -313,12 +318,10 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		String password = (String) request.getParameter("password");
-
 		System.out.println(userbiz.get(users_id).getUsers_password()  +"  "  + password);
 		if(userbiz.get(users_id).getUsers_password().equals(password)) {
 			return "success";
 		} 
-		
 		return "fail";
 	}
 	

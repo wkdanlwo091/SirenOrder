@@ -21,6 +21,12 @@ public class PointDao implements Dao<String, PointVO> {
 	public PointVO selectByChain_name(String chain_name) {
 		return pointmapper.selectByChain_name(chain_name);
 	}
+	
+	@Override
+	public PointVO selectByChain_nameWithusers_id(String chain_name, String users_id) {
+		return pointmapper.selectByChain_nameWithusers_id(chain_name, users_id);
+	}
+	
 	@Override
 	public ArrayList<PointVO> selectall() {
 		return null;

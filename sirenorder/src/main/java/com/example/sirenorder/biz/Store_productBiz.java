@@ -39,13 +39,11 @@ public class Store_productBiz implements Biz<String, Store_productVO>{
 		// TODO Auto-generated method stub
 		return dao.selectListCnt(store_name);
 	}
-	
 	@Override
 	public void deleteStore_productByProduct_name(String product_name) {
 		// TODO Auto-generated method stub
 		dao.deleteStore_productByProduct_name(product_name);
 	}
-	
 	@Override
 	public ArrayList<Store_productJoinProductVO> getProductListJoin(String store_name, int startList, int listSize) {
 		// TODO Auto-generated method stub
