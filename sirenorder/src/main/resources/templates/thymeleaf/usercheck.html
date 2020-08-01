@@ -6,7 +6,29 @@
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
 <script>
+	//owner에 chain_name, store_name 할당하기 
+	function assignOwner(value){
+		var x = document.getElementById(value);
+		alert(x.style.visibility);
+		console.log(document.getElementById(value));
+		if(x.style.visibility == "visible"){
+			document.getElementById(value).style.visibility = "hidden";
+		}
+		else if(x.style.visibility == "hidden"){
+			x.style.visibility = "visible";
+		}
+	}
+	
+	function showOwnerInfo(){
+		
+		$('.input-group').html("");
+		
+		
+		//여기서 부터 ajax로 owner의 chain_name 
+	}
+	
 </script>
+
 <body>
 	<div class="input-group" style = "width:50%" th:fragment="usercheck">
 	
@@ -23,6 +45,7 @@
 					<button id="searchId" type="submit" class="btn btn-primary"> 모든 회원 보기 </button>
 				</form>
 			</div>
+			
 		</div>
 		<div th:unless="${search != null}">
 			<table class="table">
@@ -32,18 +55,32 @@
 			      <th scope="col">users_id</th>
 			      <th scope="col">users_name</th>
 			      <th scope="col">role</th>
+			      <th scope="col" hidden>owner_info</th>
 			    </tr>
 			  </thead>
 			  <tbody>
 				  <tr th:each="userVO, iterStat : ${userVOs}" >
-				  	<td th:text="*{iterStat.index}">Onions</td>
-				  	<td th:text="*{userVO.users_id}">Onions</td>
-					<td th:text="*{userVO.users_name}">2.41</td>
-					<td th:text="*{userVO.role}">yes</td>
+			  		<div th:if="*{userVO.role == 'owner'}">
+					  	<td style="color:blue;" onclick = "assignOwner();" th:text="*{iterStat.index}">Onions</td>
+					  	<td style="color:blue;" onclick = "assignOwner();" th:text="*{userVO.users_id}">Onions</td>
+						<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|"  th:text="*{userVO.users_name}">2.41</td>
+						<td style="color:blue;" onclick = "assignOwner();" th:text="*{userVO.role}">yes</td>
+						<td style="color:blue; visibility:hidden" th:id="'id'+*{iterStat.index}">
+							<button onclick="">상세정보</button>
+						</td>
+					</div>
+			  		<div th:unless="*{userVO.role == 'owner'}">
+					  	<td th:text="*{iterStat.index}">Onions</td>
+					  	<td th:text="*{userVO.users_id}">Onions</td>
+						<td th:text="*{userVO.users_name}">2.41</td>
+						<td th:text="*{userVO.role}">yes</td>
+					</div>
 				  </tr>
 			  </tbody>
 			</table>
+			<p>click if role is owner</p>
 		</div>
 	</div>
+	
 </body>
 </html>

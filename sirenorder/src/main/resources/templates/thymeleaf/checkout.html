@@ -46,19 +46,15 @@ function cartProductElements(array){//카트에 담긴 상품들을 넣고 총 �
 }
 
 $(function(){//document ready from jQuery
-	
-	
 	//카트에 담긴 내용을 웹페이지에 뿌리는 내용
 		var numOfPoints = 0;//point 순회하는 index
 		numOfPoints = document.querySelectorAll("[id^=\"myPoint\"]");
-		
 		//포인트의 값을 뿌리는 내용 
 		[].forEach.call(numOfPoints, function(index) {
 			  console.log("가격은" + index.innerHTML + " index는" + index + "index의 type은 " + typeof index);
 			  pointsArray.push(index.innerHTML);
 			  console.log("typeof는 " + typeof index.innerHTML);
 		});
-		
 		document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "hidden";
 		//상단 바에 있는 장바구니 숨딘다.// 왜냐면 장바구니와 checkout 내용이 중복 되기 때문에 
 		//장바구니 정보 refresh한다. 
@@ -350,8 +346,6 @@ function checkOutCart(){
               <form id="buyProductId" th:action="@{buyProduct}"  method ="post"><!-- 여기 form에 여러 데이터가 들어간다.  -->
 			  </form>
             </li>
-			<li id = "li1"></li>
-			<li id = "li1"></li>
           </ul>
         </div>
 </body>
