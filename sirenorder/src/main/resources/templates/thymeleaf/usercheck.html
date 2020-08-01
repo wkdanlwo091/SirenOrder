@@ -5,14 +5,45 @@
 <title>Insert title here</title>
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
+<script>
+</script>
 <body>
 	<div class="input-group" style = "width:50%" th:fragment="usercheck">
-		<form action = "usercheck.html">
-			<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="회원">
-			<span class="input-group-btn">
-				<button id="searchId" type="submit" class="btn btn-primary">검색</button>
-			</span>
-		</form>
+	
+		<div  th:if="${search != null}">
+			<form action = "usercheck.html" method="POST">
+				<input id = "searchUserId" type="text" name = "users_id" value="" class="form-control" placeholder="회원ID_입력">
+				<span class="input-group-btn">
+					<button id="searchId" type="submit" class="btn btn-primary"> 회원 검색</button>
+				</span>
+			</form> 
+			
+			<div>
+				<form action = "usercheck.html" method = "POST">
+					<button id="searchId" type="submit" class="btn btn-primary"> 모든 회원 보기 </button>
+				</form>
+			</div>
+		</div>
+		<div th:unless="${search != null}">
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">#</th>
+			      <th scope="col">users_id</th>
+			      <th scope="col">users_name</th>
+			      <th scope="col">role</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+				  <tr th:each="userVO, iterStat : ${userVOs}" >
+				  	<td th:text="*{iterStat.index}">Onions</td>
+				  	<td th:text="*{userVO.users_id}">Onions</td>
+					<td th:text="*{userVO.users_name}">2.41</td>
+					<td th:text="*{userVO.role}">yes</td>
+				  </tr>
+			  </tbody>
+			</table>
+		</div>
 	</div>
 </body>
 </html>
