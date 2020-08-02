@@ -5,12 +5,10 @@
 <title>Insert title here</title>
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
-<script>
+<script th:inline="javascript">
 	//owner에 chain_name, store_name 할당하기 
 	function assignOwner(value){
 		var x = document.getElementById(value);
-		alert(x.style.visibility);
-		console.log(document.getElementById(value));
 		if(x.style.visibility == "visible"){
 			document.getElementById(value).style.visibility = "hidden";
 		}
@@ -18,20 +16,43 @@
 			x.style.visibility = "visible";
 		}
 	}
-	
-	function showOwnerInfo(){
-		
+	//코드를 초기화 하고 chain_name, store_name을 기입할 수 있는 input 테이블을 만든다. table안에 form이 있다. 
+	//이를 서버로 전송한다.
+	function setChain_nameStore_name(users_id){
 		$('.input-group').html("");
-		
-		
-		//여기서 부터 ajax로 owner의 chain_name 
+		var addedText = "<table class=\"table\">";
+		addedText += "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">chain_name</th><th scope=\"col\">store_name</th>";
+		addedText += "</tr></thead><tbody><div><td>";
+		addedText += "<form id =\"form1\" action=\"updateownerinfo\">";
+		addedText += "<input type=\"hidden\" name = \"users_id\" value =\"" + users_id + "\"></form>"+ users_id+ "</td>";
+		addedText += "<td><input form=\"form1\" type=\"text\" name=\"chain_name\" value=\"chain_name\" /></td>";
+		addedText += "<td><input form=\"form1\" type=\"text\" name=\"store_name\" value=\"store_name\" /></td>";
+		addedText += "</div></tr></tbody></table><p>click if store_name is null</p>";
 	}
 	
+	function showOwnerInfo(users_id, store_name){
+		//input 그룹의 element의 content 지우고 owner의 chain_name, store_name을 가져오고 없으면 할당한다. 
+		//이 것은 ajax를 통해서 한다.
+		//usercheck 코드 초기화
+		$('.input-group').html("");
+	
+		//아래의 텍스트는 users_id와 store_name을 표시하는 테이블을 나타낸다. 
+		//만약 store_name이 null 이면 버튼을 눌러 chain_name과 store_name을 지정한다. 
+		var addedText = "<table class=\"table\">";
+		addedText +=  "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">store_name</th></tr></thead><tbody><div>";
+		addedText +=  "<td>"+ users_id+ "</td>";
+		addedText +=  "<td id=\"store_nameId\">" + store_name + "</td></div></tr></tbody></table><p>click if store_name is null</p>";
+		$('.input-group').html(addedText);
+		
+		if($("#store_nameId").val() == null){
+			alert("yes");
+			$("#store_nameId").attr("onclick", "setChain_nameStore_name(" +users_id + ")");
+		}
+	}
 </script>
 
-<body>
+<body>	
 	<div class="input-group" style = "width:50%" th:fragment="usercheck">
-	
 		<div  th:if="${search != null}">
 			<form action = "usercheck.html" method="POST">
 				<input id = "searchUserId" type="text" name = "users_id" value="" class="form-control" placeholder="회원ID_입력">
@@ -39,13 +60,11 @@
 					<button id="searchId" type="submit" class="btn btn-primary"> 회원 검색</button>
 				</span>
 			</form> 
-			
 			<div>
 				<form action = "usercheck.html" method = "POST">
 					<button id="searchId" type="submit" class="btn btn-primary"> 모든 회원 보기 </button>
 				</form>
 			</div>
-			
 		</div>
 		<div th:unless="${search != null}">
 			<table class="table">
@@ -61,12 +80,14 @@
 			  <tbody>
 				  <tr th:each="userVO, iterStat : ${userVOs}" >
 			  		<div th:if="*{userVO.role == 'owner'}">
-					  	<td style="color:blue;" onclick = "assignOwner();" th:text="*{iterStat.index}">Onions</td>
-					  	<td style="color:blue;" onclick = "assignOwner();" th:text="*{userVO.users_id}">Onions</td>
+					  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{iterStat.index}">Onions</td>
+					  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.users_id}">Onions</td>
 						<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|"  th:text="*{userVO.users_name}">2.41</td>
-						<td style="color:blue;" onclick = "assignOwner();" th:text="*{userVO.role}">yes</td>
-						<td style="color:blue; visibility:hidden" th:id="'id'+*{iterStat.index}">
-							<button onclick="">상세정보</button>
+						<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.role}">yes</td>
+						<td style="color:blue; visibility:hidden;"  th:attr="onclick=|assignOwner('id*{iterStat.index}')|"    th:id="'id'+*{iterStat.index}">
+							<button th:attr="onclick=|showOwnerInfo('${userVO.users_id}', '${userVO.store_name}')|">
+							상세정보
+							</button>
 						</td>
 					</div>
 			  		<div th:unless="*{userVO.role == 'owner'}">

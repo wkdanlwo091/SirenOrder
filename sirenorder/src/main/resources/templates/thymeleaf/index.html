@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
-
+	<!-- cookie 구현 완성되었다.  -->
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
@@ -33,7 +33,6 @@
 		      c = c.substring(1);
 		    }
 		    if (c.indexOf(name) == 0) {
-		    	alert(c );
 		      return c.substring(name.length, c.length);
 		    }
 		  }
@@ -52,7 +51,6 @@
 		//submit 하기 전에 이 함수가 호출되고 호출 하고 submit 한다. 쿠키를 overwrite하기 때문에reset하는 것과 create 하는 것과 동일하다. 
 		if(document.getElementById("remember").checked == true){
 			var users_id = document.getElementById("users_id").value;
-			alert("users_id is " +  users_id);
 			setCookie("users_id",users_id,3);
 		}
 		document.getElementById("formId").submit();//post를 submit한다. 
