@@ -82,8 +82,10 @@ public class AdminController {
 		ModelAndView model = new ModelAndView();
 		
 		userbiz.get(users_id);
+		UserVO userVO = new UserVO();
+		userbiz.update(id);
 		//여기서 user의 store_name 업데이트 하고 store_name 
-		
+
 		
 		model.addObject("usercheck", "clicked");
 		model.setViewName("thymeleaf/adminmain");

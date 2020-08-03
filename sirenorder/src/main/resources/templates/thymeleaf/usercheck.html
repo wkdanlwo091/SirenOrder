@@ -16,6 +16,8 @@
 			x.style.visibility = "visible";
 		}
 	}
+	
+	
 	//코드를 초기화 하고 chain_name, store_name을 기입할 수 있는 input 테이블을 만든다. table안에 form이 있다. 
 	//이를 서버로 전송한다.
 	function setChain_nameStore_name(users_id){
@@ -34,35 +36,62 @@
 		//input 그룹의 element의 content 지우고 owner의 chain_name, store_name을 가져오고 없으면 할당한다. 
 		//이 것은 ajax를 통해서 한다.
 		//usercheck 코드 초기화
-		$('.input-group').html("");
-	
+		$('#input-group').html("");
 		//아래의 텍스트는 users_id와 store_name을 표시하는 테이블을 나타낸다. 
 		//만약 store_name이 null 이면 버튼을 눌러 chain_name과 store_name을 지정한다. 
-		var addedText = "<table class=\"table\">";
-		addedText +=  "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">store_name</th></tr></thead><tbody><div>";
-		addedText +=  "<td>"+ users_id+ "</td>";
-		addedText +=  "<td id=\"store_nameId\">" + store_name + "</td></div></tr></tbody></table><p>click if store_name is null</p>";
-		$('.input-group').html(addedText);
 		
-		if($("#store_nameId").val() == null){
-			alert("yes");
-			$("#store_nameId").attr("onclick", "setChain_nameStore_name(" +users_id + ")");
+		if(store_name == 'null'){//store_name 미정일 때 
+			//ajax로 서버로 store_name, chain_name 전송하기 
+			var addedText = "<div><table class=\"table\">";
+			addedText +=  "<thead><tr><th scope=\"col\">chain_name</th><th scope=\"col\">store_name</th></tr></thead><tbody><tr>";
+			addedText +=  "<td id = \"chain_nameId\"><input></td>";
+			addedText +=  "<td id=\"store_nameId\"><input></td>";
+			addedText += "</tr><tr><td><button id = \"users_id\" class=\"btn btn-primary\" onclick=\"sendToServer("+users_id+")\">"+users_id+" submit"+"</button></td></tr></tbody></table></div>";
+		}else{//store_name 정해져 있을 때
+			var addedText = "<table class=\"table\">";
+			addedText +=  "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">store_name</th></tr></thead><tbody><div>";
+			addedText +=  "<td>"+ users_id+ "</td>";
+			addedText +=  "<td id=\"store_nameId\">" + store_name + "</td></div></tr></tbody></table>";
+			addedText += "<button onclick=\"infoShow()\"></button>"
 		}
+		$('#input-group').html(addedText);
 	}
+	
+	function sendToServer(){
+		
+		var users_id = document.querySelector("#input-group > div > table > tbody > tr:nth-child(2) > td > button").value;
+		var users_id_split = users_id.split(" ");
+		
+		var chain_name = document.querySelector("#chain_nameId > input").value;
+		var store_name = document.querySelector("#store_nameId > input").value;
+		$.ajax({
+		    type: 'POST',
+		    url: 'updateownerinfo',
+		    data: { 
+		    	'users_id': users_id_split[0],
+		        'chain_name': chain_name, 
+		        'store_name': store_name // <-- the $ sign in the parameter name seems unusual, I would avoid it
+		    },
+		    success: function(msg){
+		    }
+		    
+		});
+	}
+	
 </script>
 
 <body>	
-	<div class="input-group" style = "width:50%" th:fragment="usercheck">
+	<div id="input-group" style = "width:50%" th:fragment="usercheck">
 		<div  th:if="${search != null}">
 			<form action = "usercheck.html" method="POST">
 				<input id = "searchUserId" type="text" name = "users_id" value="" class="form-control" placeholder="회원ID_입력">
 				<span class="input-group-btn">
-					<button id="searchId" type="submit" class="btn btn-primary"> 회원 검색</button>
+					<button id="searchId" type="submit" class="btn btn-primary"> 회원 검색   </button>
 				</span>
 			</form> 
 			<div>
 				<form action = "usercheck.html" method = "POST">
-					<button id="searchId" type="submit" class="btn btn-primary"> 모든 회원 보기 </button>
+					<button id="searchId" type="submit" class="btn btn-primary"> 모든 회원 </button>
 				</form>
 			</div>
 		</div>
