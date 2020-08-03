@@ -324,7 +324,6 @@ public class UserController {
 		} 
 		return "fail";
 	}
-	
 	@RequestMapping(value = "/requestObject", method = RequestMethod.POST) // simpleWithObject는 연습을 위한 function이다.
 	@ResponseBody
 	public String simpleWithObject(UserVO user) {

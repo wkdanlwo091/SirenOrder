@@ -7,6 +7,7 @@ public interface UserMapper {
 	public UserVO select(String users_id);
 	public ArrayList<UserVO> selectall();
 	public void update(UserVO users);
+	public void updateStore_name(UserVO users);
 	public void delete(String users_id);
 	public void insert(UserVO users);
 	public void updateToken(UserVO m) ;

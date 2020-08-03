@@ -22,6 +22,11 @@ public class StoreBiz implements Biz<String, StoreVO> {
 		return dao.select(name);
 	}
 	@Override
+	public void register(StoreVO storeVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.insert(storeVO);
+	}
+	@Override
 	public ArrayList<StoreVO> get() {
 		// TODO Auto-generated method stub
 		return dao.selectall();
@@ -35,5 +40,4 @@ public class StoreBiz implements Biz<String, StoreVO> {
 		// TODO Auto-generated method stub
 		return dao.selectChain(name);
 	}
-
 }

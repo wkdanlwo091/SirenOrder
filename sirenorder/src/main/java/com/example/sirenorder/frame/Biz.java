@@ -26,6 +26,9 @@ public interface Biz<Id, Model> {
 	default public String getToken(String orders_id) {
 		return null;
 	}
+	@Transactional
+	default public void updateStore_name(UserVO m) throws Exception {
+	}
 
 	@Transactional 
 	default public void deleteStore_productByProduct_name(String product_name) {

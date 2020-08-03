@@ -14,4 +14,5 @@ public class StoreVO {
 	double gps_latitude;
 	double gps_longtitude;
 	double point_rate;
+	int seq;
 }

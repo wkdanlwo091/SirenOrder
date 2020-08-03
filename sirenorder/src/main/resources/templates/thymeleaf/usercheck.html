@@ -57,13 +57,13 @@
 		$('#input-group').html(addedText);
 	}
 	
-	function sendToServer(){
+	function sendToServer(users_id){
 		
 		var users_id = document.querySelector("#input-group > div > table > tbody > tr:nth-child(2) > td > button").value;
 		var users_id_split = users_id.split(" ");
-		
 		var chain_name = document.querySelector("#chain_nameId > input").value;
 		var store_name = document.querySelector("#store_nameId > input").value;
+		
 		$.ajax({
 		    type: 'POST',
 		    url: 'updateownerinfo',
@@ -73,6 +73,17 @@
 		        'store_name': store_name // <-- the $ sign in the parameter name seems unusual, I would avoid it
 		    },
 		    success: function(msg){
+		    	//성공하면 등록 완료 했습니다. 표시를 띄운다.
+		    	if(msg == "success"){
+		    		$('#input-group').html("");
+		    		//등록 완료하였습니다. 등록 완료 버튼에 admain 페이지로 가는 것 href 정하기 
+		    		$('#input-group').html("<div>등록 완료하였습니다.</div>");
+		    	}else{
+		    		//chain_name, store_name 중복된 경우에 사용
+		    		$('#input-group').html("");
+		    		//등록 완료하였습니다. 출력
+		    		$('#input-group').html("<div>등록 완료하였습니다.</div>");
+		    	}
 		    }
 		    
 		});

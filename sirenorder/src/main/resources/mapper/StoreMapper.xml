@@ -12,6 +12,16 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		WHERE STORE_NAME = #{store_name}
     </select>
     
+    <insert id="insert" parameterType = "store">
+        <selectKey keyProperty="seq" resultType="int" order="BEFORE">
+    		select store_seq.nextval as seq from dual
+    	</selectKey>
+		INSERT INTO STORE 
+		VALUES(#{store_id}||#{seq}, #{store_name}, #{chain_id}, #{chain_name},
+		#{gps_latitude}, #{gps_longtitude}, #{point_rate})
+		
+    </insert>
+    
     <select id="selectall" resultType="store">
     	SELECT * 
 		FROM STORE

@@ -8,5 +8,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id="selectByChainName" resultType="chain"><!-- orders의 마지막 시퀸스 번호를 찾기 -->
 		select * from chain where chain_name = #{chain_name}
 	</select>
+	<insert id="insert">
+    	<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+    		select chain_seq.nextval as seq from dual
+    	</selectKey>
+    	INSERT INTO CHAIN VALUES( #{chain_id}||#{seq}, #{chain_name}, #{point_rate})
+    </insert>
 </mapper>
-

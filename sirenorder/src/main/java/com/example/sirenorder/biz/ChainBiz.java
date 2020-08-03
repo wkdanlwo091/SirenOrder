@@ -25,6 +25,11 @@ public class ChainBiz implements Biz<String, ChainVO>{
 		return null;
 	}
 	@Override
+	public void register(ChainVO chainVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.insert(chainVO);
+	}
+	@Override
 	public  ChainVO getByChain_name(String chain_name) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.selectByChain_name(chain_name);

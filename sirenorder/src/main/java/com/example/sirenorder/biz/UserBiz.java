@@ -37,6 +37,10 @@ public class UserBiz implements Biz<String, UserVO> {
 		dao.update(m);
 	}
 	@Override
+	public void updateStore_name(UserVO m) throws Exception {
+		dao.updateStore_name(m);
+	}
+	@Override
 	public void updateToken(UserVO m) throws Exception {
 		dao.updateToken(m);
 	}

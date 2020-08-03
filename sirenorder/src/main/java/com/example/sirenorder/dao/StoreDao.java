@@ -18,6 +18,12 @@ public class StoreDao implements Dao<String,StoreVO>{
 	public StoreVO select(String name) {
 		return storemapper.select(name);
 	}
+	
+	@Override
+	public void insert(StoreVO storeVO) {
+		// TODO Auto-generated method stub
+		storemapper.insert(storeVO);
+	}
 
 	@Override
 	public ArrayList<StoreVO> selectall() {

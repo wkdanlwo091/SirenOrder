@@ -11,6 +11,7 @@ import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
+import com.example.sirenorder.vo.UserVO;
 
 public interface Dao<Id, Model> {
 	default public void insert(Model m) throws Exception {
@@ -108,6 +109,10 @@ public interface Dao<Id, Model> {
 	default public ArrayList<SumAndOrders_date> selectIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return null;
 	}
+	
+	default public void updateStore_name(UserVO m) throws Exception {
+	}
+
 	
 	public Model select(Id id);
 

@@ -45,4 +45,8 @@ public class UserDao implements Dao<String, UserVO> {
 	public void update(UserVO m) throws Exception {
 		usermapper.update(m);
 	}
+	@Override
+	public void updateStore_name(UserVO m) throws Exception {
+		usermapper.updateStore_name(m);
+	}
 }

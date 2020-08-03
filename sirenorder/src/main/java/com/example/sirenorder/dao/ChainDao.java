@@ -19,6 +19,10 @@ public class ChainDao  implements Dao<String, ChainVO>{
 		return null;
 	}
 	@Override
+	public void insert(ChainVO chainVO) {
+		chainMapper.insert(chainVO);
+	}
+	@Override
 	public ArrayList<ChainVO> selectall() {
 		// TODO Auto-generated method stub
 		return null;
