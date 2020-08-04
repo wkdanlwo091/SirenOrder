@@ -101,6 +101,15 @@
 						</form>
 					</ul>
 					
+					<!-- 아래의 것은 owner가 chain대표일 때 사용한다.  session이다. -->
+					<ul th:if="${session.owner_first != null}" class="nav navbar-nav navbar-center" style = "padding-top: 0.3em">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							    <span  style="font-size: 1.0em">chain 대표</span>
+							</a>
+						</li>
+					</ul>
+					
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">

@@ -60,8 +60,6 @@
 	function sendToServer(users_id){
 		var chain_name = document.querySelector("#chain_nameId > input").value;
 		var store_name = document.querySelector("#store_nameId > input").value;
-		alert(users_id);
-		
 		$.ajax({
 		    type: 'POST',
 		    url: 'updateownerinfo',

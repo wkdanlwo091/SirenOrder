@@ -91,11 +91,15 @@ public class UserController {
 				// model.setViewName("thymeleaf/main");
 				if (result.getRole().equals("user")) {// 유저
 					model.setViewName("redirect:/main.html");// 메인 컨트롤러의 thymeleaf/main으로 간다.
-				} else if (result.getRole().equals("owner")) {// 사업자
-					httpSession.setAttribute("owner", "owner");
+				} else if (result.getRole().contains("owner")) {// 사업자 owner와 owner_first 포함 
+					if(result.getRole().equals("owner_first"))
+						httpSession.setAttribute("owner", "owner_first");
+					else
+						httpSession.setAttribute("owner", "owner");
 					httpSession.setAttribute("store_name", result.getStore_name());//store 이름 지정해주었다. 
 					model.setViewName("redirect:/ownermain.html");// 메인 컨트롤러의 thymeleaf/ownermain으로 간다.
-				} else if (result.getRole().equals("admin")) {// 사업자
+				}
+				else if (result.getRole().equals("admin")) {// 사업자
 					httpSession.setAttribute("admin", "admin");
 					model.setViewName("redirect:/adminmain.html");// 메인 컨트롤러의 thymeleaf/ownermain으로 간다.
 				}
