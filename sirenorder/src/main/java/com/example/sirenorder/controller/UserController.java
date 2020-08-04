@@ -25,7 +25,6 @@ public class UserController {
 //	public String login() {
 //		return "thymeleaf/index";//로그인 첫 페이지로 /index.html
 //	}
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String login(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
@@ -74,7 +73,7 @@ public class UserController {
 		return "thymeleaf/index";// 로그인 첫 페이지로 /index.html
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.POST) // 로그인 실패한 경우
+	@RequestMapping(value = "/", method = RequestMethod.POST) // 로그인 관련 메소드 
 	public ModelAndView loginFail(UserVO user, HttpServletRequest request) {//
 		String users_id = user.getUsers_id();
 		System.out.println("id의 값은 " + users_id);

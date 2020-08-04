@@ -17,10 +17,18 @@ public class MainController {
 		String users_id = (String)httpSession.getAttribute("userId");
 		
 		ModelAndView model = new ModelAndView();
+		
 		if(users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;//로그인 첫 페이지로 /index.html
+		}else if(httpSession.getAttribute("admin") != null) {
+			model.setViewName("redirect:/adminmain.html");
+			return model;//로그인 첫 페이지로 /index.html
+		}else if(httpSession.getAttribute("owner") != null) {
+			model.setViewName("redirect:/ownermain.html");
+			return model;//로그인 첫 페이지로 /index.html
 		}
+		
 		model.addObject("order", "clicked");
 		model.setViewName("thymeleaf/main");
 		return model;
