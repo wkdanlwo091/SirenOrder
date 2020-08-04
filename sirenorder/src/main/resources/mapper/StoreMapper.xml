@@ -19,7 +19,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		INSERT INTO STORE 
 		VALUES(#{store_id}||#{seq}, #{store_name}, #{chain_id}, #{chain_name},
 		#{gps_latitude}, #{gps_longtitude}, #{point_rate})
-		
     </insert>
     
     <select id="selectall" resultType="store">

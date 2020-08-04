@@ -5,7 +5,7 @@
 <title>Insert title here</title>
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
-<script th:inline="javascript">
+<script >
 	//owner에 chain_name, store_name 할당하기 
 	function assignOwner(value){
 		var x = document.getElementById(value);
@@ -46,7 +46,8 @@
 			addedText +=  "<thead><tr><th scope=\"col\">chain_name</th><th scope=\"col\">store_name</th></tr></thead><tbody><tr>";
 			addedText +=  "<td id = \"chain_nameId\"><input></td>";
 			addedText +=  "<td id=\"store_nameId\"><input></td>";
-			addedText += "</tr><tr><td><button id = \"users_id\" class=\"btn btn-primary\" onclick=\"sendToServer("+users_id+")\">"+users_id+" submit"+"</button></td></tr></tbody></table></div>";
+			addedText += "</tr><tr><td><button value = \""+users_id+"\" id = \"users_idButton\" class=\"btn btn-primary\""
+			addedText += "onclick=\"sendToServer(&quot;"+users_id+"&quot;)\">"+users_id+" submit"+"</button></td></tr></tbody></table></div>";
 		}else{//store_name 정해져 있을 때
 			var addedText = "<table class=\"table\">";
 			addedText +=  "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">store_name</th></tr></thead><tbody><div>";
@@ -58,17 +59,15 @@
 	}
 	
 	function sendToServer(users_id){
-		
-		var users_id = document.querySelector("#input-group > div > table > tbody > tr:nth-child(2) > td > button").value;
-		var users_id_split = users_id.split(" ");
 		var chain_name = document.querySelector("#chain_nameId > input").value;
 		var store_name = document.querySelector("#store_nameId > input").value;
+		alert(users_id);
 		
 		$.ajax({
 		    type: 'POST',
 		    url: 'updateownerinfo',
 		    data: { 
-		    	'users_id': users_id_split[0],
+		    	'users_id': users_id,
 		        'chain_name': chain_name, 
 		        'store_name': store_name // <-- the $ sign in the parameter name seems unusual, I would avoid it
 		    },

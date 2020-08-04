@@ -90,7 +90,7 @@ public class AdminController {
 		chain_name = chain_name.trim();
 		store_name = store_name.trim();
 		
-		System.out.println("updateownerinfo came");
+		System.out.println("users_id is" + users_id);
 		userbiz.get(users_id);
 		UserVO userVO = new UserVO();
 		userVO.setUsers_id(users_id);
