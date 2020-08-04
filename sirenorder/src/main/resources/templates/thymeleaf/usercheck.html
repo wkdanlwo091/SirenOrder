@@ -6,7 +6,17 @@
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
 <script >
-
+	function userIdCheck(){
+		var userId = document.getElementById("searchUserId").value;
+		alert(document.getElementById("myForm"));
+		if(userId == '' || userId.length < 11){
+			alert("제대로 된 아이디를 입력해주세요");
+		}//아이디에 아무 값이 없으면 함수 종료한다. 그리고 wrongOrNot에 적혀진 값이 있으면 이를 없앤다.
+		else{
+			document.getElementById("userIdCheckid").submit();
+		}
+	}
+	
 	//owner에 chain_name, store_name 할당하기 
 	function assignOwner(value){
 		var x = document.getElementById(value);
@@ -92,10 +102,10 @@
 <body>	
 	<div id="input-group" style = "width:50%" th:fragment="usercheck">
 		<div  th:if="${search != null}">
-			<form action = "usercheck.html" method="POST">
+			<form id = "myForm" action = "usercheck.html" method="POST">
 				<input id = "searchUserId" type="text" name = "users_id" value="" class="form-control" placeholder="회원ID_입력">
 				<span class="input-group-btn">
-					<button id="searchId" type="submit" class="btn btn-primary"> 회원 검색   </button>
+					<button id="searchId" onclick ="userIdCheck()" type = "button" class="btn btn-primary"> 회원 검색   </button>
 				</span>
 			</form> 
 			<div>
@@ -117,23 +127,23 @@
 			  </thead>
 			  <tbody>
 				  <tr th:each="userVO, iterStat : ${userVOs}" >
-			  		<div th:if="*{userVO.role == 'owner' || userVO.role == 'owner_first'}"><!-- owner 이거나 owner_first 일 때 owner_first는 체인 대표다 -->
-					  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{iterStat.index}">Onions</td>
-					  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.users_id}">Onions</td>
-						<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|"  th:text="*{userVO.users_name}">2.41</td>
-						<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.role}">yes</td>
-						<td style="color:blue; visibility:hidden;"  th:attr="onclick=|assignOwner('id*{iterStat.index}')|"    th:id="'id'+*{iterStat.index}">
-							<button th:attr="onclick=|showOwnerInfo('${userVO.users_id}', '${userVO.store_name}')|">
-							상세정보
-							</button>
-						</td>
-					</div>
-			  		<div th:unless="*{userVO.role == 'owner' || userVO.role == 'owner_first'}">
-					  	<td th:text="*{iterStat.index}">Onions</td>
-					  	<td th:text="*{userVO.users_id}">Onions</td>
-						<td th:text="*{userVO.users_name}">2.41</td>
-						<td th:text="*{userVO.role}">yes</td>
-					</div>
+				  		<div th:if="*{userVO.role == 'owner' || userVO.role == 'owner_first'}"><!-- owner 이거나 owner_first 일 때 owner_first는 체인 대표다 -->
+						  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{iterStat.index}">Onions</td>
+						  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.users_id}">Onions</td>
+							<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|"  th:text="*{userVO.users_name}">2.41</td>
+							<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.role}">yes</td>
+							<td style="color:blue; visibility:hidden;"  th:attr="onclick=|assignOwner('id*{iterStat.index}')|"    th:id="'id'+*{iterStat.index}">
+								<button th:attr="onclick=|showOwnerInfo('${userVO.users_id}', '${userVO.store_name}')|">
+								상세정보
+								</button>
+							</td>
+						</div>
+				  		<div th:unless="*{userVO.role == 'owner' || userVO.role == 'owner_first'}">
+							  	<td th:text="*{iterStat.index}">Onions</td>
+							  	<td th:text="*{userVO.users_id}">Onions</td>
+								<td th:text="*{userVO.users_name}">2.41</td>
+								<td th:text="*{userVO.role}">yes</td>
+						</div>
 				  </tr>
 			  </tbody>
 			</table>

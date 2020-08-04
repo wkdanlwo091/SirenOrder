@@ -57,17 +57,17 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
-
 	@RequestMapping(value = "/usercheck.html", method = RequestMethod.POST)
 	public ModelAndView usercheck(HttpServletRequest request, @RequestParam(required = false) String users_id) {
 		ModelAndView model = new ModelAndView();
-		if (users_id != null) {
+		System.out.println("usercheck came");
+		if (users_id != null) {// 회원검색 
 			ArrayList<UserVO> userVO = new ArrayList<UserVO>();
 			userVO.add(userbiz.get(users_id));
 			model.addObject("userVOs", userVO);
 			model.addObject("usercheck", "clicked");
 			model.setViewName("thymeleaf/adminmain");
-		} else {
+		} else {// 모든 회원 보기 
 			System.out.println("all users");
 			ArrayList<UserVO> userVO = userbiz.get();
 			// 모든 user 가져오기 페이지네이션은 추후에 적용하겠다. owner을 클릭하면 owner에게 chain_name과 store_name을
@@ -78,7 +78,6 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
-
 	@RequestMapping(value = "updateownerinfo", method = RequestMethod.POST)
     @ResponseBody
 	public String updateownerinfo(HttpServletRequest request,
