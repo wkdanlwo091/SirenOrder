@@ -2694,7 +2694,6 @@ body {
 		profileIdClicked = 0;
 		///below is when you clicked profile, then it gets profile from usercontroller
 		
-			console.log("profileClicked는 " + profileIdClicked);
 			$("#profileId").on("click", function(){
 				if(profileIdClicked == 0){//한번 클릭하면 다음번에 다시 ajax 통신 할 필요 없다. 
 			        $.ajax({
@@ -2753,7 +2752,12 @@ body {
 			            type: "POST",
 			            data: sendData,
 			            success: function(data){
-			            	alert("정보 수정되었습니다.");
+			            	if(data == "fail"){
+			            		alert("비밀번호 틀립니다.");
+			            	}else{
+			            		alert("변경하였습니다.");
+			            		 document.getElementById("profileId").click();
+			            	}
 			            },
 			            error: function(){
 			                alert("simpleWithObject err");

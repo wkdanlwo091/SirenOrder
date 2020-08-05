@@ -270,6 +270,7 @@ public class UserController {
 		System.out.println("getting profile");
 		HttpSession session = request.getSession();
 		String users_id = (String) session.getAttribute("userId");
+	
 		System.out.println(users_id);
 		UserVO user = userbiz.get(users_id);
 		jsonObject.put("users_name", user.getUsers_name());
@@ -286,6 +287,9 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		UserVO userVO = userbiz.get(users_id);
+		
+		System.out.println("update profile :  users_password : " + users_password + " userId :" + users_id 
+				+ " database password :" + userVO.getUsers_password());
 		
 		if (userVO.getUsers_password().equals(users_password)) {
 			// update한다.
