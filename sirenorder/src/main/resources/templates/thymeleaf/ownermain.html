@@ -105,7 +105,12 @@
 					<ul th:if="${session.owner_first != null}" class="nav navbar-nav navbar-center" style = "padding-top: 0.3em">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-							    <span  style="font-size: 1.0em">chain 대표</span>
+								<div th:if = "${session.chain_name != null}">
+							    	<span style="font-size: 1.0em"  th:text="${session.chain_name + ' 대표'  }">chain 대표</span><!-- 어느 chain대표  -->
+								</div>
+								<div th:unless = "${session.chain_name != null}">
+							    	<span style="font-size: 1.0em"  th:text="${session.store_name + ' 사장'  }"></span><!-- 어느 store대표  -->
+								</div>
 							</a>
 						</li>
 					</ul>

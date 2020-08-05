@@ -99,14 +99,15 @@ public class OwnerController {
 			httpSession.setAttribute("store_name", httpSession.getAttribute("store_name"));
 		}else if(httpSession.getAttribute("owner").equals("owner_first")) { 
 			httpSession.setAttribute("store_name", httpSession.getAttribute("store_name"));
+			httpSession.setAttribute("chain_name", ((String) httpSession.getAttribute("store_name")).split("_")[0]);
 			httpSession.setAttribute("owner_first", "chain대표");
-			System.out.println("chain대표");
+			//chain 대표면 
+			
 		}
 		else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
@@ -116,27 +117,25 @@ public class OwnerController {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
+		System.out.println("get 왔다 .");
+		
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
+		
 		UserVO userVO = userbiz.get(users_id);
-		if (userVO.getRole().equals("owner")) {
+		System.out.println("get의 userVO는" + userVO);
+		if (userVO.getRole().contains("owner")) {//owner나 owner_first 이기 때문에 
 		} 
 		else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
 		
-		
-		
-		
-		
-		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
-		ArrayList<Store_productVO> list = store_productbiz
-				.getByStore_name((String) httpSession.getAttribute("store_name"));
-		System.out.println(list.size());
+		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
+		System.out.println("list 사이즈 " + list.size());
 		System.out.println(list.get(0));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
