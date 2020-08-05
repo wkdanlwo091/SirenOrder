@@ -47,19 +47,11 @@
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-								<i class="lnr lnr-cart"></i>
-								<span class="badge bg-danger" th:text = "${session.totalIndex }">0</span>
-							</a>
-							<ul class="dropdown-menu notifications" id = "cartList" style= "background-color:#FFFFFF !important;">
-							</ul>
-						</li>
-						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							    <span class="badge bg-danger" th:text="${session.userId}" th:unless="${session == null}">[...]</span>
 							  <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu" style= "background-color:#FFFFFF !important;"> 
-								<li><a href="/profile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
+								<li><a href="/adminprofile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
 								<li><a href="/logout.html"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
 							</ul>
 						</li>
@@ -88,7 +80,7 @@
 		<!-- profile에 나의정보가 있다. -->
 		
 			<div th:if="${usercheck != null}"><div th:replace="/thymeleaf/usercheck"></div></div>
-		    <div th:if="${profile != null}"><div th:replace="/thymeleaf/profile"></div></div>
+		    <div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
 		    
 		</div>
 		<!-- END MAIN -->

@@ -248,6 +248,19 @@ public class UserController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	@RequestMapping("/adminprofile.html") // 내 정보 보기
+	public ModelAndView adminprofile(HttpServletRequest request) {
+		HttpSession httpSession = request.getSession();
+		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
+			ModelAndView model = new ModelAndView();
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		ModelAndView model = new ModelAndView();
+		model.addObject("profile", "clicked");
+		model.setViewName("thymeleaf/adminmain");
+		return model;
+	}
 	
 	@RequestMapping(value = "/getProfile", method = RequestMethod.POST)
 	@ResponseBody
