@@ -29,6 +29,7 @@ public class AdminController {
 	@RequestMapping(value = "/adminmain.html", method = RequestMethod.GET)
 	public ModelAndView login(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
+		
 		model.addObject("search", "clicked");
 		model.addObject("usercheck", "clicked");
 		model.setViewName("thymeleaf/adminmain");
