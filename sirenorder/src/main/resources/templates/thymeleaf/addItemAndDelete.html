@@ -59,18 +59,16 @@ $(function(){
 					    	
 					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
-					    	
-					    	<form action="/excludeItem.html" method = "post" th:object="${product_name}">
+					    	<h4>포인트 rate </h4>
+					    	<form action="pointUpdate" method = "post">
 						    	<div class="form-group">
-								    <label for="product_names">다중 선택</label>
-								    <select th:field="*{product_names}" id="product_names" class="form-control"  multiple  >
-								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
-								    </select>
+								    <label for="product_names">포인트 rate</label>
+									<input type="text" id="point" name="point" value ="${point_rate}"><br>
 						    	</div>
 						    	<input type="submit" value="Submit">
 					    	</form>
 					    	
-					    	<h3>포인트 관리 </h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<h3>아이템 삭제 </h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
 					    	
 					    	<form action="/excludeItem.html" method = "post" th:object="${product_name}">

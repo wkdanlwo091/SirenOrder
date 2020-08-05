@@ -33,6 +33,7 @@ import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Orders_detail_idList;
 import com.example.sirenorder.vo.PaginationOwner;
+import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.ProductNames;
 import com.example.sirenorder.vo.ProductVO;
 import com.example.sirenorder.vo.StoreVO;
@@ -68,6 +69,10 @@ public class OwnerController {
 
 	@Resource(name = "store_productbiz")
 	Biz<String, Store_productVO> store_productbiz;
+	
+	@Resource(name = "pointbiz")
+	Biz<String, PointVO> pointbiz;
+
 
 	@RequestMapping(value = "/makeConnectSession", method = RequestMethod.GET) //  connect 세션 만들어 달라고 요청
 	@ResponseBody
@@ -134,11 +139,14 @@ public class OwnerController {
 		}
 		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
+		String store_name = (String) httpSession.getAttribute("store_name");
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		System.out.println("list 사이즈 " + list.size());
 		System.out.println(list.get(0));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
+		PointVO pointVO = pointbiz.getByChain_name(store_name.split("_")[0]);//apple_sinchon의 apple을 가져와서 검색
+		model.addObject("point_rate", pointVO.getPoint_rate());
 		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
@@ -170,6 +178,25 @@ public class OwnerController {
 		model.addObject("product", list);
 		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+	
+	@RequestMapping(value = "pointUpdate", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
+	public ModelAndView pointUpdate(HttpServletRequest request, ProductVO productVO) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;// 로그인 첫 페이지로 /index.html
+		}
+		if (httpSession.getAttribute("owner") != null) {// owner로 접속했을 때 생기는 session
+		} else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		
+		pointbiz.
 		return model;
 	}
 

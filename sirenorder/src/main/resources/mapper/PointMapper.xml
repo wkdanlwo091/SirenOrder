@@ -15,6 +15,11 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	SET POINT = POINT + #{point}
     	WHERE CHAIN_NAME = #{chain_name}
     </update>
+    <update id = "updatePoint_rate">
+    	UPDATE POINT
+    	SET POINT_RATE = #{point_rate}
+    	WHERE CHAIN_NAME = #{chain_name}
+    </update>
     
     <select id="selectByChain_name" resultType="point">
 		SELECT * 
