@@ -57,13 +57,21 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
+	
+	//submit 하면 오는 메소드
 	@RequestMapping(value = "/usercheck.html", method = RequestMethod.POST)
 	public ModelAndView usercheck(HttpServletRequest request, @RequestParam(required = false) String users_id) {
 		ModelAndView model = new ModelAndView();
-		System.out.println("usercheck came");
 		if (users_id != null) {// 회원검색 
 			ArrayList<UserVO> userVO = new ArrayList<UserVO>();
-			userVO.add(userbiz.get(users_id));
+			UserVO userVO_id = userbiz.get(users_id);
+			
+			if(userVO_id != null) {
+				userVO.add(userbiz.get(users_id));
+			}else {
+				
+			}
+
 			model.addObject("userVOs", userVO);
 			model.addObject("usercheck", "clicked");
 			model.setViewName("thymeleaf/adminmain");
@@ -78,6 +86,7 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
+	
 	@RequestMapping(value = "updateownerinfo", method = RequestMethod.POST)
     @ResponseBody
 	public String updateownerinfo(HttpServletRequest request,
