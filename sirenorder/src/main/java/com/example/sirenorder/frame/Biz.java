@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
@@ -21,7 +22,10 @@ public interface Biz<Id, Model> {
 	@Transactional 
 	default public void update(Model id) throws Exception{
 	}
-	
+	@Transactional 
+	default public void updatePoint_rate(Model m) throws Exception {
+	}
+
 	@Transactional
 	default public String getToken(String orders_id) {
 		return null;

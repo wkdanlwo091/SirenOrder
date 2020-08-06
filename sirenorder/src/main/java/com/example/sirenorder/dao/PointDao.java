@@ -36,6 +36,11 @@ public class PointDao implements Dao<String, PointVO> {
 		pointmapper.update(pointVO);
 	}
 	@Override
+	public void updatePoint_rate(PointVO m) throws Exception {
+		// TODO Auto-generated method stub
+		pointmapper.updatePoint_rate(m);
+	}
+	@Override
 	public void insert(PointVO pointVO) {
 		pointmapper.insert(pointVO);
 	}

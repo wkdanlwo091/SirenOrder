@@ -19,6 +19,7 @@ import com.example.sirenorder.vo.UserVO;
 
 @Controller
 public class AdminController {
+	
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
 	@Resource(name = "storebiz")
@@ -87,7 +88,6 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
-	
 	@RequestMapping(value = "updateownerinfo", method = RequestMethod.POST)
     @ResponseBody
 	public String updateownerinfo(HttpServletRequest request,
@@ -97,14 +97,12 @@ public class AdminController {
 			) throws Exception {
 		chain_name = chain_name.trim();
 		store_name = store_name.trim();
-		
 		System.out.println("users_id is" + users_id);
 		userbiz.get(users_id);
 		UserVO userVO = new UserVO();
 		userVO.setUsers_id(users_id);
 		userVO.setStore_name(store_name);
 		userbiz.updateStore_name(userVO);
-		
 		//여기서 chain_name에 따라서 있으면 안 만들고 없으면 만든다. 
 		ChainVO chainVO = chainbiz.getByChain_name(chain_name);
 		if(chainVO != null) {
@@ -117,7 +115,6 @@ public class AdminController {
 		}
 		//여기서 user의 store_name 업데이트 한다. 
 		//store_name이 중복 안되면 success return 한다.  
-		
 		if(storebiz.getStore_id(store_name) == null) {
 			StoreVO storeVO = new StoreVO();
 			storeVO.setStore_id("store_id");
@@ -128,7 +125,6 @@ public class AdminController {
 			storebiz.register(storeVO);
 			return "success";
 		}
-
 		return "fail";// id 없다.
 	}
 

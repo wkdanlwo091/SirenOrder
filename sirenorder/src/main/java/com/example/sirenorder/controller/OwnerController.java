@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
+import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Orders_detail_idList;
@@ -72,7 +73,9 @@ public class OwnerController {
 	
 	@Resource(name = "pointbiz")
 	Biz<String, PointVO> pointbiz;
-
+	
+	@Resource(name = "chainbiz")
+	Biz<String, ChainVO> chainbiz;
 
 	@RequestMapping(value = "/makeConnectSession", method = RequestMethod.GET) //  connect 세션 만들어 달라고 요청
 	@ResponseBody
@@ -145,8 +148,9 @@ public class OwnerController {
 		System.out.println(list.get(0));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
-		PointVO pointVO = pointbiz.getByChain_name(store_name.split("_")[0]);//apple_sinchon의 apple을 가져와서 검색
-		model.addObject("point_rate", pointVO.getPoint_rate());
+		//chain에서 point_rate 가져와야 한다. 
+		ChainVO chainVO = chainbiz.getByChain_name(store_name.split("_")[0]);
+		model.addObject("point_rate", chainVO.getPoint_rate());
 		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
@@ -181,8 +185,9 @@ public class OwnerController {
 		return model;
 	}
 	
-	@RequestMapping(value = "pointUpdate", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
-	public ModelAndView pointUpdate(HttpServletRequest request, ProductVO productVO) throws Exception {
+	@RequestMapping(value = "pointUpdate", method = RequestMethod.POST) // 포인트 업데이트 한다. 																			// return한다.
+	public ModelAndView pointUpdate(HttpServletRequest request,
+			@RequestParam(required = false) double point_rate) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -195,8 +200,11 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		
-		pointbiz.
+		ChainVO chainVO = new ChainVO();
+		chainVO.setPoint_rate(point_rate);
+		chainVO.setChain_name( ((String) httpSession.getAttribute("store_name")).split("_")[0]);
+		chainbiz.updatePoint_rate(chainVO);
+		model.setViewName("redirect:/addItemAndDelete.html");
 		return model;
 	}
 

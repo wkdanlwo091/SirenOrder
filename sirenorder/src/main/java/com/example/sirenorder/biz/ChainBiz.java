@@ -34,4 +34,9 @@ public class ChainBiz implements Biz<String, ChainVO>{
 		// TODO Auto-generated method stub
 		return dao.selectByChain_name(chain_name);
 	}
+	@Override
+	public  void updatePoint_rate(ChainVO chainVO) throws Exception {
+		// TODO Auto-generated method stub
+		dao.updatePoint_rate(chainVO);
+	}
 }

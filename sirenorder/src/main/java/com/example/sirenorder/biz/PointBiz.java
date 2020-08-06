@@ -38,6 +38,13 @@ public class PointBiz implements Biz<String, PointVO>{
 		dao.update(m);
 	}
 	@Override
+	public void updatePoint_rate(PointVO m) throws Exception {
+		// TODO Auto-generated method stub
+		dao.updatePoint_rate(m);
+	}
+	
+	
+	@Override
 	public ArrayList<PointVO> get() {
 		// TODO Auto-generated method stub
 		return null;

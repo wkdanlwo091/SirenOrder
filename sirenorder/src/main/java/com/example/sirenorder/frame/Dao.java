@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
+import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
+import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
@@ -56,6 +58,9 @@ public interface Dao<Id, Model> {
 	}
 	default public int selectOrders_seq() throws Exception {
 		return (Integer) null;
+	}
+	default public void updatePoint_rate(Model m) throws Exception {
+		// TODO Auto-generated method stub
 	}
 	default public String selectProduct_id(String product_name) {
 		return null;
@@ -117,5 +122,6 @@ public interface Dao<Id, Model> {
 	public Model select(Id id);
 
 	public ArrayList<Model> selectall();
+
 
 }

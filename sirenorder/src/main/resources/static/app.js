@@ -96,10 +96,14 @@ function sendProduct(orders_detail_array) {//app/orders_detailId 로 보낸다.
 function showGreeting(message) {
     $("#greetings").append("<tr><td>" + message + "</td></tr>");
 }
+
 $(function () {
-    $("form").on('submit', function (e) {
+	
+	//websocket 연결하는 form을 stop한다. 
+    $(".form-inline").on('submit', function (e) {
         e.preventDefault();
     });
+    
     //$( "#connect" ).click(function() { connect();});
     $( "#customConnect" ).click(function() {
     	var store_name = $("#customConnect").val();

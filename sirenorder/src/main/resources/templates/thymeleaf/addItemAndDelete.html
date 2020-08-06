@@ -4,31 +4,11 @@
 <!-- store owner가 체인에  아이템을 추가하고 체인의 아이템을 제거할 수 있는 페이지-->
 <meta charset="utf-8">
 <title></title>
-<!-- animate CSS -->
-<link rel="stylesheet" href="css/animate.css">
-<!-- owl carousel CSS -->
-<link rel="stylesheet" href="css/owl.carousel.min.css">
-<!-- nice select CSS -->
-<link rel="stylesheet" href="css/nice-select.css">
-<!-- font awesome CSS -->
-<link rel="stylesheet" href="css/all.css">
-<!-- flaticon CSS -->
-<link rel="stylesheet" href="css/flaticon.css">
-<link rel="stylesheet" href="css/themify-icons.css">
-<!-- font awesome CSS -->
-<link rel="stylesheet" href="css/magnific-popup.css">
-<!-- swiper CSS -->
-<link rel="stylesheet" href="css/slick.css">
-<!-- style CSS -->
-<!-- date picker전용  -->
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 </head>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-
 <script th:inline="javascript">// th:inline 항상 필요하다. 
 $(function(){
+	//product 리스트를 받아온다. 
 	var mine = /*[[${product}]]*/ 'default'; 
 });
 </script>
@@ -57,18 +37,17 @@ $(function(){
 						    	</form>
 					    	</div>
 					    	
-					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<h3>포인트 rate 조회 및 변경</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
-					    	<h4>포인트 rate </h4>
 					    	<form action="pointUpdate" method = "post">
 						    	<div class="form-group">
 								    <label for="product_names">포인트 rate</label>
-									<input type="text" id="point" name="point" value ="${point_rate}"><br>
+									<input type="text" id="point_rate" name="point_rate" th:value ="${point_rate}"><br>
+							    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 						    	</div>
-						    	<input type="submit" value="Submit">
 					    	</form>
 					    	
-					    	<h3>아이템 삭제 </h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
 					    	
 					    	<form action="/excludeItem.html" method = "post" th:object="${product_name}">
@@ -78,7 +57,7 @@ $(function(){
 								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
 								    </select>
 						    	</div>
-						    	<input type="submit" value="Submit">
+						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
 					    	
 						</div>
@@ -87,31 +66,4 @@ $(function(){
 		</div>
 	</div>
 </body>
-<!-- jquery plugins here-->
-<script src="js/jquery-1.12.1.min.js"></script>
-<!-- popper js -->
-<script src="js/popper.min.js"></script>
-<!-- bootstrap js -->
-<script src="js/bootstrap.min.js"></script>
-<!-- easing js -->
-<script src="js/jquery.magnific-popup.js"></script>
-<!-- swiper js -->
-<script src="js/swiper.min.js"></script>
-<!-- swiper js -->
-<script src="js/masonry.pkgd.js"></script>
-<!-- particles js -->
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/jquery.nice-select.min.js"></script>
-<!-- slick js -->
-<script src="js/slick.min.js"></script>
-<script src="js/jquery.counterup.min.js"></script>
-<script src="js/waypoints.min.js"></script>
-<script src="js/jquery.ajaxchimp.min.js"></script>
-<script src="js/jquery.form.js"></script>
-<script src="js/jquery.validate.min.js"></script>
-<script src="js/mail-script.js"></script>
-<script src="js/stellar.js"></script>
-<script src="js/price_rangs.js"></script>
-<!-- custom js -->
-<script src="js/custom.js"></script>
 </html>
