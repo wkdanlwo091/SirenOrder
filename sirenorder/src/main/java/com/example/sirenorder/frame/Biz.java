@@ -24,6 +24,10 @@ public interface Biz<Id, Model> {
 	default public void update(Model id) throws Exception{
 	}
 	@Transactional 
+	default public void updateRole(Model m) {
+	}
+
+	@Transactional 
 	default public void updatePoint_rate(Model m) throws Exception {
 	}
 	@Transactional

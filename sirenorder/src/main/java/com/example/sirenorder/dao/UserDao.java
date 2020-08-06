@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.mapper.UserMapper;
 import com.example.sirenorder.vo.UserVO;
@@ -17,6 +19,10 @@ public class UserDao implements Dao<String, UserVO> {
 	@Override
 	public String selectToken(String orders_id) {
 		return usermapper.selectToken(orders_id);
+	}
+	@Override
+	public void updateRole(UserVO m) {
+		usermapper.updateRole(m);
 	}
 
 	@Override

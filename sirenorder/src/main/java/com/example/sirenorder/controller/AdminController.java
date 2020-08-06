@@ -108,12 +108,20 @@ public class AdminController {
 		//여기서 chain_name에 따라서 있으면 안 만들고 없으면 만든다. 
 		ChainVO chainVO = chainbiz.getByChain_name(chain_name);
 		if(chainVO != null) {
-		}else {//체인 만든다. 
+		}else {//체인 만든다. 체인 만든 것은 owner가 chain의  대표가 된다. owner를 owner first로 변환한다. 
 			chainVO = new ChainVO();
 			chainVO.setChain_id("chain_id");
 			chainVO.setPoint_rate(0.1);
 			chainVO.setChain_name(chain_name);
 			chainbiz.register(chainVO);
+
+
+			//user의 role을 변경 
+			userVO = new UserVO();
+			userVO.setRole("owner_first");
+			userVO.setUsers_id(users_id);
+			userbiz.updateRole(userVO);
+		
 		}
 		//여기서 user의 store_name 업데이트 한다. 
 		//store_name이 중복 안되면 success return 한다.  

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.UserVO;
@@ -20,10 +22,16 @@ public class UserBiz implements Biz<String, UserVO> {
 		return dao.select(userID);
 	}
 	
+	@Override 
+	public void updateRole(UserVO m) {
+		dao.updateRole(m);
+	}	
+
 	@Override
 	public ArrayList<UserVO> get() {
 		return dao.selectall();
 	}
+	
 	@Override
 	public String getToken(String orders_id) {
 		return dao.selectToken(orders_id);

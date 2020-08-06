@@ -195,12 +195,12 @@ public class UserController {
 		m.setUsers_address(user.getUsers_address());
 		m.setSex(user.getSex());
 		m.setRole(user.getRole());
-		
+		m.setStore_name("");
 		//user의 토큰 지정하기 --> 토큰은 안드로이드에서 fcm 사용할 때 필요하다. 
 		m.setToken("");
+		System.out.println("user info " + m);
 		userbiz.register(m);
 		return "redirect:/";// 여기서 login 페이지로 redirect 시켜준다. 이렇게 해도 되고 modelandview로 model addattribute로
-							// msg값을 줘도 된
 	}
 
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET) // register 페이지 왔을 때

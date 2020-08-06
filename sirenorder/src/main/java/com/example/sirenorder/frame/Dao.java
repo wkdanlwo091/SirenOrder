@@ -26,6 +26,10 @@ public interface Dao<Id, Model> {
 	}
 	default public void updateToken(Model m) throws Exception {
 	}
+	default public void updateRole(Model m) {
+		
+	}
+
 	default public String selectToken(String orders_id) {
 		return null;
 	}

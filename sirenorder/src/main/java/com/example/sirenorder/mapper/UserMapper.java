@@ -11,6 +11,7 @@ public interface UserMapper {
 	public void delete(String users_id);
 	public void insert(UserVO users);
 	public void updateToken(UserVO m) ;
+	public void updateRole(UserVO m) ;
 	public String selectToken(String orders_id);
 
 }
