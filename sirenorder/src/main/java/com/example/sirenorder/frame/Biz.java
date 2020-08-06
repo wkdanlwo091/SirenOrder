@@ -10,6 +10,7 @@ import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
@@ -25,7 +26,10 @@ public interface Biz<Id, Model> {
 	@Transactional 
 	default public void updatePoint_rate(Model m) throws Exception {
 	}
-
+	@Transactional
+	default public void updateAllPoint_rate(StoreVO storeVO) {
+		
+	}
 	@Transactional
 	default public String getToken(String orders_id) {
 		return null;

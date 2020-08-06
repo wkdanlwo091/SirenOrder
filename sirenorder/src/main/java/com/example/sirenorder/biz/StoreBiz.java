@@ -40,4 +40,10 @@ public class StoreBiz implements Biz<String, StoreVO> {
 		// TODO Auto-generated method stub
 		return dao.selectChain(name);
 	}
+	
+	@Override
+	public void updateAllPoint_rate(StoreVO storeVO) {
+		dao.updateAllPoint_rate(storeVO);
+	}
+
 }

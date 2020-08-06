@@ -10,6 +10,7 @@ import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
@@ -27,6 +28,9 @@ public interface Dao<Id, Model> {
 	}
 	default public String selectToken(String orders_id) {
 		return null;
+	}
+	default public void updateAllPoint_rate(StoreVO storeVO) {
+		
 	}
 
 	default public void delete(String id) throws Exception {

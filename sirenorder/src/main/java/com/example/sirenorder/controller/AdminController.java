@@ -88,6 +88,7 @@ public class AdminController {
 		}
 		return model;// id 없다.
 	}
+	
 	@RequestMapping(value = "updateownerinfo", method = RequestMethod.POST)
     @ResponseBody
 	public String updateownerinfo(HttpServletRequest request,
@@ -97,12 +98,13 @@ public class AdminController {
 			) throws Exception {
 		chain_name = chain_name.trim();
 		store_name = store_name.trim();
-		System.out.println("users_id is" + users_id);
+
 		userbiz.get(users_id);
 		UserVO userVO = new UserVO();
 		userVO.setUsers_id(users_id);
 		userVO.setStore_name(store_name);
 		userbiz.updateStore_name(userVO);
+		
 		//여기서 chain_name에 따라서 있으면 안 만들고 없으면 만든다. 
 		ChainVO chainVO = chainbiz.getByChain_name(chain_name);
 		if(chainVO != null) {

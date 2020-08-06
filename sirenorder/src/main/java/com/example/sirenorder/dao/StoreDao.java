@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.mapper.StoreMapper;
 import com.example.sirenorder.vo.StoreVO;
@@ -19,6 +21,11 @@ public class StoreDao implements Dao<String,StoreVO>{
 		return storemapper.select(name);
 	}
 	
+	@Override
+	public void updateAllPoint_rate(StoreVO storeVO) {
+		storemapper.updateAllPoint_rate(storeVO);
+	}
+
 	@Override
 	public void insert(StoreVO storeVO) {
 		// TODO Auto-generated method stub

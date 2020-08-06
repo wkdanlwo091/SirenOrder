@@ -200,9 +200,19 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
+		String chain_name = ((String) httpSession.getAttribute("store_name")).split("_")[0];
 		ChainVO chainVO = new ChainVO();
 		chainVO.setPoint_rate(point_rate);
-		chainVO.setChain_name( ((String) httpSession.getAttribute("store_name")).split("_")[0]);
+		chainVO.setChain_name(chain_name);
+
+		
+		StoreVO storeVO = new StoreVO();
+		storeVO.setPoint_rate(point_rate);
+		storeVO.setChain_name(chain_name);
+		storebiz.updateAllPoint_rate(storeVO);
+		
+		
+		
 		chainbiz.updatePoint_rate(chainVO);
 		model.setViewName("redirect:/addItemAndDelete.html");
 		return model;
