@@ -115,13 +115,12 @@ public class AdminController {
 			chainVO.setChain_name(chain_name);
 			chainbiz.register(chainVO);
 
-
 			//user의 role을 변경 
 			userVO = new UserVO();
 			userVO.setRole("owner_first");
 			userVO.setUsers_id(users_id);
 			userbiz.updateRole(userVO);
-		
+
 		}
 		//여기서 user의 store_name 업데이트 한다. 
 		//store_name이 중복 안되면 success return 한다.  

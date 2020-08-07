@@ -52,6 +52,7 @@
 		if(store_name == 'null'){//store_name 미정일 때 
 			//ajax로 서버로 store_name, chain_name 전송하기 
 			var addedText = "<div><table class=\"table\">";
+			addedText += "<h4>store_name은 chain_지점명 형태로 지정합니다. ex)burgerking_sinchon </h4>";
 			addedText +=  "<thead><tr><th scope=\"col\">chain_name</th><th scope=\"col\">store_name</th></tr></thead><tbody><tr>";
 			addedText +=  "<td id = \"chain_nameId\"><input></td>";
 			addedText +=  "<td id=\"store_nameId\"><input></td>";
@@ -69,6 +70,10 @@
 	function sendToServer(users_id){
 		var chain_name = document.querySelector("#chain_nameId > input").value;
 		var store_name = document.querySelector("#store_nameId > input").value;
+		var patt = /^\S+_\S+$/gi;
+		var result = patt.test(store_name);
+		if(result == true){}
+		else{alert("잘못된 형식입니다.")}
 		$.ajax({
 		    type: 'POST',
 		    url: 'updateownerinfo',
