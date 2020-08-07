@@ -97,12 +97,17 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|">Prev
 										</a>
 									</li>
-									<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
-										<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-											<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|" th:text="${idx}"> ${idx} 
-											</a>
-										</li>
-									</th:block>	
+									<div th:if = "${pagination.startPage != 1 and pagination.endPage != 0}">
+										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}"><!-- 1 0 이다.   -->
+											<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
+												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|" th:text="${idx}"> ${idx} 
+												</a>
+											</li>
+										</th:block>	
+									</div>
+									<div th:unless = "${pagination.startPage != 1 and pagination.endPage != 0}">
+										<div>no data</div>
+									</div>
 									<li th:if="${pagination.next}" class="page-item">
 										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|">next
 										</a>
