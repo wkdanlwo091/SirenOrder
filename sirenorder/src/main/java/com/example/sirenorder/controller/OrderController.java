@@ -66,7 +66,7 @@ public class OrderController {
 		String chain = request.getParameter("chain").trim();// 검색 했을 때 뒤에 오는 스페이스를 자르기
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
 		if (arrList.size() == 0) {
-			System.out.println("찾는 가게가 없습니다.");
+			//System.out.println("찾는 가게가 없습니다.");
 		} else {
 			return arrList;
 		}
@@ -99,10 +99,9 @@ public class OrderController {
 		ArrayList<PointVO> arrayList = new ArrayList<PointVO>();
 		while (itr2.hasNext()) {
 			String chain_names_next = itr2.next();
-			System.out.println(chain_names_next + " !!!!!!!!!!!!!!!! " );
+			//System.out.println(chain_names_next + " !!!!!!!!!!!!!!!! " );
 			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(chain_names_next, (String)httpSession.getAttribute("userId"));
-			
-			System.out.println(pointVO);
+			//System.out.println(pointVO);
 
 			
 			if (pointVO != null && pointVO.getUsers_id().equals(httpSession.getAttribute("userId")))
@@ -113,7 +112,7 @@ public class OrderController {
 	
 	@RequestMapping(value = "/checkOut.html", method = RequestMethod.GET) // 주문하기 페이지
 	public ModelAndView checkOut(HttpServletRequest request) throws Exception {
-		System.out.println("checkout에 들어왔다.");
+		//System.out.println("checkout에 들어왔다.");
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -143,14 +142,14 @@ public class OrderController {
 				String chain_name = pointlist.getChain_name()[i];
 				int point = pointlist.getPoint()[i];
 				String point_id = pointlist.getPoint_id()[i];
-				System.out.println(users_id);
+				//System.out.println(users_id);
 
 				PointVO pointVO = new PointVO();
 				pointVO.setPoint(-point);
 				pointVO.setPoint_id(point_id);
 				pointVO.setChain_name(chain_name);
 				pointVO.setUsers_id(users_id);
-				System.out.println(pointVO);
+				//System.out.println(pointVO);
 				pointbiz.update(pointVO);// point를 사용한 만큼 차감하기
 			}
 		}
@@ -166,7 +165,7 @@ public class OrderController {
 			pointVO.setPoint_id(pointVO.getPoint_id());
 			pointVO.setChain_name(chain_name);
 			pointVO.setUsers_id(users_id);
-			System.out.println(pointVO);
+			//System.out.println(pointVO);
 			pointbiz.update(pointVO);// point를 add하기
 		}
 	}
@@ -216,7 +215,7 @@ public class OrderController {
 		pointVO.setPoint_id("point_id");
 		pointbiz.register(pointVO);
 		
-		System.out.println("made point");
+		//System.out.println("made point");
 	}
 	
 	public void makeOrders(String users_id, HttpSession httpSession, int allTotalPrice) throws Exception {// orders 테이블에
@@ -226,14 +225,14 @@ public class OrderController {
 		ordersVO.setPayment_way("before_card");
 		ordersVO.setUsers_id(users_id);
 		ordersVO.setTotal_price(allTotalPrice);
-		System.out.println(ordersVO);
+		//System.out.println(ordersVO);
 		ordersbiz.register(ordersVO);
 	}
 	
 	//orders_detail을 만든다. 
 	public void makeOrders_detail(HttpSession httpSession) throws Exception {// orders_detail 테이블에 insert
 		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된
-		System.out.println("orders_id 는 " + orders_id);
+		//System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
 		
@@ -267,7 +266,7 @@ public class OrderController {
 		Iterator<String> itr2 = message.keySet().iterator();
 		while(itr2.hasNext()) {
 		    Thread.sleep(100); // simulated delay 0.1초 100ms 
-		    System.out.println("hahah sent from server with user ");
+		    //System.out.println("hahah sent from server with user ");
 		    //from client to server by websocket;
 		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id);// /topic/store_name  , orders_id
 		}
@@ -286,18 +285,23 @@ public class OrderController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		
 		//체인에 따라서 포인트 검색
 		for (int i = 0; i < pointList.getAll_chain_name().length; i++) {
 			PointVO pointVO = pointbiz.getByChain_nameWithusers_id(pointList.getAll_chain_name()[i], users_id);
 			
 			if (pointVO != null && pointVO.getUsers_id().equals(users_id)) {
 				// 포인트 있으면 point_store를 만든다. 
-				System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
+				//System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
 				usePoint(pointList, users_id);// 포인트 사용
 				addPoint(pointList, users_id);							// 포인트 쌓기
 				makePoint_store(pointList, users_id);
 			} else {
-				System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
+				//System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
 				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
 			}
 		}	
@@ -313,7 +317,7 @@ public class OrderController {
 		httpSession.removeAttribute("cartProduct");// 구매 후 카트 세션 파괴
 		httpSession.setAttribute("totalIndex", 0);// 장바구니 수 0으로 초기화
 		if (httpSession.getAttribute("cartProduct") == null) {
-			System.out.println("session 파괴되었다. ");
+			//System.out.println("session 파괴되었다. ");
 		}
 		model.addObject("order", "clicked");
 		model.setViewName("thymeleaf/main");
@@ -322,7 +326,7 @@ public class OrderController {
 	
 	public void greeting() throws Exception {//물건을 어 떤 상점에서 사면 그 상점으로 물건이 갔다고  websocket messaging 보낸다. 
 	    Thread.sleep(100); // simulated delay 0.1초 100ms 
-	    System.out.println("hahah sent from server with user ");
+	    //System.out.println("hahah sent from server with user ");
 	    //store 이름을 적는다. ex)/topic/banapresso_sinchon , "orders_id"
 	    this.template.convertAndSend("/topic/greetings", "SentFromServer");
 	}
@@ -336,8 +340,9 @@ public class OrderController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		ModelAndView model = new ModelAndView();
 		// 포인트가 미사용 이라면
-		if (users_id.equals(null)) {
+		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
+			return model;
 		}
 		// orders_detail과 product가 join 되었다. mybatis의 resultmap을 사용하여
 		int listCnt = orders_detailjoinproductbiz.getOrders_detailCnt();// 페이지네이션을 위해서 orders_detail 개수를 센다
@@ -371,15 +376,15 @@ public class OrderController {
 
 		if (from == null && to == null) { // 페이지네이션 아니고 아예 처음 들어왔을 때
 			// 맨 처음 페이지에 들어왔을 때
-			System.out.println("다른 스테이트 입니다. ");
+			//System.out.println("다른 스테이트 입니다. ");
 			model.addObject("from", "");// 페이지에 orders_hitory 안 내놓기 위해
 			model.addObject("to", "");//
 		} else {
 			// 같은 시작일 마침일 내에서 페이지네이션을 했을 경우
-			System.out.println("paginiation");
+			//System.out.println("paginiation");
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// 프론트의 자바스크립트에 날짜 표시하는 것
 			String beforeFromState = formatter.format(httpSession.getAttribute("from"));// 전의 시작일
-			System.out.println(httpSession.getAttribute("to"));
+			//System.out.println(httpSession.getAttribute("to"));
 			String beforeToState = formatter.format(httpSession.getAttribute("to"));// 전의 마침일
 			String currentFromState = null;
 			String currentToState = null;
@@ -393,18 +398,18 @@ public class OrderController {
 			}
 			if (to != null)
 				currentToState = formatter.format(to);// 새로 들어온 마침일
-			System.out.println("start");
-			System.out.println(beforeFromState);
-			System.out.println(beforeToState);
-			System.out.println(currentFromState);
-			System.out.println(currentToState);
-			System.out.println("done");
+//			System.out.println("start");
+//			System.out.println(beforeFromState);
+//			System.out.println(beforeToState);
+//			System.out.println(currentFromState);
+//			System.out.println(currentToState);
+//			System.out.println("done");
 			if (beforeFromState.equals(currentFromState) && beforeToState.equals(currentToState)) // 전의 스테이트 현재 스테이트 같으면
 			{// 같은 시작일, 끝일에 페이지네이션을 사용한 경우 들어온다.
 				ArrayList<Orders_detailVO> detailTemp = null;
 				detailTemp = (ArrayList<Orders_detailVO>) httpSession.getAttribute("orders_detailList");
 				// 전의 스테이트에서 받은 orders_detailList 세션을 사용한다.
-				System.out.println(page + " " + range + " ");
+				//System.out.println(page + " " + range + " ");
 				int listCnt = detailTemp.size();// 주문 상품 각각의 개수
 				Pagination pagination = new Pagination();
 				pagination.pageInfo(page, range, listCnt);
@@ -465,7 +470,7 @@ public class OrderController {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// 프론트의 자바스크립트에 날짜 표시하는 것
 		model.addObject("from", formatter.format(from));// from을 페이지의 datepicker의 ${from} value에 넣기 위함
 		model.addObject("to", formatter.format(to));// to을 페이지의 datepicker의 ${from} value에 넣기 위함
-		System.out.println("orderHistory에 왔습니다. post");
+		//System.out.println("orderHistory에 왔습니다. post");
 		ArrayList<Orders_detailVO> detailTemp = null;
 		// 맨 처음 들어온 경우
 		// pagination 첫페이지

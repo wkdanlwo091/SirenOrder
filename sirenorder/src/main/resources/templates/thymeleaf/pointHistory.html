@@ -114,7 +114,7 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 								<label for="to">to</label>
 								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
 							</form>
-							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
+							<button class="btn btn-primary mb-2" onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
 						</div>
 						<!-- ELSE -->
 							<div th:if="${!from.equals('')}}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->

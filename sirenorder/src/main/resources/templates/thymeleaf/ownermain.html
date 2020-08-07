@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
 	<title>Owner mainPage</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -93,7 +92,7 @@
 				<div id="navbar-menu"  >
 					<ul class="nav navbar-nav navbar-left"  style=" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						<form class="form-inline">
-							<div class="form-group"  >
+							<div class="form-group"  th:if = "${session.store_name != null}">
 								<label for="connect" style = "font-size: 1.0em;">WebSocket connection:</label>
 								<button id="customConnect" class="btn btn-default" th:value="${session.store_name}" type="submit">Connect</button>
 								<button id="disconnect" class="btn btn-default" type="submit"
@@ -109,8 +108,17 @@
 								<div th:if = "${session.chain_name != null}">
 							    	<span style="font-size: 1.0em"  th:text="${session.chain_name + ' 대표'  }">chain 대표</span><!-- 어느 chain대표  -->
 								</div>
-								<div th:unless = "${session.chain_name != null}">
-							    	<span style="font-size: 1.0em"  th:text="${session.store_name + ' 사장'  }"></span><!-- 어느 store대표  -->
+							</a>
+						</li>
+					</ul>
+					<ul th:unless="${session.owner_first != null}" class="nav navbar-nav navbar-center" style = "padding-top: 0.3em">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<div th:if = "${session.store_name != null}">
+							    	<span style="font-size: 1.0em"  th:text="${session.store_name + ' 점주'  }">chain 대표</span><!-- 어느 chain대표  -->
+								</div>
+								<div th:unless = "${session.store_name != null}">
+							    	<span style="font-size: 1.0em" > 체인,지점 승인 대기 중</span><!-- 어느 chain대표  -->
 								</div>
 							</a>
 						</li>
@@ -140,10 +148,15 @@
 		<div id="sidebar-nav" class="sidebar">
 			<div class="sidebar-scroll">
 				<nav>
-					<ul class="nav">
-						<li><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황</span></a></li>
-						<li><a href="incomeChart.html" class=""><i class="lnr lnr-code"></i> <span>매출액보기</span></a></li>
-						<li><a href="addItemAndDelete.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Item 추가 및 포인트 관리</span></a></li>
+					<ul class="nav" th:if = "${session.store_name != null}">
+						<!-- admin이 chain과 store를 할당 해 주었을 때 -->
+							<li><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황</span></a></li>
+							<li><a href="incomeChart.html" class=""><i class="lnr lnr-code"></i> <span>매출액보기</span></a></li>
+							<li><a href="addItemAndDelete.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Item 추가 및 포인트 관리</span></a></li>
+					</ul>
+					<ul class="nav" th:unless = "${session.store_name != null}"> 
+						<!-- admin이 chain과 store를 할당 하지 않았을 때 -->
+							<li><a ><i class="lnr lnr-home"></i> <span>승인 대기 중</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -151,12 +164,10 @@
 		<!-- END LEFT SIDEBAR -->
 		<!-- MAIN -->
 		<div class="main">
-		<!-- 기본으로 주문하기가 들어가있다. -->
-		<!-- profile에 나의정보가 있다. -->
-			<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
-			<div th:if="${ownerOrderStatus != null}"><div th:replace="/thymeleaf/ownerOrderStatus"></div></div>
-			<div th:if = "${incomeChart != null}"><div th:replace="/thymeleaf/incomeChart"></div></div>
-			<div th:if = "${addItemAndDelete != null}"><div th:replace="/thymeleaf/addItemAndDelete"></div></div>
+				<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
+				<div th:if="${ownerOrderStatus != null}"><div th:replace="/thymeleaf/ownerOrderStatus"></div></div>
+				<div th:if = "${incomeChart != null}"><div th:replace="/thymeleaf/incomeChart"></div></div>
+				<div th:if = "${addItemAndDelete != null}"><div th:replace="/thymeleaf/addItemAndDelete"></div></div>
 		</div>
 		
 		<!-- END MAIN -->

@@ -4,7 +4,9 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-<!-- 주문하는 컨트롤러 -->
+
+
+<!-- 체인점 검색, 매장 검색 하는 페이지 by javascript -->
 <body>
 	<form id = "toOrderPageId" action = "product.html"><!--  -->
 		<input type='hidden' name='chain_name' value='hidden' />
@@ -44,7 +46,7 @@
             	$('th').empty();
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"btn btn-primary\" class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
                 }
                 console.log(data[0]);
             },

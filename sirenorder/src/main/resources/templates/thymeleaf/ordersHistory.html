@@ -24,6 +24,7 @@
 	  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
+
 <script>
 //이전 버튼 이벤트
 function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
@@ -51,7 +52,6 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 		url = url + "&from=" + startDate;
 		url = url + "&to=" + endDate;
 		url = url + "&none=" + endDate;
-		alert("pagination page " + page);
 		location.href = url;	
 	}
 	//다음 버튼 이벤트
@@ -113,7 +113,7 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 								<label for="to">to</label>
 								<input type="date" id="to" th:value="${to}" name="to"><!--  -->
 							</form>
-							<button onclick="submitOrdersHistoryDate()" value="Submit">Submit</button>
+							<button onclick="submitOrdersHistoryDate()"class="btn btn-primary mb-2"  value="Submit">Submit</button>
 						</div>
 						<!-- ELSE -->
 							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->

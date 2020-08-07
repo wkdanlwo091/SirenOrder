@@ -25,7 +25,7 @@
 <body>
 <script th:inline="javascript">//script for product list 
 var myProduct= 5;
-//
+
 $(function() {
 	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
 	//장바구니 정보 refresh한다. 
@@ -38,10 +38,10 @@ $(function() {
 				return;
 			}
 			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
-				alert("hidden");
+				//alert("hidden");
 				return;
 			}else{
-				alert("visible")
+				//alert("visible")
 			}
 			
 			var array = JSON.parse(result);
@@ -49,15 +49,11 @@ $(function() {
 			var numOfArrays = array.length;
 			var totalPrice = 0;
 			var totalIndex = 0;
-			console.log(array.length);
-			console.log("kaka" + JSON.parse(result)[0]["price"]);
-			console.log("haha" + array[0]["product_name"]);
-			console.log("jaja" + array[0]["number"]);
 		  	var cartHistory = document.getElementById("cartList");
 		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
 			for(var i in array){//iteration을 한다. 
 			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
 			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 			  	totalPrice += array[i]["price"] * array[i]["number"];
 			  	totalIndex += array[i]["number"];
@@ -93,7 +89,6 @@ $(function() {
 });
 
 function addToCart(product_name,store_name,chain_name,price){
-	alert(product_name + " " + store_name + " " + price);
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
 		  url: "cartProductAdd",
@@ -109,7 +104,7 @@ function addToCart(product_name,store_name,chain_name,price){
 		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
 			for(var i in array){//iteration을 한다. 
 			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] + "','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] + "','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
 			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
 			  	totalPrice += array[i]["price"] * array[i]["number"];
 			  	totalIndex += array[i]["number"];
@@ -123,7 +118,6 @@ function addToCart(product_name,store_name,chain_name,price){
 	});
 }
 function minusToCart(product_name,store_name, chain_name,price){
-	alert(store_name);
 	
 	data = "product_name=" + product_name + "&price=" + price + "&sign=minus" + "&store_name=" + store_name + "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
@@ -177,14 +171,6 @@ function minusToCart(product_name,store_name, chain_name,price){
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>
-				<!-- 
-				<form class="navbar-form navbar-left">
-					<div class="input-group">
-						<input type="text" value="" class="form-control" placeholder="매장검색">
-						<span class="input-group-btn"><button type="button" class="btn btn-primary">Go</button></span>
-					</div>
-				</form>
-				 -->
 				<div class="navbar-btn navbar-btn-right">
 				</div>
 				<div id="navbar-menu">

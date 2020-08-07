@@ -99,13 +99,11 @@ public class AdminController {
 		chain_name = chain_name.trim();
 		store_name = store_name.trim();
 
-		
 		userbiz.get(users_id);
 		UserVO userVO = new UserVO();
 		userVO.setUsers_id(users_id);
 		userVO.setStore_name(store_name);
 		userbiz.updateStore_name(userVO);
-		
 		
 		//여기서 chain_name에 따라서 있으면 안 만들고 없으면 만든다. 
 		ChainVO chainVO = chainbiz.getByChain_name(chain_name);
@@ -118,7 +116,6 @@ public class AdminController {
 			chainVO.setPoint_rate(0.1);
 			chainVO.setChain_name(chain_name);
 			chainbiz.register(chainVO);
-
 			//user의 role을 변경 
 			userVO = new UserVO();
 			userVO.setRole("owner_first");
@@ -126,7 +123,6 @@ public class AdminController {
 			userbiz.updateRole(userVO);
 			System.out.println("user update success yes ");
 		}
-		
 		//여기서 user의 store_name 업데이트 한다. 
 		//store_name이 중복 안되면 success return 한다.  
 		if(storebiz.getStore_id(store_name) == null) {
@@ -141,5 +137,4 @@ public class AdminController {
 		}
 		return "fail";// id 없다.
 	}
-
 }

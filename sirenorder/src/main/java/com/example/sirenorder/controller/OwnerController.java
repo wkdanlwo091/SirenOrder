@@ -104,7 +104,8 @@ public class OwnerController {
 			return model;// 로그인 첫 페이지로 /index.html
 		}
 		if (httpSession.getAttribute("owner").equals("owner")) {
-			httpSession.setAttribute("store_name", httpSession.getAttribute("store_name"));
+			httpSession.setAttribute("store_name", (String)httpSession.getAttribute("store_name"));
+			
 		}else if(httpSession.getAttribute("owner").equals("owner_first")) { 
 			httpSession.setAttribute("store_name", httpSession.getAttribute("store_name"));
 			httpSession.setAttribute("chain_name", ((String) httpSession.getAttribute("store_name")).split("_")[0]);
@@ -133,7 +134,7 @@ public class OwnerController {
 		}
 		
 		UserVO userVO = userbiz.get(users_id);
-		System.out.println("get의 userVO는" + userVO);
+		
 		if (userVO.getRole().contains("owner")) {//owner나 owner_first 이기 때문에 
 		} 
 		else {
@@ -144,12 +145,12 @@ public class OwnerController {
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		String store_name = (String) httpSession.getAttribute("store_name");
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
-		System.out.println("list 사이즈 " + list.size());
-		System.out.println(list.get(0));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
+		
 		//chain에서 point_rate 가져와야 한다. 
 		ChainVO chainVO = chainbiz.getByChain_name(store_name.split("_")[0]);
+		
 		model.addObject("point_rate", chainVO.getPoint_rate());
 		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
@@ -218,7 +219,7 @@ public class OwnerController {
 		return model;
 	}
 
-	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.GET) //
+	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.GET) 
 	public ModelAndView ownerOrderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
 			@RequestParam(required = false, defaultValue = "1") int range,
@@ -230,7 +231,6 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		
 		
 		int listCnt;
 		int startList;
@@ -328,8 +328,6 @@ public class OwnerController {
 				}
 			}
 		}
-		
-		
 		
 		//파이어베이스 메시지 보내기 
 		firebaseSend(orders_id);

@@ -12,7 +12,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		WHERE STORE_NAME = #{store_name}
     </select>
     
-    
     <select id="updateAllPoint_rate" >
     	UPDATE STORE
     	SET POINT_RATE = #{point_rate}

@@ -42,8 +42,15 @@ $(function(){
 					    	<form action="pointUpdate" method = "post">
 						    	<div class="form-group">
 								    <label for="product_names">포인트 rate</label>
-									<input type="text" id="point_rate" name="point_rate" th:value ="${point_rate}"><br>
-							    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
+								    <!-- owner_first 즉 체인점 주인이면 포인트 적립율 변경을 가능하게 하고  -->
+								    <!-- owner 즉 상점 주인이면 포인트 적립율만 볼 수 있게 한다. -->
+								    <div th:if = "${session.owner == 'owner_first'}">
+										<input type="text" id="point_rate" name="point_rate" th:value ="${point_rate}"><br>
+								    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
+							    	</div>
+								    <div th:unless = "${session.owner == 'owner_first'}">
+										<h4 type="text" id="point_rate" name="point_rate" th:text ="${point_rate}"></h4><br>
+							    	</div>
 						    	</div>
 					    	</form>
 					    	

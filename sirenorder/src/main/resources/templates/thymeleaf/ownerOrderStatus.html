@@ -122,8 +122,8 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
-					
-					
+
+				
 					<form action="/ownerOrderStatus.html" method="post" id="form1">
 						<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6"
 							th:each="list,iter : ${List}">
@@ -148,7 +148,13 @@
 							</div>
 						</div>
 					</form>
-					<button type="submit" form="form1" value="Submit">submit</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
+					
+					<button th:if = "${#lists.size(List) != 0}" class="btn btn-primary mb-2" type="submit" form="form1" value="Submit">
+						submit
+					</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
+					<button th:unless = "${#lists.size(List) != 0}" class="btn btn-primary mb-2" value="Submit">
+						No data
+					</button><!-- 이 버튼을 통해 서버에 주문완료 되었다고 전송 그리고 websocket을 통해 서버로 전송 한후 fcm 전송-->
 					
 					<div id="paginationBox">
 						<!-- css 포지션을 위해서 style지정해줌   -->
