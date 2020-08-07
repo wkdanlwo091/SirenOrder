@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <update id="updateRole">
         UPDATE USERS
        	SET 
-       	ROLE = #{role},
+       	ROLE = #{role}
         WHERE USERS_ID = #{users_id}
     </update>
     <update id="updateStore_name">

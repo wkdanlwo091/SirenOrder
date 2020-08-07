@@ -47,6 +47,7 @@ public class UserDao implements Dao<String, UserVO> {
 	public void delete(String m) throws Exception {
 		usermapper.delete(m);
 	}
+	
 	@Override
 	public void update(UserVO m) throws Exception {
 		usermapper.update(m);
