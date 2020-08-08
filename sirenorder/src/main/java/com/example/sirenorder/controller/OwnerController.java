@@ -120,28 +120,23 @@ public class OwnerController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
-
 	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를																				// return한다.
 	public ModelAndView addItem(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
+		String role = (String) httpSession.getAttribute("owner");
 		System.out.println("get 왔다 .");
-		
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
-		
-		UserVO userVO = userbiz.get(users_id);
-		
-		if (userVO.getRole().contains("owner")) {//owner나 owner_first 이기 때문에 
+		if (role != null) {//owner나 owner_first 이기 때문에 
 		} 
 		else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		String store_name = (String) httpSession.getAttribute("store_name");
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
@@ -162,23 +157,24 @@ public class OwnerController {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
+		String role = (String) httpSession.getAttribute("owner");
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
-		if (userbiz.get(users_id).getRole().equals("owner")) {
+		if (role != null) {
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
 		//만들 아이템을 넣는다. 
 		System.out.println(productVO);
-
+		productbiz.register(productVO);
+		
+		
+		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
-		ArrayList<Store_productVO> list = store_productbiz
-				.getByStore_name((String) httpSession.getAttribute("store_name"));
-		System.out.println(list.size());
-		System.out.println(list.get(0));
+		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
 		model.addObject("addItemAndDelete", "clicked");

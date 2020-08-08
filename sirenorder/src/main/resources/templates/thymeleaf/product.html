@@ -76,6 +76,7 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 					        <td th:text="${prod.inStock}? #{true} : #{false}">yes</td>
 					    </tr>	
 									-->		
+
                         <div class="col-lg-4 col-sm-6" th:each="list : ${List}">
                             <div class="single_product_item">
                                 <img th:src="${list.productVO.image}" alt="" width="300" height="350">
@@ -89,8 +90,8 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
                                 </div><!-- th:attr="onclick=|upload('${gallery}')|"  -->
                             </div>
                         </div>
-                        	<!-- pagination{s} -->
 
+                        	<!-- pagination{s} -->
 						<div id="paginationBox">
 							<ul class="pagination">
 									<li th:if="${pagination.prev}" class="page-item">
