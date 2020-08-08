@@ -23,36 +23,36 @@ $(function(){
 					<!-- 여기다가 그래프를 넣어라 -->
 					<!-- 구간 설정 datePicker -->
 					    <div>	
-					    	<h3>체인 상품 추가</h3><!-- owner_first 체인 대표 일 때 product 만들고 owner이면 store_product 만든다.  -->
-					    	<div style="overflow: auto;">
-						    	<form id = "addItemDeleteId" action="/addItemAndDelete.html" method = "post" >
-						    		<div class = "form-group col-md-6">
-										  <input  class="form-control" type="hidden" name="product_id" value = "product_id"><!-- product_id -->
-										  <input  class="form-control" type="hidden" name="chain_name" th:value = "${#strings.arraySplit(session.store_name,'_')[0]}"><!-- product_id -->
-										  <label for="fname">상품 명: </label>
-										  <input class="form-control" type="text" name="product_name"><br><br>
-										  <label for="lname">이미지 url: </label>
-										  <input class="form-control" type="text" name="image"><br><br>
-										  <label for="lname">가격 : </label>
-										  <input class="form-control" type="text" name="price"><br><br>
-										  <button form="addItemDeleteId" type = "submit" value = "submit" class="btn btn-primary mb-2" >submit</button>
-									 </div>
-						    	</form>
+					    	<div th:if = "${session.owner == 'owner_first'}">
+						    	<h3>체인 상품 추가</h3><!-- owner_first 체인 대표 일 때 product 만들고 owner이면 store_product 만든다.  -->
+						    	<div style="overflow: auto;">
+							    	<form id = "addItemDeleteId" action="/addItemAndDelete.html" method = "post" >
+							    		<div class = "form-group col-md-6">
+											  <input  class="form-control" type="hidden" name="product_id" value = "product_id"><!-- product_id -->
+											  <input  class="form-control" type="hidden" name="chain_name" th:value = "${#strings.arraySplit(session.store_name,'_')[0]}"><!-- product_id -->
+											  <label for="fname">상품 명: </label>
+											  <input class="form-control" type="text" name="product_name"><br><br>
+											  <label for="lname">이미지 url: </label>
+											  <input class="form-control" type="text" name="image"><br><br>
+											  <label for="lname">가격 : </label>
+											  <input class="form-control" type="text" name="price"><br><br>
+											  <button form="addItemDeleteId" type = "submit" value = "submit" class="btn btn-primary mb-2" >submit</button>
+										 </div>
+							    	</form>
+						    	</div>
 					    	</div>
-					    	<h3>지점에 상품 추가</h3><!-- owner_first 체인 대표 일 때 product 만들고 owner이면 store_product 만든다.  -->
-					    	<div style="overflow: auto;">
-						    	<form id = "addItemDeleteId" action="/addItemAndDelete.html" method = "post" >
-						    		<div class = "form-group col-md-6">
-										  <label for="fname">상품 명: </label>
-										  <input class="form-control" type="text" name="product_name"><br><br>
-										  <label for="lname">이미지 url: </label>
-										  <input class="form-control" type="text" name="image"><br><br>
-										  <label for="lname">가격 : </label>
-										  <input class="form-control" type="text" name="price"><br><br>
-										  <button form="addItemDeleteId" type = "submit" value = "submit" class="btn btn-primary mb-2" >submit</button>
-									 </div>
-						    	</form>
-					    	</div>
+					    	
+					    	<h3>지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
+					    	<form action="/addItemToStore.html" method = "post" th:object="${product_name}">
+						    	<div class="form-group">
+								    <label for="product_names">다중 선택 </label>
+								    <select th:field="*{product_names}" class="form-control"  multiple  >
+								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
+								    </select>
+						    	</div>
+						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
+					    	</form>
+					    	
 					    	
 					    	<h3>포인트 rate 조회 및 변경</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
@@ -71,19 +71,17 @@ $(function(){
 						    	</div>
 					    	</form>
 					    	
-					    	<h3>기존 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
+					    	<h3>해당 지점 상품 조회 및 제거</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
-					    	
 					    	<form action="/excludeItem.html" method = "post" th:object="${product_name}">
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택</label>
-								    <select th:field="*{product_names}" id="product_names" class="form-control"  multiple  >
+								    <select th:field="*{product_names}"  class="form-control"  >
 								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
 								    </select>
 						    	</div>
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
-					    	
 						</div>
 				</div>
 			</div>

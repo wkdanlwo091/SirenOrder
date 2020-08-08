@@ -126,7 +126,7 @@ public class OwnerController {
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
 		String role = (String) httpSession.getAttribute("owner");
-		System.out.println("get 왔다 .");
+		
 		if (users_id == null) {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
@@ -172,6 +172,53 @@ public class OwnerController {
 		productbiz.register(productVO);
 		
 		
+		
+		
+		
+		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
+		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
+		model.addObject("product_name", new ProductNames());
+		model.addObject("product", list);
+		model.addObject("addItemAndDelete", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+	
+	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
+	public ModelAndView addItemToStore(HttpServletRequest request, ProductNames productNames) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		String role = (String) httpSession.getAttribute("owner");
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;// 로그인 첫 페이지로 /index.html
+		}
+		if (role != null) {
+		} else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		
+		//만들 아이템을 넣는다. 
+		Store_productVO store_productVO = new Store_productVO();
+		
+		public class Store_productVO {
+			String store_product_id;
+			String store_id;
+			String product_id;
+			String store_name;
+			String chain_name;
+			String product_name;
+			int seq;
+		}
+		store_productVO.setStore_product_id("store_product_id");
+		store_productVO.setStore_id("store_id");
+		store_productVO.setProduct_id("store_product_id");
+		store_productVO.setStore_name("store_name");
+		store_productVO.setChain_name("chain_name");
+		store_productVO.setProduct_name("product_name");
+		store_productbiz.register(store_productVO);
 		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));

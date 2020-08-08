@@ -19,6 +19,16 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	</selectKey>
     	INSERT INTO STORE_PRODUCT VALUES( #{store_product_id}||#{seq}, #{store_id}, #{product_id}, #{store_name}, #{chain_name}, #{product_name})
     </insert>
+    
+    <insert id="insert" parameterType = "store_product"><!-- store_product의 집합(배열)인 store_products -->
+    
+    	<selectKey keyProperty="seq" resultType="int"  order="BEFORE">
+    		select store_product_seq.nextval as seq from dual
+    	</selectKey>
+    	INSERT INTO STORE_PRODUCT VALUES( #{store_product_id}||#{seq}, #{store_id}, #{product_id}, #{store_name}, #{chain_name}, #{product_name})
+    
+    </insert>
+    
     <select id="selectListCnt" resultType = "int">
     	SELECT count(*) as listCnt from store_product where store_name = #{store_name}
     </select>
