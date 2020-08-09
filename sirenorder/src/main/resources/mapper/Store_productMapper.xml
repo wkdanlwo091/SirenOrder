@@ -20,15 +20,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	INSERT INTO STORE_PRODUCT VALUES( #{store_product_id}||#{seq}, #{store_id}, #{product_id}, #{store_name}, #{chain_name}, #{product_name})
     </insert>
     
-    <insert id="insert" parameterType = "store_product"><!-- store_product의 집합(배열)인 store_products -->
-    
-    	<selectKey keyProperty="seq" resultType="int"  order="BEFORE">
-    		select store_product_seq.nextval as seq from dual
-    	</selectKey>
-    	INSERT INTO STORE_PRODUCT VALUES( #{store_product_id}||#{seq}, #{store_id}, #{product_id}, #{store_name}, #{chain_name}, #{product_name})
-    
-    </insert>
-    
+	<!-- 여기다가 multiple insert 넣기 -->
+	
+	    
     <select id="selectListCnt" resultType = "int">
     	SELECT count(*) as listCnt from store_product where store_name = #{store_name}
     </select>
@@ -67,5 +61,37 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		 )
 		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
     </select>
+    
+    <select id = "selectSequence" resultType = "int">    	
+    	 SELECT * from
+		 (
+			 select A.*, rownum r, B.image, B.price
+			 from store_product A, product B 
+			 where A.STORE_NAME = #{store_name} AND A.PRODUCT_ID = B.PRODUCT_ID 
+		 )
+		 where r &gt;= #{startList} and r &lt; #{startList} + #{listSize}
+    </select>
+    
+    
+    <!-- 한번에 여러 데이터를 지우기  -->
+     <insert id="insertMultiple" parameterType="java.util.List" useGeneratedKeys="true">
+         <selectKey keyProperty="id" resultType="int" order="BEFORE">
+                SELECT STORE_PRODUCT_SEQ.nextVal as id FROM DUAL
+         </selectKey>    
+         INSERT INTO
+         STORE_PRODUCT (id,store_id, product_id, store_name, chain_name, product_name)
+         SELECT STORE_PRODUCT_SEQ.nextVal, A.* from (
+         <foreach collection="list" item="item" index="index" separator="union all">
+         SELECT 
+           #{item.store_id} as store_id,
+           #{item.product_id}  as product_id
+           #{item.store_name} as store_name,
+           #{item.chain_name} as chain_name,
+           #{item.product_name}  as product_name
+         FROM DUAL
+         </foreach> ) A
+    </insert>
+    
+    
     
 </mapper>

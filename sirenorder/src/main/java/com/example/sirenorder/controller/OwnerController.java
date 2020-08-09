@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -120,6 +122,7 @@ public class OwnerController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	
 	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를																				// return한다.
 	public ModelAndView addItem(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
@@ -144,7 +147,7 @@ public class OwnerController {
 		model.addObject("product", list);
 		
 		//chain에서 point_rate 가져와야 한다. 
-		ChainVO chainVO = chainbiz.getByChain_name(store_name.split("_")[0]);
+		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
 		
 		model.addObject("point_rate", chainVO.getPoint_rate());
 		model.addObject("addItemAndDelete", "clicked");
@@ -152,8 +155,9 @@ public class OwnerController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
-	public ModelAndView addItemPost(HttpServletRequest request, ProductVO productVO) throws Exception {
+	// 상점에 아이템을 추가한다. 다중으로 받아 올 수 있다.	
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) 																			// return한다.
+	public ModelAndView addItemPost(HttpServletRequest request,  String[] product_names) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -168,14 +172,38 @@ public class OwnerController {
 			return model;
 		}
 		//만들 아이템을 넣는다. 
-		System.out.println(productVO);
-		productbiz.register(productVO);
+
+		List<Store_productVO> lists = new ArrayList<Store_productVO>();
+
+		for(int i =0 ;i < product_names.length;i++) {
+			//string split을 하여
+			Store_productVO store_productVO = new Store_productVO();
+
+			System.out.println(product_names);
+			
+			System.out.println(product_names[i]);
+			
+			String [] example = product_names[i].split("-");
+			System.out.println(example[0]);
+			store_productVO.setStore_product_id(example[0]); 
+			store_productVO.setStore_id(example[1]); 
+			store_productVO.setProduct_id(example[2]);
+			store_productVO.setStore_name(example[3]); 
+			store_productVO.setChain_name(example[4]);
+			store_productVO.setProduct_name(example[5]); 
+
+			lists.add(store_productVO);
+		}
+		
+		store_productbiz.registerMultiple(lists);
 		
 		
 		
-		
+		Scanner scan = new Scanner(System.in);
+		scan.next();
 		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
+
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
@@ -184,7 +212,9 @@ public class OwnerController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST) // 상점에 아이템을 추가한다. 																				// return한다.
+	
+	 // 상점의 아이템을 지운다. 	
+	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST)																			// return한다.
 	public ModelAndView addItemToStore(HttpServletRequest request, ProductNames productNames) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
@@ -203,15 +233,6 @@ public class OwnerController {
 		//만들 아이템을 넣는다. 
 		Store_productVO store_productVO = new Store_productVO();
 		
-		public class Store_productVO {
-			String store_product_id;
-			String store_id;
-			String product_id;
-			String store_name;
-			String chain_name;
-			String product_name;
-			int seq;
-		}
 		store_productVO.setStore_product_id("store_product_id");
 		store_productVO.setStore_id("store_id");
 		store_productVO.setProduct_id("store_product_id");

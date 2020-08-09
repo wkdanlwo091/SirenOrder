@@ -2,6 +2,7 @@ package com.example.sirenorder.frame;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,8 @@ public interface Dao<Id, Model> {
 	}
 	default public void updateRole(Model m) {
 		
+	}
+	default public void insertMultiple(List<Model> m)  {
 	}
 
 	default public String selectToken(String orders_id) {

@@ -1,6 +1,7 @@
 package com.example.sirenorder.biz;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -28,6 +29,11 @@ public class Store_productBiz implements Biz<String, Store_productVO>{
 	public void register(Store_productVO store_productVO) throws Exception {
 		// TODO Auto-generated method stub
 		dao.insert(store_productVO);
+	}
+	@Override
+	public void registerMultiple(List<Store_productVO> lists) throws Exception {
+		// TODO Auto-generated method stub
+		dao.insertMultiple(lists);
 	}
 	@Override
 	public ArrayList<Store_productVO> getByStore_name(String store_name) {

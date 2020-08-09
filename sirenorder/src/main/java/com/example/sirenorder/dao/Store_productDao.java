@@ -1,6 +1,7 @@
 package com.example.sirenorder.dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,6 +26,11 @@ public class Store_productDao implements Dao<String, Store_productVO>{
 	public void insert(Store_productVO store_productVO) {
 		// TODO Auto-generated method stub
 		store_productMapper.insert(store_productVO);
+	}
+	@Override
+	public void insertMultiple(List<Store_productVO> lists)  {
+		// TODO Auto-generated method stub
+		store_productMapper.insertMultiple(lists);
 	}
 
 	@Override

@@ -42,7 +42,8 @@ $(function(){
 						    	</div>
 					    	</div>
 					    	
-					    	<h3>지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
+					    	<!-- 
+					    	<h3>지점 상품 추가</h3>
 					    	<form action="/addItemToStore.html" method = "post" th:object="${product_name}">
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택 </label>
@@ -52,7 +53,19 @@ $(function(){
 						    	</div>
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
-					    	
+					    	 -->
+					    	 
+					    	<h3>지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
+					    	<form action="/addItemAndDelete.html" method = "post"  >
+						    	<div class="form-group">
+								    <label for="product_names">다중 선택 </label>
+								    <select class="form-control" name = "product_names" multiple  ><!-- products 는 ArrayList 에 들어간다  -->
+								      <option  th:each="prod : ${product}" th:value = "${ prod.store_product_id + '-' + prod.store_id + '-' + prod.product_id + '-' + 
+								      prod.store_name + '-' + prod.chain_name + '-' + prod.product_name}" th:text="${prod.product_name}"></option>
+								    </select>
+						    	</div>
+						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
+					    	</form>
 					    	
 					    	<h3>포인트 rate 조회 및 변경</h3><!-- 체인의 상품을 지우는게 아니라 체인의 한 지점의 아이템을 빼는 것이다.-->
 					    	<!-- bootstrap -->
@@ -82,6 +95,8 @@ $(function(){
 						    	</div>
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
+					    	
+
 						</div>
 				</div>
 			</div>

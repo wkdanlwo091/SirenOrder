@@ -2,6 +2,7 @@ package com.example.sirenorder.frame;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
+import com.example.sirenorder.vo.Store_productVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
 import com.example.sirenorder.vo.UserVO;
 
@@ -25,6 +27,9 @@ public interface Biz<Id, Model> {
 	}
 	@Transactional 
 	default public void updateRole(Model m) {
+	}
+	@Transactional
+	default public void registerMultiple(List<Model> m) throws Exception  {
 	}
 
 	@Transactional 
