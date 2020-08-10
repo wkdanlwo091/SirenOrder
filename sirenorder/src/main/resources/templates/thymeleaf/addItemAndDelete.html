@@ -54,14 +54,16 @@ $(function(){
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
 					    	 -->
-					    	 
-					    	<h3>지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
+
+					    	<h3 th:text = "${session.store_name + ' 에 상품 추가'}" >지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
 					    	<form action="/addItemToStore.html" method = "post"  >
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택 </label>
 								    <select class="form-control" name = "product_names" multiple  ><!-- products 는 ArrayList 에 들어간다  -->
-								      <option  th:each="prod : ${product}" th:value = "${ prod.store_product_id + '-' + prod.store_id + '-' + prod.product_id + '-' + 
-								      prod.store_name + '-' + prod.chain_name + '-' + prod.product_name}" th:text="${prod.product_name}"></option>
+								      <option  th:each="prod : ${chain_product}" 
+								      	th:value = "${ prod.product_id + '-' + 
+								      	prod.product_name + '-' + prod.chain_name}" th:text="${prod.product_name}">
+								      </option>
 								    </select><!-- th: value에 store_product의 모든 변수의 정보를 담았다. -->
 						    	</div>
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >

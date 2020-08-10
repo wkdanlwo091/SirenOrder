@@ -28,6 +28,10 @@ public interface Dao<Id, Model> {
 	default public void updateRole(Model m) {
 		
 	}
+	default public ArrayList<Model> selectByChainName(String chain_name) throws Exception {
+		return null;
+	}
+
 	default public String selectLastId() {
 		return null;
 	}

@@ -113,7 +113,6 @@ public class OwnerController {
 			httpSession.setAttribute("chain_name", ((String) httpSession.getAttribute("store_name")).split("_")[0]);
 			httpSession.setAttribute("owner_first", "chain대표");
 			//chain 대표면 
-			
 		}
 		else {
 			model.setViewName("redirect:/main.html");
@@ -123,7 +122,8 @@ public class OwnerController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를																				// return한다.
+	// 처음 들어 왔을 때 여러 정보들을 뿌린다. 
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.GET) 																			// return한다.
 	public ModelAndView addItem(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
@@ -140,22 +140,73 @@ public class OwnerController {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
+		
+		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
+		String store_name = (String) httpSession.getAttribute("store_name");
+		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
+		
+		//이것은 체인이 가지고 있는 물품
+		String chain_name = ((String) httpSession.getAttribute("store_name")).split("_")[0];
+		ArrayList<ProductVO> chainList = productbiz.getByChainName(chain_name);
+		model.addObject("chain_product", chainList);
+		
+		//이것은 상점에 걸려있는 product 목록들 
+		model.addObject("product", list);
+		
+		//chain에서 point_rate 가져와야 한다. 
+		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
+		model.addObject("point_rate", chainVO.getPoint_rate());
+
+		model.addObject("addItemAndDelete", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		return model;
+	}
+	
+	//체인에 아이템을 추가한다. (상점에 추가하는 것이 아니다. )
+	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) // 처음 들어 왔을 때 상점이 가지고 있는 아이템 list를																				// return한다.
+	public ModelAndView addItemToChain(HttpServletRequest request, ProductVO productVO) throws Exception {
+		HttpSession httpSession = request.getSession();
+		ModelAndView model = new ModelAndView();
+		String users_id = (String) httpSession.getAttribute("userId");
+		String role = (String) httpSession.getAttribute("owner");
+		
+		if (users_id == null) {
+			model.setViewName("redirect:/index.html");
+			return model;// 로그인 첫 페이지로 /index.html
+		}
+		
+		if (role != null) {//owner나 owner_first 이기 때문에 
+		} 
+		else {
+			model.setViewName("redirect:/main.html");
+			return model;
+		}
+		
+		//product 추가하기 
+		productbiz.register(productVO);
+		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		String store_name = (String) httpSession.getAttribute("store_name");
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
 		
+		
+		//이것은 체인이 가지고 있는 물품 
+		String chain_name = ((String) httpSession.getAttribute("store_name")).split("_")[0];
+		ArrayList<ProductVO> chainList = productbiz.getByChainName(chain_name);
+		model.addObject("chain_product", chainList);
+
 		//chain에서 point_rate 가져와야 한다. 
 		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
-		
 		model.addObject("point_rate", chainVO.getPoint_rate());
 		model.addObject("addItemAndDelete", "clicked");
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
 	
-	// 상점에 아이템을 추가한다. 다중으로 받아 올 수 있다.	
+	// 특정 store에 아이템을 추가한다. 다중으로 받아 올 수 있다.	원래 mybatis 로 multiple insert 하려고
+	//
 	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST) 																			// return한다.
 	public ModelAndView addItemToStore(HttpServletRequest request,  String[] product_names) throws Exception {
 		HttpSession httpSession = request.getSession();
@@ -166,18 +217,16 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
+		
 		if (role != null) {
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
-		//만들 아이템을 넣는다. 
+		//만들 아이템을 넣는다. 여러개 넣기 
 
-		String lastId = store_productbiz.getLastId();
-		String seq_number = lastId.substring("store_product_id".length(), lastId.length());//시퀸스 id 값 ex) store_product50 의  50을 가져온다. 
-		
-
-		int lastSeq = Integer.parseInt(seq_number) ;
+		String store_id = storebiz.getStore_id((String) httpSession.getAttribute("store_name"));
+		String store_name = (String) httpSession.getAttribute("store_name");
 
 		List<Store_productVO> lists = new ArrayList<Store_productVO>();
 
@@ -186,23 +235,23 @@ public class OwnerController {
 			Store_productVO store_productVO = new Store_productVO();
 			
 			String [] example = product_names[i].split("-");
-			store_productVO.setStore_product_id(example[0]); 
-			store_productVO.setStore_id(example[1]); 
-			store_productVO.setProduct_id(example[2]);
-			store_productVO.setStore_name(example[3]); 
-			store_productVO.setChain_name(example[4]);
-			store_productVO.setProduct_name(example[5]); 
-			store_productVO.setSeq(++lastSeq);// sequence number를 넣다. // 가장 근래의 store_product_id 보다 1큰 것 집어 넣는다. 
-
-			lists.add(store_productVO);
+			store_productVO.setProduct_id(example[0]);
+			store_productVO.setProduct_name(example[1]); 
+			store_productVO.setChain_name(example[2]);
+			store_productVO.setStore_product_id(""); 
+			store_productVO.setStore_id(store_id); 
+			store_productVO.setStore_name(store_name); 
+			store_productbiz.register(store_productVO);;
 		}
 		
-		store_productbiz.registerMultiple(lists);
 		
 		
 		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
-
+		//chain에서 point_rate 가져와야 한다. 
+		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
+		
+		model.addObject("point_rate", chainVO.getPoint_rate());
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
@@ -211,6 +260,19 @@ public class OwnerController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.GET) 																			// return한다.
+	public String addItemToStore(HttpServletRequest request ) throws Exception {
+		return "redirect:/addItemAndDelete.html";
+	}
+	
+	
+	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.GET)																			// return한다.
+	public ModelAndView excludeItemGet(HttpServletRequest request ) throws Exception {
+		ModelAndView model = new ModelAndView();
+		model.setViewName("redirect:/addItemAndDelete.html");
+		return model;// 로그인 첫 페이지로 /index.html
+	}
+
 	// 상점의 아이템을 지운다. 	
 	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.POST)																			// return한다.
 	public ModelAndView excludeItem(HttpServletRequest request, @RequestParam List<String> selected) throws Exception {
@@ -228,11 +290,20 @@ public class OwnerController {
 			return model;
 		}
 		
+		String store_name = ((String) httpSession.getAttribute("store_name"));
+		String chain_name = store_name.split("_")[0];
+		
+		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
+		
+
 		//삭제할 store_product item의 제품명을 넣는다. 
-		System.out.println(selected);
 		store_productbiz.deleteMultiple(selected);
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
+		
+		ArrayList<ProductVO> chainList = productbiz.getByChainName(chain_name);
+		model.addObject("point_rate", chainVO.getPoint_rate());
+		model.addObject("chain_product", chainList);
 		model.addObject("product_name", new ProductNames());
 		model.addObject("product", list);
 		model.addObject("addItemAndDelete", "clicked");
@@ -265,9 +336,6 @@ public class OwnerController {
 		storeVO.setPoint_rate(point_rate);
 		storeVO.setChain_name(chain_name);
 		storebiz.updateAllPoint_rate(storeVO);
-		
-		
-		
 		chainbiz.updatePoint_rate(chainVO);
 		model.setViewName("redirect:/addItemAndDelete.html");
 		return model;

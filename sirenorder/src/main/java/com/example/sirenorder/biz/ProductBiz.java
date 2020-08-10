@@ -26,6 +26,11 @@ public class ProductBiz implements Biz<String, ProductVO>{
 	}
 	
 	@Override
+	public ArrayList<ProductVO> getByChainName(String chain_name) throws Exception {
+		return dao.selectByChainName(chain_name);
+	}
+	
+	@Override
 	public void deleteProduct(ProductVO m) throws Exception {
 		// TODO Auto-generated method stub
 		dao.deleteProduct(m);

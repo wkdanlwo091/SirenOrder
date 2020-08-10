@@ -11,6 +11,7 @@ import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
+import com.example.sirenorder.vo.ProductVO;
 import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
 import com.example.sirenorder.vo.Store_productJoinProductVO;
@@ -28,6 +29,11 @@ public interface Biz<Id, Model> {
 	
 	@Transactional 
 	default public String getLastId() {
+		return null;
+	}
+	
+	@Transactional
+	default public ArrayList<Model> getByChainName(String chain_name) throws Exception {
 		return null;
 	}
 

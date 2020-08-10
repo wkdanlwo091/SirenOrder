@@ -94,8 +94,8 @@
 						<form class="form-inline">
 							<div class="form-group"  th:if = "${session.store_name != null}">
 								<label for="connect" style = "font-size: 1.0em;">WebSocket connection:</label>
-								<button id="customConnect" class="btn btn-default" th:value="${session.store_name}" type="submit">Connect</button>
-								<button id="disconnect" class="btn btn-default" type="submit"
+								<button id="customConnect"  class="btn btn-primary mb-2" th:value="${session.store_name}" type="submit">Connect</button>
+								<button id="disconnect"  class="btn btn-primary mb-2" type="submit"
 									disabled="disabled">Disconnect</button>
 							</div>
 						</form>

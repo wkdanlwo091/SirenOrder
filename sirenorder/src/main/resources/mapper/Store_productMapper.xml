@@ -20,7 +20,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	INSERT INTO STORE_PRODUCT VALUES( #{store_product_id}||#{seq}, #{store_id}, #{product_id}, #{store_name}, #{chain_name}, #{product_name})
     </insert>
     
-	<!-- 여기다가 multiple insert 넣기 -->
 	
 	    
     <select id="selectListCnt" resultType = "int">
@@ -77,14 +76,6 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	select STORE_PRODUCT_ID FROM STORE_PRODUCT WHERE rowid=(select max(rowid) from STORE_PRODUCT) 
     </select>
     
-    <insert id = "insertMultiple"  parameterType="list"><!-- java.util.list -->
-	    Insert All 
-	    <foreach collection="list" item="item" index="index">
-	        Into STORE_PRODUCT (store_product_id,store_id, product_id, store_name, chain_name, product_name)
-	         values ('store_product_id'||#{item.seq}, #{item.store_id}, #{item.product_id} ,#{item.store_name},#{item.chain_name},#{item.product_name})
-	    </foreach>
-	    select * from dual
-	</insert>
 	
 	<delete id="deleteMultiple" parameterType="java.util.List">
 	    DELETE FROM STORE_PRODUCT

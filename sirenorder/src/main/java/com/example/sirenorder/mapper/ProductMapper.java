@@ -9,4 +9,5 @@ public interface ProductMapper {
 	public String selectProduct_id(String product_name);
 	public int selectListCnt(String chain_name);
 	public ArrayList<ProductVO> selectProductList(String chain_name, int startList, int listSize);
+	public  ArrayList<ProductVO> selectByChainName(String chain_name);
 }

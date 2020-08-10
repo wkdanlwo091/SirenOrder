@@ -166,7 +166,7 @@
 							<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">
 								<!-- pagination.endPage == 0이면 페이지가 한개 존재 하는 것이므로 아예 출력을 하지 않는다.  -->
 								<li class="page-item" th:if ="${pagination.endPage != 0}" th:classapend="${pagination.page == idx ? 'active' : ''}">
-									<a class="page-link" href="#"
+									<a class="page-link" href="#"  th:style=" ${idx == pagination.page} ? 'color:red' : 'color:#337ab7'"
 									th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}' )|"
 									th:text="${idx}"> ${idx} </a>
 								</li>

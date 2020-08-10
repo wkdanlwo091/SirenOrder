@@ -15,6 +15,11 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 		FROM PRODUCT
 		WHERE PRODUCT_ID = #{product_id}
     </select>
+    <select id="selectByChainName" resultType="product">
+		SELECT * 
+		FROM PRODUCT
+		WHERE CHAIN_NAME = #{chain_name}
+    </select>
     
     <select id="selectListCnt" resultType = "int">
     	SELECT count(*) as listCnt from product where chain_name = #{chain_name}

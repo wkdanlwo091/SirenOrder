@@ -22,6 +22,13 @@ public class ProductDao implements Dao<String,ProductVO>{
 	public String selectProduct_id(String product_name) {
 		return productmapper.selectProduct_id(product_name);
 	}
+	
+	@Override
+	public ArrayList<ProductVO> selectByChainName(String chain_name) throws Exception {
+		return productmapper.selectByChainName(chain_name);
+	}
+	
+
 	@Override
 	public void deleteProduct(ProductVO product) {
 	}
