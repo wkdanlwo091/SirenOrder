@@ -156,8 +156,8 @@ public class OwnerController {
 	}
 	
 	// 상점에 아이템을 추가한다. 다중으로 받아 올 수 있다.	
-	@RequestMapping(value = "/addItemAndDelete.html", method = RequestMethod.POST) 																			// return한다.
-	public ModelAndView addItemPost(HttpServletRequest request,  String[] product_names) throws Exception {
+	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST) 																			// return한다.
+	public ModelAndView addItemToStore(HttpServletRequest request,  String[] product_names) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -201,9 +201,6 @@ public class OwnerController {
 		
 		
 		
-		Scanner scan = new Scanner(System.in);
-		scan.next();
-		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
@@ -214,10 +211,9 @@ public class OwnerController {
 		return model;
 	}
 	
-	
-	 // 상점의 아이템을 지운다. 	
-	@RequestMapping(value = "/addItemToStore.html", method = RequestMethod.POST)																			// return한다.
-	public ModelAndView addItemToStore(HttpServletRequest request, ProductNames productNames) throws Exception {
+	// 상점의 아이템을 지운다. 	
+	@RequestMapping(value = "/excludeItem.html", method = RequestMethod.POST)																			// return한다.
+	public ModelAndView excludeItem(HttpServletRequest request, @RequestParam List<String> selected) throws Exception {
 		HttpSession httpSession = request.getSession();
 		ModelAndView model = new ModelAndView();
 		String users_id = (String) httpSession.getAttribute("userId");
@@ -232,17 +228,9 @@ public class OwnerController {
 			return model;
 		}
 		
-		//만들 아이템을 넣는다. 
-		Store_productVO store_productVO = new Store_productVO();
-		
-		store_productVO.setStore_product_id("store_product_id");
-		store_productVO.setStore_id("store_id");
-		store_productVO.setProduct_id("store_product_id");
-		store_productVO.setStore_name("store_name");
-		store_productVO.setChain_name("chain_name");
-		store_productVO.setProduct_name("product_name");
-		store_productbiz.register(store_productVO);
-		
+		//삭제할 store_product item의 제품명을 넣는다. 
+		System.out.println(selected);
+		store_productbiz.deleteMultiple(selected);
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));
 		model.addObject("product_name", new ProductNames());

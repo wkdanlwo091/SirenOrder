@@ -15,5 +15,6 @@ public interface Store_productMapper {
 	public ArrayList<Store_productJoinProductVO> selectProductListJoin(String store_name, int startList, int listSize);
 	public void deleteStore_productByProduct_name(String product_name);
 	public String selectLastId();
+	public void deleteMultiple(List<String> lists);
 	
 }

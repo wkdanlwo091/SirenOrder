@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.sirenorder.frame.Dao;
 import com.example.sirenorder.mapper.ProductMapper;
@@ -26,6 +27,11 @@ public class Store_productDao implements Dao<String, Store_productVO>{
 	public String selectLastId() {
 		return store_productMapper.selectLastId();
 	}
+	@Override
+	public void deleteMultiple(List<String> lists) throws Exception {
+		store_productMapper.deleteMultiple(lists);
+	}
+
 	@Override
 	public void insert(Store_productVO store_productVO) {
 		// TODO Auto-generated method stub

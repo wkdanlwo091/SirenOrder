@@ -85,5 +85,14 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	    </foreach>
 	    select * from dual
 	</insert>
-    
+	
+	<delete id="deleteMultiple" parameterType="java.util.List">
+	    DELETE FROM STORE_PRODUCT
+	    <where>
+	    <foreach collection="list" item="item" open="" close="" separator="OR">
+	        (PRODUCT_NAME = #{item}  )
+	    </foreach>
+	    </where>
+	</delete>
+	
 </mapper>

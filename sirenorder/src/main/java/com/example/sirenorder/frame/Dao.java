@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
@@ -28,6 +30,8 @@ public interface Dao<Id, Model> {
 	}
 	default public String selectLastId() {
 		return null;
+	}
+	default public void deleteMultiple(List<String> lists) throws Exception {
 	}
 
 	default public void insertMultiple(List<Model> m)  {

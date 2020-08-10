@@ -37,6 +37,9 @@ public interface Biz<Id, Model> {
 	@Transactional
 	default public void registerMultiple(List<Model> m) throws Exception  {
 	}
+	@Transactional
+	default public void deleteMultiple(List<String> lists) throws Exception {
+	}
 
 	@Transactional 
 	default public void updatePoint_rate(Model m) throws Exception {

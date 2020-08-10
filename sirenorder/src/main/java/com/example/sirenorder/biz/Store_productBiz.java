@@ -34,6 +34,13 @@ public class Store_productBiz implements Biz<String, Store_productVO>{
 		// TODO Auto-generated method stub
 		dao.insert(store_productVO);
 	}
+	
+	@Override
+	public void deleteMultiple(List<String> lists) throws Exception {
+		// TODO Auto-generated method stub
+		dao.deleteMultiple(lists);
+	}
+	
 	@Override
 	public void registerMultiple(List<Store_productVO> lists) throws Exception {
 		// TODO Auto-generated method stub
