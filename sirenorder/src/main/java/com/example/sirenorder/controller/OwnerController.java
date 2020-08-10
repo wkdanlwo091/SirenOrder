@@ -173,24 +173,26 @@ public class OwnerController {
 		}
 		//만들 아이템을 넣는다. 
 
+		String lastId = store_productbiz.getLastId();
+		String seq_number = lastId.substring("store_product_id".length(), lastId.length());//시퀸스 id 값 ex) store_product50 의  50을 가져온다. 
+		
+
+		int lastSeq = Integer.parseInt(seq_number) ;
+
 		List<Store_productVO> lists = new ArrayList<Store_productVO>();
 
 		for(int i =0 ;i < product_names.length;i++) {
 			//string split을 하여
 			Store_productVO store_productVO = new Store_productVO();
-
-			System.out.println(product_names);
-			
-			System.out.println(product_names[i]);
 			
 			String [] example = product_names[i].split("-");
-			System.out.println(example[0]);
 			store_productVO.setStore_product_id(example[0]); 
 			store_productVO.setStore_id(example[1]); 
 			store_productVO.setProduct_id(example[2]);
 			store_productVO.setStore_name(example[3]); 
 			store_productVO.setChain_name(example[4]);
 			store_productVO.setProduct_name(example[5]); 
+			store_productVO.setSeq(++lastSeq);// sequence number를 넣다. // 가장 근래의 store_product_id 보다 1큰 것 집어 넣는다. 
 
 			lists.add(store_productVO);
 		}

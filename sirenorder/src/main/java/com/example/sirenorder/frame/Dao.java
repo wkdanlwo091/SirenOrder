@@ -4,12 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.common.Pagination;
-import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.PaginationOwner;
-import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
 import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.Store_nameAndDate;
@@ -30,6 +26,10 @@ public interface Dao<Id, Model> {
 	default public void updateRole(Model m) {
 		
 	}
+	default public String selectLastId() {
+		return null;
+	}
+
 	default public void insertMultiple(List<Model> m)  {
 	}
 

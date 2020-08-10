@@ -25,6 +25,12 @@ public interface Biz<Id, Model> {
 	@Transactional 
 	default public void update(Model id) throws Exception{
 	}
+	
+	@Transactional 
+	default public String getLastId() {
+		return null;
+	}
+
 	@Transactional 
 	default public void updateRole(Model m) {
 	}

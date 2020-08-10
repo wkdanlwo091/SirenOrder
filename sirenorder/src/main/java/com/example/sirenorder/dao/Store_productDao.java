@@ -23,6 +23,10 @@ public class Store_productDao implements Dao<String, Store_productVO>{
 		return null;
 	}
 	@Override
+	public String selectLastId() {
+		return store_productMapper.selectLastId();
+	}
+	@Override
 	public void insert(Store_productVO store_productVO) {
 		// TODO Auto-generated method stub
 		store_productMapper.insert(store_productVO);

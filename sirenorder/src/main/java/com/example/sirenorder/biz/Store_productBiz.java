@@ -26,6 +26,10 @@ public class Store_productBiz implements Biz<String, Store_productVO>{
 		return null;
 	}
 	@Override
+	public String getLastId() {
+		return dao.selectLastId();
+	}
+	@Override
 	public void register(Store_productVO store_productVO) throws Exception {
 		// TODO Auto-generated method stub
 		dao.insert(store_productVO);
