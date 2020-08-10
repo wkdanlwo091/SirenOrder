@@ -11,6 +11,26 @@
 $(function(){
 	//product 리스트를 받아온다. 
 	var mine = /*[[${product}]]*/ 'default'; 
+	var chainListSize=  /*[[${chain_product.size()}]]*/ 'default'; 
+	var arr = document.getElementById("productDelete");
+	var products =[];
+	
+	//store에 있는 상품 가져오기 
+	for(var i = 0 ;i < arr.length; i++){
+		products.push(arr.options[i].value);
+	}
+	
+	//store에 넣을 상품 중 store에 이미 있는 것들 지우기 
+	
+	var select = document.getElementById("productAdd");
+	alert(select.options[0].value.split("-")[1]);
+	for (var i=0; i<select.length; i++) {
+		if(products.includes(select.options[i].value.split("-")[1])){
+			alert(select.options[i].value);
+	        select.remove(i);
+		}
+	}
+
 });
 </script>
 
@@ -59,7 +79,7 @@ $(function(){
 					    	<form action="/addItemToStore.html" method = "post"  >
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택 </label>
-								    <select class="form-control" name = "product_names" multiple  ><!-- products 는 ArrayList 에 들어간다  -->
+								    <select id = "productAdd" class="form-control" name = "product_names" multiple  ><!-- products 는 ArrayList 에 들어간다  -->
 								      <option  th:each="prod : ${chain_product}" 
 								      	th:value = "${ prod.product_id + '-' + 
 								      	prod.product_name + '-' + prod.chain_name}" th:text="${prod.product_name}">
@@ -91,7 +111,7 @@ $(function(){
 					    	<form action="/excludeItem.html" method = "post">
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택</label>
-								    <select name="selected"  class="form-control"  multiple="multiple">
+								    <select id = "productDelete" name="selected"  class="form-control"  multiple="multiple">
 								      <option  th:each="prod : ${product}" th:value = "${prod.product_name}" th:text="${prod.product_name}"></option>
 								    </select>
 						    	</div>
