@@ -15,19 +15,14 @@ $(function(){
 	var chainListSize=  /*[[${chain_product.size()}]]*/ 'default'; 
 	var arr = document.getElementById("productDelete");
 	var products =[];
-	
 	//store에 있는 상품 가져오기 
 	for(var i = 0 ;i < arr.length; i++){
 		products.push(arr.options[i].value);
 	}
-	
-
 	for(var i = 0 ;i < arr.length; i++){
 		if(products.includes($("#productAdd option:contains('"+ products[i] +"')").text()) == true ) 
 			$("#productAdd option:contains('"+ products[i] +"')").remove();
-
 	}
-	
 });
 </script>
 

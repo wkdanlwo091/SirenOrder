@@ -4,10 +4,21 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+import com.example.sirenorder.fileupload.FileUploadProperties;
 
 @SpringBootApplication
 @MapperScan("com.example.sirenorder.mapper")
+
+
+//아래의 것은 파일 업로드 클래스를 불러온다. 
+@EnableConfigurationProperties({
+    FileUploadProperties.class
+})
+ 
+
 public class SirenorderApplication  extends SpringBootServletInitializer{// extends 한 것은 aws에서 돌리려면 필요해서
 	public static void main(String[] args) {
 		SpringApplication.run(SirenorderApplication.class, args);

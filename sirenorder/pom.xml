@@ -133,6 +133,25 @@
 
 		</dependency>
 
+
+	<!-- 파일 업로드 -->
+	
+
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-configuration-processor</artifactId>
+		<optional>true</optional>
+	</dependency>
+	
+	<!-- 바로 아래의 dependency는 파일 업로드 한다고 올린 것 -->
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-configuration-processor</artifactId>
+		<optional>true</optional>
+	</dependency>
+	
+	
 	</dependencies>
 	<build>
 		<plugins>

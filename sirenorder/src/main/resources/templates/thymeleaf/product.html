@@ -107,7 +107,7 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 										</th:block>	
 									</div>
 									<div th:unless = "${pagination.startPage != 1 and pagination.endPage != 0}">
-										<div>no data</div>
+										<div>end</div>
 									</div>
 									<li th:if="${pagination.next}" class="page-item">
 										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|">next
