@@ -115,7 +115,7 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<div th:if = "${session.store_name != null}">
-							    	<span style="font-size: 1.0em"  th:text="${session.store_name + ' 점주'  }">chain 대표</span><!-- 어느 chain대표  -->
+							    	<span style="font-size: 1.0em"  th:text="${session.store_name + ' owner'  }">chain 대표</span><!-- 어느 chain대표  -->
 								</div>
 								<div th:unless = "${session.store_name != null}">
 							    	<span style="font-size: 1.0em" > 체인,지점 승인 대기 중</span><!-- 어느 chain대표  -->

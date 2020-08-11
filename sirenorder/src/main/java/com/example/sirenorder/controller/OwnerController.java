@@ -217,18 +217,14 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;// 로그인 첫 페이지로 /index.html
 		}
-		
 		if (role != null) {
 		} else {
 			model.setViewName("redirect:/main.html");
 			return model;
 		}
 		//만들 아이템을 넣는다. 여러개 넣기 
-
 		String store_id = storebiz.getStore_id((String) httpSession.getAttribute("store_name"));
 		String store_name = (String) httpSession.getAttribute("store_name");
-
-		List<Store_productVO> lists = new ArrayList<Store_productVO>();
 
 		for(int i =0 ;i < product_names.length;i++) {
 			//string split을 하여
@@ -238,18 +234,22 @@ public class OwnerController {
 			store_productVO.setProduct_id(example[0]);
 			store_productVO.setProduct_name(example[1]); 
 			store_productVO.setChain_name(example[2]);
-			store_productVO.setStore_product_id(""); 
+			store_productVO.setStore_product_id("store_product_id"); 
 			store_productVO.setStore_id(store_id); 
 			store_productVO.setStore_name(store_name); 
 			store_productbiz.register(store_productVO);;
 		}
 		
-		
-		
-		
 		// 스토어 이름 기반으로 상품 리스트를 가져왔다.
 		//chain에서 point_rate 가져와야 한다. 
 		ChainVO chainVO = chainbiz.getByChain_name(	store_name.split("_")[0]);
+		
+		//이것은 체인이 가지고 있는 물품 
+		String chain_name = ((String) httpSession.getAttribute("store_name")).split("_")[0];
+		ArrayList<ProductVO> chainList = productbiz.getByChainName(chain_name);
+		model.addObject("chain_product", chainList);
+
+		
 		
 		model.addObject("point_rate", chainVO.getPoint_rate());
 		ArrayList<Store_productVO> list = store_productbiz.getByStore_name((String) httpSession.getAttribute("store_name"));

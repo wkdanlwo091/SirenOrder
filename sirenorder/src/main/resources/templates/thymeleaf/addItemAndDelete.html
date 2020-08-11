@@ -8,6 +8,7 @@
 </head>
 
 <script th:inline="javascript">// th:inline 항상 필요하다. 
+
 $(function(){
 	//product 리스트를 받아온다. 
 	var mine = /*[[${product}]]*/ 'default'; 
@@ -20,17 +21,13 @@ $(function(){
 		products.push(arr.options[i].value);
 	}
 	
-	//store에 넣을 상품 중 store에 이미 있는 것들 지우기 
-	
-	var select = document.getElementById("productAdd");
-	alert(select.options[0].value.split("-")[1]);
-	for (var i=0; i<select.length; i++) {
-		if(products.includes(select.options[i].value.split("-")[1])){
-			alert(select.options[i].value);
-	        select.remove(i);
-		}
-	}
 
+	for(var i = 0 ;i < arr.length; i++){
+		if(products.includes($("#productAdd option:contains('"+ products[i] +"')").text()) == true ) 
+			$("#productAdd option:contains('"+ products[i] +"')").remove();
+
+	}
+	
 });
 </script>
 
@@ -74,12 +71,11 @@ $(function(){
 						    	<input type="submit" value="Submit"  class="btn btn-primary mb-2" >
 					    	</form>
 					    	 -->
-
 					    	<h3 th:text = "${session.store_name + ' 에 상품 추가'}" >지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
 					    	<form action="/addItemToStore.html" method = "post"  >
 						    	<div class="form-group">
 								    <label for="product_names">다중 선택 </label>
-								    <select id = "productAdd" class="form-control" name = "product_names" multiple  ><!-- products 는 ArrayList 에 들어간다  -->
+								    <select id = "productAdd" class="form-control" name = "product_names" multiple="multiple"  ><!-- products 는 ArrayList 에 들어간다  -->
 								      <option  th:each="prod : ${chain_product}" 
 								      	th:value = "${ prod.product_id + '-' + 
 								      	prod.product_name + '-' + prod.chain_name}" th:text="${prod.product_name}">
