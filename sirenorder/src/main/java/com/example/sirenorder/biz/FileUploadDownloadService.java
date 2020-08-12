@@ -66,6 +66,8 @@ public class FileUploadDownloadService {
         }
     }
     
+    
+    //db에 있는 파일을 불러온다.
     public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileLocation.resolve(fileName).normalize();
@@ -80,6 +82,4 @@ public class FileUploadDownloadService {
             throw new FileDownloadException(fileName + " 파일을 찾을 수 없습니다.", e);
         }
     }
-
-
 }

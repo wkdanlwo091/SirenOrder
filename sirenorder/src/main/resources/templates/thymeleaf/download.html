@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+</head>
+<script>
+
+	function fn_downloadFile(obj){ 
+		var idx = obj.parent().find("#IDX").val(); 
+		var comSubmit = new ComSubmit(); 
+		comSubmit.setUrl("<c:url value='/common/downloadFile.do' />"); 
+		comSubmit.addParam("IDX", idx); 
+		comSubmit.submit(); 
+	}
+
+	$("a[name='file']").on("click", function(e){ //파일 이름
+		e.preventDefault();
+		fn_downloadFile($(this));
+	});
+	
+<body>
+	<div>
+		<label>Siren-order 안드로이드 apk 파일: 최종 수정일 : </label>
+		<a href = "" name="file" class="btn btn-primary mb-2">다운로드</a>
+		</div>
+</body>
+</html>

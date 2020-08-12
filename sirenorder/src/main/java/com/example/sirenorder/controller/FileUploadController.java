@@ -112,5 +112,13 @@ public class FileUploadController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
+    
+    @GetMapping("/download.html")
+    public ModelAndView downloadHtml(HttpServletRequest request){
+		ModelAndView model = new ModelAndView();
+		model.setViewName("thymeleaf/downloadmain");
+		model.addObject("download", "yes");
+		return model;// id 없다.
+    }
 }
  

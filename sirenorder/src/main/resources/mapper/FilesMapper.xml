@@ -11,7 +11,9 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	</selectKey>
     	INSERT INTO FILES VALUES( #{seq}, #{files_name} ,#{files_size}, #{regdate})
     </insert>
-	
-	<select id = "select"></select>
-
+	<select id = "selectLast" resultType="files"><!--  -->
+		select *
+	  	from files
+		where files_id = ( select max(files_id) from files )
+	</select>
 </mapper>
