@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.example.sirenorder.biz.FileUploadDownloadService;
 import com.example.sirenorder.fileupload.FileUploadResponse;
 
@@ -48,13 +45,22 @@ public class FileUploadController {
 		return model;// id 없다.
 	}
 	
+	//여기서 db에 apk 파일을 업로드 한다. 
     @PostMapping("/uploadFile")
     public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    	
+    	
+    	//파일을 디비에 저장하는 서비스  dao는 사용 안한다. 
         String fileName = service.storeFile(file);
+        
+        
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                                 .path("/downloadFile/")
                                 .path(fileName)
                                 .toUriString();
+        //file이 잘 올라 갔는지에 대한 response는 object로 돌려준다. 만약 실패면 alert 한다. 
+        
+        
         
         return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }

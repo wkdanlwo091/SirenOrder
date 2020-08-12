@@ -16,11 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.sirenorder.fileupload.FileDownloadException;
 import com.example.sirenorder.fileupload.FileUploadException;
 import com.example.sirenorder.fileupload.FileUploadProperties;
+import com.example.sirenorder.mapper.FilesMapper;
+import com.example.sirenorder.vo.FilesVO;
 
 @Service
 public class FileUploadDownloadService {
     private final Path fileLocation;
     
+	@Autowired
+	FilesMapper fileMapper;
+
     @Autowired
     public FileUploadDownloadService(FileUploadProperties prop) {
         this.fileLocation = Paths.get(prop.getUploadDir()).toAbsolutePath().normalize();
@@ -37,12 +42,23 @@ public class FileUploadDownloadService {
             // 파일명에 부적합 문자가 있는지 확인한다.
             if(fileName.contains(".."))
                 throw new FileUploadException("파일명에 부적합 문자가 포함되어 있습니다. " + fileName);
-            System.out.println("1");
             Path targetLocation = this.fileLocation.resolve(fileName);
-            System.out.println("2");
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            //여기서 db에다가 파일 저장 
+            file.getSize();//이게 데이터를 db에다가 넣는다. 
             
-            System.out.println("3");
+            
+            //files에 넣을 시간 구하기 
+            long millis=System.currentTimeMillis();  
+            java.sql.Date regDate=new java.sql.Date(millis);  
+
+            FilesVO filesVO = new FilesVO();
+            filesVO.setFiles_name(fileName);
+            filesVO.setFiles_size(file.getSize());
+            filesVO.setRegdate(regDate);
+            
+            fileMapper.insert(filesVO);
+            
             return fileName;
         }catch(Exception e) {
         	e.printStackTrace();

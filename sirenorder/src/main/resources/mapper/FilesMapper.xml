@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.sirenorder.mapper.FilesMapper">
+	<insert id="insert">
+    	<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+    		select files_seq.nextval as seq from dual
+    	</selectKey>
+    	INSERT INTO FILES VALUES( #{seq}, #{files_name} ,#{files_size}, #{regdate})
+    </insert>
+	
+	<select id = "select"></select>
+
+</mapper>
