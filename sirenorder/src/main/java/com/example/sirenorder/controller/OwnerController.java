@@ -603,8 +603,6 @@ public class OwnerController {
 		
 		model.addObject("from", dateFrom);//시작일
 		model.addObject("to", dateTo);// 마침일을 incomeChart의 datepicker 입력창에 넣어준다. 
-		
-		
 		model.addObject("ja", ja);// javascript에서 string으로 받는다.
 		model.addObject("message", "exist");
 		model.addObject("incomeChart", "clicked");

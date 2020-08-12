@@ -248,6 +248,7 @@ public class UserController {
 		model.setViewName("thymeleaf/ownermain");
 		return model;
 	}
+	
 	@RequestMapping("/adminprofile.html") // 내 정보 보기
 	public ModelAndView adminprofile(HttpServletRequest request) {
 		HttpSession httpSession = request.getSession();

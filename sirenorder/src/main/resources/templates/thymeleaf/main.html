@@ -61,9 +61,9 @@ $(function() {
 			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
 		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
 		  },
-            error: function(result){
+          error: function(result){
             	alert("error 는" + result);
-            }
+          }
 	});
 	
 	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 

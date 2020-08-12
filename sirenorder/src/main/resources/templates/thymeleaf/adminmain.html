@@ -68,8 +68,8 @@
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="adminmain.html" class="active" ><i class="lnr lnr-home"></i> <span>회원보기</span></a></li>
-						<li><a href="application.html" class="active" ><i class="lnr lnr-home"></i> <span>어플리케이션 배포</span></a></li>
+						<li><a href="adminmain.html" class = "active"><i class="lnr lnr-home"></i> <span>회원보기</span></a></li>
+						<li><a href="applications.html" ><i class="lnr lnr-home"></i> <span>어플리케이션 배포</span></a></li>
 					</ul>
 				</nav>
 			</div>
@@ -79,11 +79,11 @@
 		<div class="main">
 		<!-- 기본으로 주문하기가 들어가있다. -->
 		<!-- profile에 나의정보가 있다. -->
-		
-			<div th:if="${usercheck != null}"><div th:replace="/thymeleaf/usercheck"></div></div>
+			<div th:if="${usercheck != null}"><div th:replace="/thymeleaf/usercheck "></div></div>
 		    <div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
-		    
+		    <div th:if="${applications != null}"><div th:replace="/thymeleaf/applications"></div></div>
 		</div>
+		
 		<!-- END MAIN -->
 		<div class="clearfix"></div>
 	</div>
@@ -96,5 +96,4 @@
 	<script src="assets/vendor/chartist/js/chartist.min.js"></script>
 	<script src="assets/scripts/klorofil-common.js"></script>
 </body>
-
 </html>

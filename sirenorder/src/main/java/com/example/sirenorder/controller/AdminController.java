@@ -31,8 +31,9 @@ public class AdminController {
 	public ModelAndView login(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
 		
-		model.addObject("search", "clicked");
-		model.addObject("usercheck", "clicked");
+		System.out.println("adminmain came");
+		model.addObject("usercheck", "clicked");//usercheck.html을 띄우기
+		model.addObject("search", "clicked");//usercheck 안에 있는 search object 할당
 		model.setViewName("thymeleaf/adminmain");
 
 		return model;// id 없다.
