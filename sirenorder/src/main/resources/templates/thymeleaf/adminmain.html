@@ -22,6 +22,28 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 </head>
 
+<script th:inline="javascript">
+
+	$(function (){
+		
+		//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
+		var usercheck = /*[[${usercheck}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+		var applications =/*[[${applications}]]*/ 'default';
+		
+		
+		if(usercheck == "clicked"){
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";
+		}
+		
+		if(applications == "clicked"){
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
+		}
+
+		
+	})
+
+</script>
+
 <body>
 	<!-- WRAPPER -->
 	<div id="wrapper">
@@ -68,8 +90,8 @@
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="adminmain.html" class = "active"><i class="lnr lnr-home"></i> <span>회원보기</span></a></li>
-						<li><a href="applications.html" ><i class="lnr lnr-home"></i> <span>어플리케이션 배포</span></a></li>
+						<li><a href="adminmain.html"  class=""><i class="lnr lnr-home"></i> <span>회원보기</span></a></li>
+						<li><a href="applications.html" class=""><i class="lnr lnr-home"></i> <span>어플리케이션 배포</span></a></li>
 					</ul>
 				</nav>
 			</div>
