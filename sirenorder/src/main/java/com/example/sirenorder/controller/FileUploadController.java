@@ -47,7 +47,23 @@ public class FileUploadController {
 	
 	//여기서 db에 apk 파일을 업로드 한다. 
     @PostMapping("/uploadFile")
-    public FileUploadResponse uploadFile(@RequestParam("file") MultipartFile file) {
+    public String  uploadFile(@RequestParam("file") MultipartFile file) {
+    	
+    	//파일을 디비에 저장하는 서비스  dao는 사용 안한다. 
+        String fileName = service.storeFile(file);
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                .path("/downloadFile/")
+                                .path(fileName)
+                                .toUriString();
+        //file이 잘 올라 갔는지에 대한 response는 object로 돌려준다. 만약 실패면 alert 한다. 
+        return "redirect:/adminmain.html";
+    }
+    
+    /*
+     * 
+     * 아래의 것은 멀티 파일 업로딩을 위한 것 본인은 한개만 업로드 한다. 
+      @PostMapping("/uploadFile")
+    public FileUploadResponse  uploadFile(@RequestParam("file") MultipartFile file) {
     	
     	
     	//파일을 디비에 저장하는 서비스  dao는 사용 안한다. 
@@ -61,17 +77,17 @@ public class FileUploadController {
         //file이 잘 올라 갔는지에 대한 response는 object로 돌려준다. 만약 실패면 alert 한다. 
         
         
-        
+		//return "/adminmain.html";
+
         return new FileUploadResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
-    
+
+     * 
     @PostMapping("/uploadMultipleFiles")
     public List<FileUploadResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files){
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
+        return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
     }
+    */
     
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
