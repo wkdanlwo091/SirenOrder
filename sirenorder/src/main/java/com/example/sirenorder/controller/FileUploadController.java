@@ -1,10 +1,9 @@
 package com.example.sirenorder.controller;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,13 +20,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import com.example.sirenorder.biz.FileUploadDownloadService;
-import com.example.sirenorder.fileupload.FileUploadResponse;
+import com.example.sirenorder.mapper.FilesMapper;
+import com.example.sirenorder.vo.FilesVO;
 
 @Controller
 public class FileUploadController {
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
     
+    
+	@Autowired
+	FilesMapper fileMapper;
+
     @Autowired
     private FileUploadDownloadService service;
     
@@ -89,9 +93,10 @@ public class FileUploadController {
     }
     */
     
-    @GetMapping("/downloadFile/{fileName:.+}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+    @GetMapping("/downloadFile")
+    public ResponseEntity<Resource> downloadFile( HttpServletRequest request){
          // Load file as Resource
+    	String fileName = "app-release.apk";
         Resource resource = service.loadFileAsResource(fileName);
  
         // Try to determine file's content type
@@ -116,6 +121,10 @@ public class FileUploadController {
     @GetMapping("/download.html")
     public ModelAndView downloadHtml(HttpServletRequest request){
 		ModelAndView model = new ModelAndView();
+		
+		//여기서 파일의 마지막 수정일 올린다. 
+		FilesVO filesVO = fileMapper.selectLastByPk();
+		model.addObject("date", filesVO.getRegdate() );
 		model.setViewName("thymeleaf/downloadmain");
 		model.addObject("download", "yes");
 		return model;// id 없다.
