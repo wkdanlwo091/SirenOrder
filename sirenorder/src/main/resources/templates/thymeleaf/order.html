@@ -5,7 +5,9 @@
 <title>Insert title here</title>
 </head>
 
-<!-- 체인점 검색, 매장 검색 하는 페이지 by javascript -->
+<!-- 체인점 검색, 매장 검색 하는 페이지 by javascript 
+store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다. 
+-->
 <body>
 	<form id = "toOrderPageId" action = "product.html"><!--  -->
 		<input type='hidden' name='chain_name' value='hidden' />
@@ -59,11 +61,14 @@
             dataType: "json",
             success: function(data){
             	$('th').empty();
+            	if(data.length){
+            		alert("찾으시는 지점이 없습니다.");
+            	}
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"btn btn-primary\" class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"btn btn-primary\" class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "제한거리 : " +"</button> </td></tr>");
                 }
-                console.log(data[0]);
+                
             },
             error: function(data){
             	alert("찾으시는 체인이 없습니다.");

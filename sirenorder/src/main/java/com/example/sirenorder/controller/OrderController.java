@@ -61,6 +61,22 @@ public class OrderController {
 	@Autowired
 	private SimpMessagingTemplate template;//서버에서 메시지를 보내는 변수 websocket stomp
 	
+	//a,b 의 위도 경도를 가지고 두 거리를 meter로 나타낸다. 
+	
+	
+	 public static float distFrom(float lat1, float lng1, float lat2, float lng2) {
+		    double earthRadius = 6371000; //meters
+		    double dLat = Math.toRadians(lat2-lat1);
+		    double dLng = Math.toRadians(lng2-lng1);
+		    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+		               Math.sin(dLng/2) * Math.sin(dLng/2);
+		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		    float dist = (float) (earthRadius * c);
+
+		    return dist;
+	}
+	
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST) // 가게 이름을 return 한다.
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
@@ -75,6 +91,11 @@ public class OrderController {
 		
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
 		
+		for(int i = 0 ; i < arrList.size();i++) { 
+			//store와 user의 거리 미터로 나타낸 것을 limit에 넣는다. 물론 limit은 다른의미다. 잠시 사용할 뿐이다. 변수를 최소화 하기 위해서 이다. 
+			arrList.get(i).getGps_latitude();
+			arrList.get(i).getGps_longtitude();
+		}
 		
 		if(option.equals("location")) {
 			for(int i = 0; i< arrList.size();i++) {
