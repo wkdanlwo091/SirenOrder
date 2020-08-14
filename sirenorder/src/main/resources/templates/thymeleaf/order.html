@@ -5,7 +5,6 @@
 <title>Insert title here</title>
 </head>
 
-
 <!-- 체인점 검색, 매장 검색 하는 페이지 by javascript -->
 <body>
 	<form id = "toOrderPageId" action = "product.html"><!--  -->
@@ -13,63 +12,47 @@
 		<input type='hidden' name='store_name' value='hidden' />
 	</form>
 <script>
-
-	var lat;
-	var longti;
-	
-	function getLocation() {
-	  if (navigator.geolocation) {
-	    navigator.geolocation.getCurrentPosition(showPosition);
-	  } else { 
-	    alert("현재 브라우져에서는 위치 지원이 안됩니다.");
-	  }
-	}
-
-	function showPosition(position) {
-		 lat = position.coords.latitude; 
-		 longti = position.coords.longitude;
-		$(".nav.navbar-nav.navbar-left").text( "위도 : " + lat + "경도 : " + longti);
-		
-		
-		//여기서 서버에 위도 경도 보내준다 
-	}
-
-	$(function (){
-		//gps로 내 위치 설정하기 
-		if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
-			//gps 설정
-			getLocation();
-			
-		} else {
-			  // Do nothing!
-		}
-	});
-	
 	var tmp;
 	function getProduct(chain_name, store_name){//체인의 상점의 물품을 가져오기 위해서 form 태그로 서버에 보낸다. 
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
     	document.getElementById("toOrderPageId").submit();
 	}
-	
-	</script>
+</script>
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색(체인명)">
-		<span class="input-group-btn"><button id="searchId" type="button" class="btn btn-primary">Go</button></span>
+		<span class="input-group-btn">
+			<button id="searchId" type="button" class="btn btn-primary">
+				Go
+			</button>
+			
+		</span>
+	</div>
+	<div class="input-group" style = "width:50%">
+		<div style = "float: right;">
+			<label for="cars" >정렬 옵션 : </label>
+				  <select name="sort" id="sortOptionId">
+				    <option value="none">미 선택</option>
+				    <option value="location">가장 가까운곳</option>
+			</select>
+		</div>
 	</div>
 		<div .table-responsive style = "width:50%">
 	  		<table border="1" class = "table table-bordered table-hover" >
 				<th>매장명</th>
 	    	</table>
 		</div>
+		
 	<script>
-
-	$(function(){
-		
-		
-	});
 	$("#searchId").on("click", function(){
-		data = "chain=" + $('#searchStoreId').val().toLowerCase();
+		
+		var e = document.getElementById("sortOptionId");
+		
+		var option = e.options[e.selectedIndex].value;
+		alert(option);
+		data = "chain=" + $('#searchStoreId').val().toLowerCase() +
+		" &option=" + option +"&latitude=" + sessionStorage.lat + "&longtitude=" + sessionStorage.longti;
+		
 		$.ajax({
             url: "searchStore",
             type: "POST",

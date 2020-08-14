@@ -2,17 +2,19 @@ package com.example.sirenorder.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Scanner;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,7 +31,6 @@ import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.CartVO;
 import com.example.sirenorder.vo.ChainVO;
 import com.example.sirenorder.vo.OrdersVO;
-import com.example.sirenorder.vo.Orders_detailIdMessage;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.PointList;
@@ -64,7 +65,44 @@ public class OrderController {
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
 		String chain = request.getParameter("chain").trim();// 검색 했을 때 뒤에 오는 스페이스를 자르기
+		String option = request.getParameter("option");// 정렬 선택
+		
+		//위도 경도
+		String latitude = request.getParameter("latitude");
+		String longtitude = request.getParameter("longtitude");
+		double latitudeDouble = Double.parseDouble(latitude);
+		double longtitudeDouble = Double.parseDouble(longtitude);
+		
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
+		
+		System.out.println(latitude + " " + longtitude + " " + option);
+		
+		Thread.sleep(2000);
+
+		
+		if(option.equals("location")) {
+			for(int i = 0; i< arrList.size();i++) {
+				arrList.get(i).setDifference(latitudeDouble - arrList.get(i).getGps_latitude() + 
+						longtitudeDouble - arrList.get(i).getGps_longtitude());
+			}
+			
+			Comparator<StoreVO> compareById = new Comparator<StoreVO>() {
+			    @Override
+			    public int compare(StoreVO o1, StoreVO o2) {
+			        if (o1.getDifference() < o2.getDifference()) return -1;
+			        if (o1.getDifference() > o2.getDifference()) return 1;
+			        return 0;
+			    }
+			};
+			
+			Collections.sort(arrList, compareById);
+		}else {
+			
+		}
+		
+		
+		
+		
 		if (arrList.size() == 0) {
 			//System.out.println("찾는 가게가 없습니다.");
 		} else {

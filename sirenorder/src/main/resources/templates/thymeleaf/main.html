@@ -26,6 +26,10 @@
 <script th:inline="javascript">//script for product list 
 var myProduct= 5;
 
+//위도 경도 
+var lat;
+var longti;
+
 $(function() {
 	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
 	//장바구니 정보 refresh한다. 
@@ -86,7 +90,48 @@ $(function() {
 		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
 		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
 	}
+	
+	
+	
+     
+	//gps 및 session  설정
+	//websession 설정
+	
+	if(typeof(Storage) !== "undefined") {
+	    if (sessionStorage.lat) {
+			//sessionStorage에 위도 경도가 있으면 출력 
+			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
+	    } else {
+	    	//gps로 내 위치 설정하기 
+	    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
+	    	//gps 설정
+	    		getLocation();
+	    	} else {
+	    		// Do nothing!
+	    	}
+	    }
+	} else {
+		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
+	  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+	}
+
 });
+
+//현재 gps 위치 보여주기 
+function getLocation() {
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(showPosition);
+	  } else { 
+		  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
+	  }
+}
+
+function showPosition(position) {
+	sessionStorage.lat = position.coords.latitude; 
+	sessionStorage.longti = position.coords.longitude;
+	//위도 경도 설정
+	$(".nav.navbar-nav.navbar-left").text( "위도 : " + sessionStorage.lat + "경도 : " + sessionStorage.longti);
+}
 
 function addToCart(product_name,store_name,chain_name,price){
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
@@ -173,9 +218,14 @@ function minusToCart(product_name,store_name, chain_name,price){
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>
 				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-left"  style=" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
+					<ul class="nav navbar-nav navbar-left"  style ="  margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						
 					</ul>
+					
+					<ul class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
+						<button class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
+					</ul>
+					
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
