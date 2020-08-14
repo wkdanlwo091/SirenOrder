@@ -13,12 +13,45 @@
 		<input type='hidden' name='store_name' value='hidden' />
 	</form>
 <script>
+
+	var lat;
+	var longti;
+	
+	function getLocation() {
+	  if (navigator.geolocation) {
+	    navigator.geolocation.getCurrentPosition(showPosition);
+	  } else { 
+	    alert("현재 브라우져에서는 위치 지원이 안됩니다.");
+	  }
+	}
+
+	function showPosition(position) {
+		 lat = position.coords.latitude; 
+		 longti = position.coords.longitude;
+		$(".nav.navbar-nav.navbar-left").text( "위도 : " + lat + "경도 : " + longti);
+		
+		
+		//여기서 서버에 위도 경도 보내준다 
+	}
+
+	$(function (){
+		//gps로 내 위치 설정하기 
+		if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
+			//gps 설정
+			getLocation();
+			
+		} else {
+			  // Do nothing!
+		}
+	});
+	
 	var tmp;
 	function getProduct(chain_name, store_name){//체인의 상점의 물품을 가져오기 위해서 form 태그로 서버에 보낸다. 
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
     	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
     	document.getElementById("toOrderPageId").submit();
 	}
+	
 	</script>
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색(체인명)">
