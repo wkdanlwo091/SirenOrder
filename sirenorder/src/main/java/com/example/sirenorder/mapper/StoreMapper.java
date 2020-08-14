@@ -11,4 +11,5 @@ public interface StoreMapper {
 	public ArrayList<StoreVO> selectchain(String name);
 	public String selectStore_id(String store_name);
 	public void updateAllPoint_rate(StoreVO storeVO);
+	public void changeLatLong(StoreVO storeVO);
 }

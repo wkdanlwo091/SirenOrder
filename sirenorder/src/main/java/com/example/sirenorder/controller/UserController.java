@@ -1,9 +1,9 @@
 package com.example.sirenorder.controller;
 
-import java.util.Scanner;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.example.sirenorder.frame.Biz;
+import com.example.sirenorder.vo.StoreVO;
 import com.example.sirenorder.vo.UserVO;
 
 @Controller
@@ -19,6 +21,8 @@ public class UserController {
 
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
+	@Resource(name = "storebiz")
+	Biz<String, StoreVO> storebiz;
 
 //아래거 작동한다. 	
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -313,6 +317,26 @@ public class UserController {
 		return "fail";
 	}
 	
+	//위도 경도 변경
+	@RequestMapping(value = "changeLatLong", method = RequestMethod.POST)
+	@ResponseBody
+	public String changeLatLong(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		
+		System.out.println("changeLatLong");
+		String latitude = (String) request.getParameter("latitude");
+		String longtitude = (String) request.getParameter("longtitude");
+		StoreVO storeVO = new StoreVO();
+		System.out.println(latitude + " "+ longtitude);
+		storeVO.setGps_latitude(Double.parseDouble(latitude));
+		storeVO.setGps_longtitude(Double.parseDouble(longtitude));
+		storeVO.setStore_name((String) httpSession.getAttribute("store_name"));
+		storebiz.changeLatLong(storeVO);
+		
+		return "success";
+	}
+	
+
 	@RequestMapping(value = "quitProfile", method = RequestMethod.POST)
 	public String quitProfile(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();

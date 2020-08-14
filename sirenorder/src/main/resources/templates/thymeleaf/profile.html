@@ -2606,10 +2606,18 @@ body {
 							<!-- Nav tabs -->
 							<ul class="nav nav-tabs" role="tablist">
 								<li role="presentation" class="active">
-								<a href="#home" aria-controls="home" role="tab" data-toggle="tab">Update</a></li>
-								<li role="presentation">
-								<a href="#profile" id="profileId" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+									<a href="#home" aria-controls="home" role="tab" data-toggle="tab">Update</a>
 								</li>
+								
+								<li role="presentation">
+									<a href="#profile" id="profileId" aria-controls="profile" role="tab" data-toggle="tab">Profile</a>
+								</li>
+								
+								<!-- owner gps set -->
+								<li th:if = "${session.owner != null}"  role="presentation">
+									<a href="#gps" id="gpsId" aria-controls="gps" role="tab" data-toggle="tab">gps set</a>
+								</li>
+								
 							</ul>
 
 							<!-- Tab panes -->
@@ -2642,12 +2650,13 @@ body {
 									</form>
 									
 									
-									<button type="submit" class="btn btn-default" id="updateId">제출하기</button>
-									<button onclick = "checkPassword()" form = "quitProfileTestId" type="submit" class="btn btn-default" id="quitId">탈퇴하기</button>
+									<button type="submit" class="btn btn-primary mb-2"   id="updateId">제출하기</button>
+									<button onclick = "checkPassword()" form = "quitProfileTestId" type="submit" class="btn btn-primary mb-2" id="quitId">탈퇴하기</button>
 									<form action="quitProfile" method = "POST" id = "quitProfileTestId">
 									</form>
 									
 								</div>
+								
 								<div role="tabpanel" class="tab-pane" id="profile">
 									<div class="form-group">
 										<label for="Name">Name : </label>
@@ -2662,6 +2671,17 @@ body {
 										<label for="role">role : </label>
 									</div>
 								</div>
+								
+								<div th:if = "${session.owner != null}"  role="tabpanel" class="tab-pane" id="gps">
+									<div class="latitude">
+										<label for="latitude">위도 : <span id = "latitudeId"></span></label>
+									</div>
+									<div class="longtitude">
+										<label for="longtitude">경도 : <span id = "longtitudeId"></span></label>
+									</div>
+									<button id = "longlatId" class="btn btn-primary mb-2">변경하기</button>
+								</div>
+								
 							</div>
 						</div>
 					</div>
@@ -2670,6 +2690,48 @@ body {
 		</div>
 
 		<script>
+		
+			//위도 경도 변경 
+			$("#longlatId").on("click", function(){
+		        $.ajax({
+		            url: "changeLatLong",
+		            type: "POST",
+		            data : 'latitude='+ sessionStorage.lat  +  "&longtitude=" + sessionStorage.longti ,
+		            success: function(data){
+		            	if(data == "success"){
+		            		alert("gps 값 변경되었습니다. ");
+		            	}
+		            },
+		            error: function(){
+		                alert("simpleWithObject err");
+		            }
+		        });
+			});
+
+			
+			
+			$(function (){
+				getLocation();
+				$("#latitudeId").text(sessionStorage.lat);
+				$("#longtitudeId").text(sessionStorage.longti);
+			});
+			//위도 경도 설정 
+			function getLocation() {
+				  if (navigator.geolocation) {
+				    navigator.geolocation.getCurrentPosition(showPosition);
+				  } else { 
+					  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
+				  }
+			}
+	
+			function showPosition(position) {
+				sessionStorage.lat = position.coords.latitude; 
+				sessionStorage.longti = position.coords.longitude;
+				//위도 경도 설정
+			}
+
+		
+		
 			function checkPassword(){
 				var txt;
 				var password = prompt("비밀번호를 입력하세요:");

@@ -114,10 +114,12 @@ public interface Biz<Id, Model> {
 	default public String getProduct_id(String product_name) throws Exception{
 		return  null;
 	}
+	
 	@Transactional
 	default public int getListCnt(String chain_name) {
 		return (Integer) null;
 	}
+	
 	@Transactional
 	default public ArrayList<Model> getProductList(String chain_name, int startList, int listSize) {
 		return  null;
@@ -137,14 +139,17 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getByDateFromTo(String users_id, Date firstDate, Date secondDate){
 		return null;
 	}
+	
 	@Transactional
 	default public ArrayList<Model> getOrders_detailByOrdersId(String orders_id ){
 		return null;
 	}
+	
 	@Transactional
 	default public ArrayList<Point_storeJoinStoreVO> getByDateFromToJoin(String users_id, Date firstDate, Date secondDate)  {
 		return null;
 	}
+	
 	@Transactional
 	default public ArrayList<Store_productJoinProductVO> getProductListJoin(String store_name, int startList, int listSize)  {
 		return null;
@@ -154,14 +159,17 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Model> getOrders_detailByStore_name(String store_name ) throws Exception {
 		return null;
 	}
+	
 	@Transactional
 	default public ArrayList<Point_storeJoinStoreVO> getByUsers_id(String users_id ) throws Exception {
 		return null;
 	}
+	
 	@Transactional
 	default public int getOrders_detailCntByStore_name(String store_name) { 
 		return (Integer)null;
 	}
+	
 	@Transactional
 	default public ArrayList<Model> getOrders_detailJoinProductByStore_name(PaginationOwner pagination){
 		
@@ -172,16 +180,20 @@ public interface Biz<Id, Model> {
 	default public ArrayList<Integer> getIncomeByStore_nameDay(Store_nameAndDate a) { 
 		return null;
 	}
+	
 	@Transactional
 	default public ArrayList<SumAndOrders_date> getIncomeBystore_nameDayRange(Store_nameAndDate a) { 
 		return null;
 	}
+	
 	@Transactional
 	default public String getStore_id(String store_name) {
 		return null;
 	}
-
-
+	
+	@Transactional
+	default public void changeLatLong(Model storeVO) { 
+	}
 
 	public Model get(Id id);
 	public ArrayList<Model> get();

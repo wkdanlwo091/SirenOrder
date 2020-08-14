@@ -218,11 +218,13 @@ function minusToCart(product_name,store_name, chain_name,price){
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>
 				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-left"  style ="  margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
+				
+					<!-- gps는 main에서만 출력  -->
+					<ul th:if = "${order != null}" class="nav navbar-nav navbar-left"  style ="  margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						
 					</ul>
 					
-					<ul class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
+					<ul th:if = "${order != null}" class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						<button class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
 					</ul>
 					

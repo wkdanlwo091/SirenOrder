@@ -142,5 +142,9 @@ public interface Dao<Id, Model> {
 
 	public ArrayList<Model> selectall();
 
+	default public void changeLatLong(Model storeVO) {
+		
+	}
+
 
 }

@@ -21,6 +21,10 @@ public class StoreDao implements Dao<String,StoreVO>{
 		return storemapper.select(name);
 	}
 	
+	public void changeLatLong(StoreVO storeVO) { 
+		storemapper.changeLatLong(storeVO);
+	}
+
 	@Override
 	public void updateAllPoint_rate(StoreVO storeVO) {
 		storemapper.updateAllPoint_rate(storeVO);

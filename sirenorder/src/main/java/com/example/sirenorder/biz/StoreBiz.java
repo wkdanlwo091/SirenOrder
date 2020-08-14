@@ -21,6 +21,13 @@ public class StoreBiz implements Biz<String, StoreVO> {
 		// TODO Auto-generated method stub
 		return dao.select(name);
 	}
+	
+	@Override
+	public void changeLatLong(StoreVO storeVO) { 
+		dao.changeLatLong(storeVO);
+	}
+
+
 	@Override
 	public void register(StoreVO storeVO) throws Exception {
 		// TODO Auto-generated method stub

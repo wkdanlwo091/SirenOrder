@@ -75,10 +75,6 @@ public class OrderController {
 		
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
 		
-		System.out.println(latitude + " " + longtitude + " " + option);
-		
-		Thread.sleep(2000);
-
 		
 		if(option.equals("location")) {
 			for(int i = 0; i< arrList.size();i++) {
@@ -86,7 +82,9 @@ public class OrderController {
 						longtitudeDouble - arrList.get(i).getGps_longtitude());
 			}
 			
+			//오름차순이다. 
 			Comparator<StoreVO> compareById = new Comparator<StoreVO>() {
+				
 			    @Override
 			    public int compare(StoreVO o1, StoreVO o2) {
 			        if (o1.getDifference() < o2.getDifference()) return -1;
