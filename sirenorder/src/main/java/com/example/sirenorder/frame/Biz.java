@@ -194,6 +194,9 @@ public interface Biz<Id, Model> {
 	@Transactional
 	default public void changeLatLong(Model storeVO) { 
 	}
+	@Transactional
+	default public void updateLimit(Model storeVO) { 
+	}
 
 	public Model get(Id id);
 	public ArrayList<Model> get();

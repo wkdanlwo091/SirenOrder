@@ -20,9 +20,14 @@ public class StoreDao implements Dao<String,StoreVO>{
 	public StoreVO select(String name) {
 		return storemapper.select(name);
 	}
-	
+	@Override
 	public void changeLatLong(StoreVO storeVO) { 
 		storemapper.changeLatLong(storeVO);
+	}
+	
+	@Override
+	public void updateLimit(StoreVO storeVO) { 
+		storemapper.updateLimit(storeVO);
 	}
 
 	@Override

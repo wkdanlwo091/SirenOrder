@@ -2617,6 +2617,11 @@ body {
 								<li th:if = "${session.owner != null}"  role="presentation">
 									<a href="#gps" id="gpsId" aria-controls="gps" role="tab" data-toggle="tab">gps set</a>
 								</li>
+
+								<!-- owner gps set -->
+								<li th:if = "${session.owner != null}"  role="presentation">
+									<a href="#distance" id="distanceId" aria-controls="distance" role="tab" data-toggle="tab">주문 거리 지정</a>
+								</li>
 								
 							</ul>
 
@@ -2682,6 +2687,13 @@ body {
 									<button id = "longlatId" class="btn btn-primary mb-2">변경하기</button>
 								</div>
 								
+								<div th:if = "${session.owner != null}"  role="tabpanel" class="tab-pane" id="distance">
+									<div class="latitude">
+										<label for="distance">주문 거리 제한 : 단위(미터 :)<input id = "distanceLimitId"></span></label>
+									</div>
+									<button id = "distanceChangeId" class="btn btn-primary mb-2">변경하기</button>
+								</div>
+								
 							</div>
 						</div>
 					</div>
@@ -2709,12 +2721,30 @@ body {
 			});
 
 			
+			//주문 거리 제한 설정 
+			$("#distanceChangeId").on("click", function(){
+		        $.ajax({
+		            url: "changeDistanceLimit",
+		            type: "POST",
+		            data : 'limit='+ $("#distanceLimitId").val()  ,
+		            success: function(data){
+		            	if(data == "success"){
+		            		alert("주문 거리 제한 변경 되었습니다. ");
+		            	}
+		            },
+		            error: function(){
+		                alert("simpleWithObject err");
+		            }
+		        });
+			});
+
 			
 			$(function (){
 				getLocation();
 				$("#latitudeId").text(sessionStorage.lat);
 				$("#longtitudeId").text(sessionStorage.longti);
 			});
+			
 			//위도 경도 설정 
 			function getLocation() {
 				  if (navigator.geolocation) {
@@ -2776,6 +2806,7 @@ body {
 					profileIdClicked++;
 				}
 			});
+		
 		///below is when you update user info, then it updates user info in usercontroller
 		$("#updateId").on("click", function(){
 			if(document.forms['updateForm'].elements[0].value == ''

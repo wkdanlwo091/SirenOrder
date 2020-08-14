@@ -12,4 +12,5 @@ public interface StoreMapper {
 	public String selectStore_id(String store_name);
 	public void updateAllPoint_rate(StoreVO storeVO);
 	public void changeLatLong(StoreVO storeVO);
+	public void updateLimit(StoreVO storeVO);
 }

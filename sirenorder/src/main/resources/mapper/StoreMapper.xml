@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     	</selectKey>
 		INSERT INTO STORE 
 		VALUES(#{store_id}||#{seq}, #{store_name}, #{chain_id}, #{chain_name},
-		#{gps_latitude}, #{gps_longtitude}, #{point_rate})
+		#{gps_latitude}, #{gps_longtitude}, #{point_rate}, #{limit})
     </insert>
     
     <select id="selectall" resultType="store">
@@ -50,5 +50,10 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 			GPS_LONGTITUDE = #{gps_longtitude}
 		WHERE STORE_NAME  = #{store_name}
     </update>
-    
+
+    <update id="updateLimit" >
+		UPDATE STORE
+		SET LIMIT = #{limit} 
+		WHERE STORE_NAME  = #{store_name}
+    </update>
 </mapper>

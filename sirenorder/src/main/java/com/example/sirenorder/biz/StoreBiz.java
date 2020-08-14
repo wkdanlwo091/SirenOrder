@@ -26,6 +26,10 @@ public class StoreBiz implements Biz<String, StoreVO> {
 	public void changeLatLong(StoreVO storeVO) { 
 		dao.changeLatLong(storeVO);
 	}
+	@Override
+	public void updateLimit(StoreVO storeVO) { 
+		dao.updateLimit(storeVO);
+	}
 
 
 	@Override

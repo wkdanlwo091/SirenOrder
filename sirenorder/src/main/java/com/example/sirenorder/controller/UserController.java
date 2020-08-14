@@ -173,6 +173,9 @@ public class UserController {
 //		
 //		return "redirect:/?login=fail";//id 없다. 
 //	}
+	
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/idCheck", method = RequestMethod.POST)
 	public int idCheck(@RequestBody UserVO user) {
@@ -336,6 +339,20 @@ public class UserController {
 		return "success";
 	}
 	
+	@RequestMapping(value = "changeDistanceLimit", method = RequestMethod.POST)
+	@ResponseBody
+	public String changeDistanceLimit(HttpServletRequest request) throws Exception {
+		HttpSession httpSession = request.getSession();
+		
+		String limit = (String) request.getParameter("limit");
+		StoreVO storeVO = new StoreVO();
+		storeVO.setLimit(Integer.parseInt(limit));
+		storeVO.setStore_name((String) httpSession.getAttribute("store_name"));
+		storebiz.updateLimit(storeVO); 
+		
+		return "success";
+	}
+
 
 	@RequestMapping(value = "quitProfile", method = RequestMethod.POST)
 	public String quitProfile(HttpServletRequest request) throws Exception {

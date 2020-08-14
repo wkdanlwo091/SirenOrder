@@ -145,6 +145,9 @@ public interface Dao<Id, Model> {
 	default public void changeLatLong(Model storeVO) {
 		
 	}
+	default public void updateLimit(Model storeVO) {
+		
+	}
 
 
 }
