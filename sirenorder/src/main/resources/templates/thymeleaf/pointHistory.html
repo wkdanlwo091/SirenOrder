@@ -72,23 +72,6 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 		url = url + "&none=" + endDate;
 		location.href = url;
 	}
-    var j = jQuery.noConflict();// jquery 중복 문제 때문에 $(…).datepicker is not a function 문제가 생겼다. 이를 해결하기 위해서 사용하였다. 
-	  j( function() {
-		    var dateFormat = "yyyy-mm-dd";
-		    var from = j( "#from" )
-		        .datepicker({
-		          defaultDate: "+1w",
-		          changeMonth: true,
-		          changeYear: true,
-		          numberOfMonths: 1
-		        }) 
-		    var to = j( "#to" ).datepicker({
-		        defaultDate: "+1w",
-		        changeMonth: true,
-		        changeYear: true,
-		        numberOfMonths: 1
-		      }) 
-	  	} );
     
     	function submitOrdersHistoryDate(){
     		var startDate = $('#from').val();
@@ -138,7 +121,8 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
 										</li>
 										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	<!-- thymeleaf에서 startPage 번호부터 endPage 번호까지 진행됨  -->
 												<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-													<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')|" th:text="${idx}"> ${idx} 
+													<!-- 현재 인덱스는 빨간색으로 지정 -->
+													<a  th:style=" ${idx == pagination.page} ? 'color:red' : 'color:#337ab7'"  class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}')|" th:text="${idx}"> ${idx} 
 													</a>
 												</li>
 										</th:block>	
@@ -156,19 +140,14 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
     <!-- jquery plugins here-->
     <!-- <script src="js/jquery-1.12.1.min.js"></script> --> <!-- 이거 없어도 작동하더라 -->
     <!-- popper js -->
+    <!--  
     <script src="js/popper.min.js"></script>
-    <!-- bootstrap js -->
     <script src="js/bootstrap.min.js"></script>
-    <!-- easing js -->
     <script src="js/jquery.magnific-popup.js"></script>
-    <!-- swiper js -->
     <script src="js/swiper.min.js"></script>
-    <!-- swiper js -->
     <script src="js/masonry.pkgd.js"></script>
-    <!-- particles js -->
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.nice-select.min.js"></script>
-    <!-- slick js -->
     <script src="js/slick.min.js"></script>
     <script src="js/jquery.counterup.min.js"></script>
     <script src="js/waypoints.min.js"></script>
@@ -178,6 +157,6 @@ function fn_prev(page, range, rangeSize ) {// 7, 7, 6
     <script src="js/mail-script.js"></script>
     <script src="js/stellar.js"></script>
     <script src="js/price_rangs.js"></script>
-    <!-- custom js -->
     <script src="js/custom.js"></script>
+    --> 
 </html>

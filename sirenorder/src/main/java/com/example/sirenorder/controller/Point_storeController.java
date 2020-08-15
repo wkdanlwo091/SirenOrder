@@ -113,12 +113,12 @@ public class Point_storeController {
 				return model;
 			}
 			
-			System.out.println("start");
-			System.out.println(beforeFromState);
-			System.out.println(beforeToState);
-			System.out.println(currentFromState);
-			System.out.println(currentToState);
-			System.out.println("done");
+			
+			/*
+			 * System.out.println("start"); System.out.println(beforeFromState);
+			 * System.out.println(beforeToState); System.out.println(currentFromState);
+			 * System.out.println(currentToState); System.out.println("done");
+			 */			
 			
 			if (beforeFromState.equals(currentFromState) && beforeToState.equals(currentToState)) // 전의 스테이트 현재 스테이트 같으면
 			{// 같은 시작일, 끝일에 페이지네이션을 사용한 경우 들어온다.
