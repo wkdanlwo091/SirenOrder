@@ -60,7 +60,7 @@ store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다
 			<label for="cars" >정렬 옵션 : </label>
 				  <select name="sort" id="sortOptionId">
 				    <option value="none">미 선택</option>
-				    <option value="location">가장 가까운곳</option>
+				    <option value="location">거리 기준</option>
 			</select>
 		</div>
 	</div>
@@ -86,7 +86,7 @@ store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다
             dataType: "json",
             success: function(data){
             	$('th').empty();
-            	
+            	alert("searchStore return ");
             	if(!data.length){
             		alert("찾으시는 지점이 없습니다.");
             	}

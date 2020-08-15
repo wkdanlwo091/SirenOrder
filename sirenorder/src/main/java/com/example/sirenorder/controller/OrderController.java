@@ -92,7 +92,7 @@ public class OrderController {
 		}
  
 	 
-	 
+	// 가게 거리를 기준으로 정렬 하고 본인의 gps 거리를 나타낸다. 
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST) // 가게 이름을 return 한다.
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
@@ -105,7 +105,7 @@ public class OrderController {
 		double latitudeDouble = Double.parseDouble(latitude);
 		double longtitudeDouble = Double.parseDouble(longtitude);
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
-		
+
 		for(int i = 0 ; i < arrList.size();i++) { 
 			//store와 user의 거리 미터로 나타낸 것을 limit에 넣는다. 물론 limit은 다른의미다. 잠시 사용할 뿐이다. 변수를 최소화 하기 위해서 이다. 
 			arrList.get(i).
@@ -115,9 +115,13 @@ public class OrderController {
 		}
 		
 		if(option.equals("location")) {
+			System.out.println("hahah");
 			for(int i = 0; i< arrList.size();i++) {
-				arrList.get(i).setDifference(latitudeDouble - arrList.get(i).getGps_latitude() + 
-						longtitudeDouble - arrList.get(i).getGps_longtitude());
+				arrList.get(i).setDifference(Math.abs(latitudeDouble - arrList.get(i).getGps_latitude() + 
+						longtitudeDouble - arrList.get(i).getGps_longtitude()));
+			}
+			for(int i = 0; i< arrList.size();i++) {
+				System.out.println(arrList.get(i).getDifference() + " " + arrList.get(i).getStore_name());
 			}
 			
 			//오름차순이다. 
