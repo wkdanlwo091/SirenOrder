@@ -57,6 +57,13 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 		location.href = url;
 	}
 
+	
+	//아래 4줄의 코드는 pagenation의 css 에러를 막기 위한 코드다. 
+	$(function(){
+		var temp = $("#pagenationCssId").contents();
+		$("#pagenationCssId").replaceWith(temp);
+	})
+	
 </script>
 <body>
     <!--================Category Product Area =================-->
@@ -98,7 +105,12 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 										<a class="page-link" href="#" th:attr="onClick=|fn_prev('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|">Prev
 										</a>
 									</li>
-									<div th:if = "${pagination.startPage != 1 and pagination.endPage != 0}">
+									
+									<!-- 바로 아래 구문은 페이지가 한개 인데도 1,0 페이지 (에러인 상황) 을 막기 위한 것 -->
+									<div id = "pagenationCssId" th:if = "${pagination.startPage == 1 and pagination.endPage == 0}">
+										<div>end</div>
+									</div>
+									<div id = "pagenationCssId" th:unless = "${pagination.startPage == 1 and pagination.endPage == 0 }">
 										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}"><!-- 1 0 이다.   -->
 											<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
 												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|" th:text="${idx}"> ${idx} 
@@ -106,9 +118,8 @@ function fn_prev(page, range, rangeSize, chain_name, store_name) {// 7, 7, 6
 											</li>
 										</th:block>	
 									</div>
-									<div th:unless = "${pagination.startPage != 1 and pagination.endPage != 0}">
-										<div>end</div>
-									</div>
+									
+									
 									<li th:if="${pagination.next}" class="page-item">
 										<a class="page-link" href="#" th:attr="onClick=|fn_next('${pagination.page}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}', '${store_name}')|">next
 										</a>

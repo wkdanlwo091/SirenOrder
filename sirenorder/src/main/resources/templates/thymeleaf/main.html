@@ -72,11 +72,12 @@ $(function() {
 	
 	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
 	var order = /*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var product = /*[[${product}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
 	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
 	var pointHistory= /*[[${pointHistory}]]*/ 'default';
 	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
 	
-	if(order == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
+	if(order == "clicked" || product == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
 	
 	if(currentOrderStatus == "clicked"){
 		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";

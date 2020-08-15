@@ -62,8 +62,8 @@ public class Point_storeController {
 		model.setViewName("thymeleaf/points");
 		return model;
 	}
-	
-	@RequestMapping(value = "pointHistory.html", method = RequestMethod.GET)//pointHistory에 처음 들어왔을 때, 페이지네이션으로 범위검색 했을 때 
+	//pointHistory에 처음 들어왔을 때, 페이지네이션으로 범위검색 했을 때
+	@RequestMapping(value = "pointHistory.html", method = RequestMethod.GET) 
 	public ModelAndView pointHistorybefore(HttpServletRequest request,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date from,
 			@DateTimeFormat(pattern = "yyyy-MM-dd") @RequestParam(required = false) Date to,
@@ -81,6 +81,10 @@ public class Point_storeController {
 			// 맨 처음 페이지에 들어왔을 때
 			model.addObject("from", "");// 페이지에 orders_hitory 안 내놓기 위해
 			model.addObject("to", "");//
+			
+			Pagination pagination = new Pagination();
+			model.addObject("pagination", pagination);
+			
 		} else {
 			// 같은 시작일 마침일 내에서 페이지네이션을 했을 경우   ex) 6월 1일 부터 7월 1일 까지 데이터가 많아서 페이지네이션이 된 경우 
 			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// 프론트의 자바스크립트에 날짜 표시하는 것

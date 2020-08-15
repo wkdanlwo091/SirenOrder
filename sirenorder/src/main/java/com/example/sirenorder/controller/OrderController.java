@@ -62,8 +62,6 @@ public class OrderController {
 	private SimpMessagingTemplate template;//서버에서 메시지를 보내는 변수 websocket stomp
 	
 	//a,b 의 위도 경도를 가지고 두 거리를 meter로 나타낸다. 
-	
-	
 	 public static float distFrom(float lat1, float lng1, float lat2, float lng2) {
 		    double earthRadius = 6371000; //meters
 		    double dLat = Math.toRadians(lat2-lat1);
@@ -77,6 +75,24 @@ public class OrderController {
 		    return dist;
 	}
 	
+		@RequestMapping(value = "limitCheck", method = RequestMethod.POST) // 가게 이름을 return 한다.
+		@ResponseBody
+		public String limitCheck(HttpServletRequest request) throws Exception {
+			System.out.println("limitCheck came");
+			String limit = request.getParameter("limit");
+			String store_name = request.getParameter("store_name");
+			int storeLimit = storebiz.get(store_name).getLimit();
+			System.out.println(" 가게 limit은 " +  storeLimit + " 본인 거리는 "+ limit);
+			if(Integer.parseInt(limit) > storeLimit) {
+				System.out.println("fail");
+				return "fail";
+			}
+			System.out.println("success");
+			return "success";
+		}
+ 
+	 
+	 
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST) // 가게 이름을 return 한다.
 	@ResponseBody
 	public Object searchStore(HttpServletRequest request) throws Exception {
@@ -88,13 +104,14 @@ public class OrderController {
 		String longtitude = request.getParameter("longtitude");
 		double latitudeDouble = Double.parseDouble(latitude);
 		double longtitudeDouble = Double.parseDouble(longtitude);
-		
 		ArrayList<StoreVO> arrList = storebiz.getChain(chain);
 		
 		for(int i = 0 ; i < arrList.size();i++) { 
 			//store와 user의 거리 미터로 나타낸 것을 limit에 넣는다. 물론 limit은 다른의미다. 잠시 사용할 뿐이다. 변수를 최소화 하기 위해서 이다. 
-			arrList.get(i).getGps_latitude();
-			arrList.get(i).getGps_longtitude();
+			arrList.get(i).
+			setLimit((int)distFrom((float)arrList.get(i).getGps_latitude(),
+					(float)arrList.get(i).getGps_longtitude(), (float)latitudeDouble, (float)longtitudeDouble));
+			
 		}
 		
 		if(option.equals("location")) {
@@ -113,20 +130,17 @@ public class OrderController {
 			        return 0;
 			    }
 			};
-			
 			Collections.sort(arrList, compareById);
 		}else {
 			
 		}
-		
-		
-		
 		
 		if (arrList.size() == 0) {
 			//System.out.println("찾는 가게가 없습니다.");
 		} else {
 			return arrList;
 		}
+		
 		return "fail";// 로그인 첫 페이지로 /index.html
 	}
 	// checkout 장바구니 보기
@@ -528,6 +542,8 @@ public class OrderController {
 		model.addObject("from", formatter.format(from));// from을 페이지의 datepicker의 ${from} value에 넣기 위함
 		model.addObject("to", formatter.format(to));// to을 페이지의 datepicker의 ${from} value에 넣기 위함
 		//System.out.println("orderHistory에 왔습니다. post");
+		
+		System.out.println(from + " "  + to);
 		ArrayList<Orders_detailVO> detailTemp = null;
 		// 맨 처음 들어온 경우
 		// pagination 첫페이지

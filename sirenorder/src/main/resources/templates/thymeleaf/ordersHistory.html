@@ -21,8 +21,13 @@
     <link rel="stylesheet" href="css/slick.css">
     <!-- style CSS -->
         <!-- date picker전용  -->
+        
+        <!--  
+        	아래의 것 없어도 작동 하는지 체크해봐 
 	  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  
+	  -->
 </head>
 
 <script>
@@ -100,6 +105,7 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 				document.getElementById("OrdersHistoryId").submit();
 			}
     	}
+    	
 </script>
 <body>
         <div class="container">
@@ -118,7 +124,7 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 						<!-- ELSE -->
 							<div th:if="${!from.equals('')}" class="col-lg-4 col-sm-6" th:each="list : ${List}"><!-- from이 시간을 포함할 때 -->
 	                            <div class="single_product_item">
-	                                <img th:src="${list.productVO.image}" alt="" width="333" height="333"><!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
+	                                <img style = " " th:src="${list.productVO.image}" alt="" width="333" height="333"><!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
 	                                <div class="single_product_text">
 	                                    <h4 th:text="${list.productVO.product_name}"></h4>
 	                                    <h4 th:text="${list.price}"></h4>
@@ -135,7 +141,7 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
 										</li>
 										<th:block th:each="idx : ${#numbers.sequence( pagination.startPage ,   pagination.endPage )}">	
 											<li class="page-item" th:classapend="${pagination.page == idx ? 'active' : ''}">
-												<a class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
+												<a th:style=" ${idx == pagination.page} ? 'color:red' : 'color:#337ab7'" class="page-link" href="#" th:attr="onclick=|fn_pagination('${idx}', '${pagination.range}', '${pagination.rangeSize}', '${chain_name}')|" th:text="${idx}"> ${idx} 
 												</a>
 											</li>
 										</th:block>	
@@ -150,8 +156,12 @@ function fn_prev(page, range, rangeSize, chain_name ) {// 7, 7, 6
             </div>
         </div>
 </body>
-    <!-- jquery plugins here-->
-    <script src="js/jquery-1.12.1.min.js"></script>
+
+	<!--  
+		아래의 것 없어도 작동하는 지 체크해봐 
+	    <script src="js/jquery-1.12.1.min.js"></script>
+	-->	
+	
     <!-- popper js -->
     <script src="js/popper.min.js"></script>
     <!-- bootstrap js -->

@@ -4,23 +4,48 @@
 <meta charset="utf-8">
 <title>Insert title here</title>
 </head>
-
 <!-- 체인점 검색, 매장 검색 하는 페이지 by javascript 
 store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다. 
 -->
+
 <body>
+
 	<form id = "toOrderPageId" action = "product.html"><!--  -->
 		<input type='hidden' name='chain_name' value='hidden' />
 		<input type='hidden' name='store_name' value='hidden' />
 	</form>
+	
 <script>
 	var tmp;
-	function getProduct(chain_name, store_name){//체인의 상점의 물품을 가져오기 위해서 form 태그로 서버에 보낸다. 
-    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
-    	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
-    	document.getElementById("toOrderPageId").submit();
+	
+	function getProduct(chain_name, store_name, limit){//체인의 상점의 물품을 가져오기 위해서 form 태그로 서버에 보낸다. 
+		var data = "store_name="+ store_name + "&limit=" + limit;
+		
+		//ajax로 거리 제한 체크 한다. 
+		$.ajax({
+            url: "limitCheck",
+            type: "POST",
+            data: data,
+            success: function(data){
+            	
+            	if(data == "success"){//거리가 정상 거리 일 때
+                	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(1)").value = chain_name;//chain_name
+                	document.querySelector("#toOrderPageId > input[type=hidden]:nth-child(2)").value = store_name;//store_name
+                	document.getElementById("toOrderPageId").submit();
+            	}else if(data = "fail"){
+					alert("주문이 불가한 거리입니다.");
+					return;
+            	}
+            	
+            },
+            error: function(data){
+            	alert("찾으시는 체인이 없습니다.");
+            }
+        });
+		
 	}
 </script>
+
 	<div class="input-group" style = "width:50%">
 		<input id = "searchStoreId" type="text" value="" class="form-control" placeholder="매장검색(체인명)">
 		<span class="input-group-btn">
@@ -61,14 +86,14 @@ store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다
             dataType: "json",
             success: function(data){
             	$('th').empty();
-            	if(data.length){
+            	
+            	if(!data.length){
             		alert("찾으시는 지점이 없습니다.");
             	}
                 for(var i=0; i<data.length; i++){
                 	//<button type="button" onclick="alert('Hello world!')">Click Me!</button>
-                	$('th').append("<tr><td> <button class=\"btn btn-primary\" class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'"   +")\">"+ data[i].store_name + "제한거리 : " +"</button> </td></tr>");
+                	$('th').append("<tr><td> <button class=\"btn btn-primary\" class=\"block\" style=\"width:100%\" type=\"button\" onclick=\"getProduct(" +  "'"  + data[i].chain_name + "','"+ data[i].store_name + "'," + data[i].limit +")\">"+ data[i].store_name + " 거리 차이 : "+ data[i].limit + "m" +"</button> </td></tr>");
                 }
-                
             },
             error: function(data){
             	alert("찾으시는 체인이 없습니다.");

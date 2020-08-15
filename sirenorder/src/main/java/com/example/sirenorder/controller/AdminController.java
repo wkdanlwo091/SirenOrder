@@ -27,6 +27,8 @@ public class AdminController {
 	@Resource(name = "chainbiz")
 	Biz<String, ChainVO> chainbiz;
 
+	
+	//
 	@RequestMapping(value = "/adminmain.html", method = RequestMethod.GET)
 	public ModelAndView login(HttpServletRequest request) {
 		ModelAndView model = new ModelAndView();
@@ -39,6 +41,7 @@ public class AdminController {
 		return model;// id 없다.
 	}
 
+	//사용자 체크 
 	@RequestMapping(value = "/usercheck.html", method = RequestMethod.GET)
 	public ModelAndView usercheck1(HttpServletRequest request, @RequestParam(required = false) String users_id) {
 		ModelAndView model = new ModelAndView();
@@ -90,6 +93,8 @@ public class AdminController {
 		return model;// id 없다.
 	}
 	
+	
+	//owner 정보 업데이트 -->  오너의 chain 과 store 업데이트 한다. 
 	@RequestMapping(value = "updateownerinfo", method = RequestMethod.POST)
     @ResponseBody
 	public String updateownerinfo(HttpServletRequest request,
@@ -133,6 +138,7 @@ public class AdminController {
 			storeVO.setChain_id(chainbiz.getByChain_name(chain_name).getChain_id());
 			storeVO.setChain_name(chain_name);
 			storeVO.setPoint_rate(0.1);
+			storeVO.setLimit(10000);
 			storebiz.register(storeVO);
 			return "success";
 		}

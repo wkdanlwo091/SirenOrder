@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,6 +35,7 @@ public class ProductController {
 	public ModelAndView showProduct(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page , 
 			@RequestParam(required = false, defaultValue = "1") int range ) throws Exception {
+		
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		if(httpSession.getAttribute("userId") == null) {//아이디 로그인 안 했을 시 로그인 해라로 간다. 
@@ -48,9 +48,11 @@ public class ProductController {
 		int listCnt;
 		int startList;
 		int listSize;
+		
 		//스토어에 해당하는 상품을 가져와야 한다. 
-		//banapresso 신촌과 홍대의 판매 item이 다를 수 있다. 
+		//banapresso 신촌과 홍대의 판매 item이 다를 수 있다.  왜나면 store에서 자기 chain의 상품을 store에 할당하기 때문이다. 
 		//따라서 다대다 관계를 위해 store_product를 만들었다.  
+		
 		listCnt = store_productbiz.getListCnt(store_name);
 		//listCnt = productbiz.getListCnt(chain_name);//상품 갯수 가져오기
 		Pagination pagination = new Pagination();
@@ -62,16 +64,16 @@ public class ProductController {
 		model.addObject("pagination", pagination);
 		model.addObject("chain_name", chain_name);
 		model.addObject("store_name", store_name);
-
 		model.addObject("product", "clicked");
-		model.setViewName("thymeleaf/main");
+		
 		if(List.size() == 0) {
-			System.out.println("가게에 물건이 없읍니다.");
 			model.addObject("List", List);
 		}
 		else {
 			model.addObject("List", List);
 		}
+		
+		model.setViewName("thymeleaf/main");
 		return model;
 	}
 	//가게의 판매 물건을 가져오는 컨트롤러이다
