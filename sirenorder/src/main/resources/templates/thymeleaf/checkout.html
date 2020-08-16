@@ -13,7 +13,8 @@
 // 카트에 있는 아이템을 add하거나 minus하면 전체 페이지가 refresh 되고 point 정보도 refresh 된다. 
 //form에 있는 정보도 refresh 된다. 
 var pointsArray = new Array();//포인트 정보 저장 
-var chain_nameDict = {}; 
+
+var chain_nameDict = {};//체인 이름 저장 
 //banapresso 
 
 function cartProductElements(array){//카트에 담긴 상품들을 넣고 총 가격을 계산해서 return 해주는 함수 
@@ -81,7 +82,9 @@ $(function(){//document ready from jQuery
 		});
 });
 
-function addToCartCheckout(product_name,store_name,chain_name,price){//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 이 함수가 실행 될때 마다 포인트 정보도 초기화 
+
+//체크아웃 전용  장바구니 정보와 포인트 정보를 가져와야한다. 이 함수가 실행 될때 마다 포인트 정보도 초기화 
+function addToCartCheckout(product_name,store_name,chain_name,price){
 	//alert(product_name + " " + store_name + " " + price);
 	chain_nameIndex = 0;//초기화
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
@@ -165,31 +168,37 @@ function minusToCartCheckout(product_name,store_name, chain_name,price){//장바
 	
 var chain_nameIndex = 0;
 
+
+//포인트 미사용 사용을 처리 한다. useOrNot이 1이면 사용 0이면 미사용 이다. 
 function userPoint(point, chain_name, point_id,useOrNot){
 	
 	//문제점 물건 수량이 적어지거나 늘어 날 때마다 페이지 refresh 하는데 chain_name index는 그대로이다. 이도 초기화 해야한다. 
+	
 	//point 사용정보를 form의 input태그 hidden에 넣기   point --> 포인트 사용 , 체인 이름, 사용 할 지 안 할지 
+	
 	var chain_namePoint = document.querySelectorAll("[id=\""+ chain_name + "개"+"\"]");//개를 붙인것은 아래에서 chain_name id가 겹쳐서 
+	
+	//총 체인의 총 가격 --> banapresso 홍대 , 신촌 점 여러군데서 주문 가능 
 	var chain_total_price = 0;
+	
+	//querySelectorAll을 기준으로 검색한다. 
 	[].forEach.call( chain_namePoint, function(el) {//체인네임 기준으로 물건의 값을 계산한다. 
 		chain_total_price += parseInt(el.innerHTML);
 	});
 	
-	if(chain_total_price > point){// 체인의 토탈 가격이 포인트보다 높을 때 
-		
-	}else{//체인 총가격이 point 보다 낮을 때 point = point - chain_total_price가 된다. 
-		point = point - chain_total_price;
-	}
+	
 	
 	if($("#"+ chain_name+"").length == 1){//포인트 쓰거나 안쓰거나를 한번 눌렀을 때 element 존재할 때  point를 사용 할 것인지 아닌지 판단
-		if(useOrNot == 1){//사용하기
+		
+		if(useOrNot == 1){//사용하기 이미 사용하기를 누른 상태에서 사용하기 누르면 아무 일도 일어나지 않는다.
 			$("#"+ chain_name).val("1");
 		}
 		else{//미사용하기 
 			$('#strongTotalId').html(parseInt($('#strongTotalId').html())+point);//원래 값으로 돌리기 
 			$("#"+ chain_name).val(0);
 		}
-	}else if($("#"+ chain_name).length == 0){// element 존재 하지 않을 때 point 사용 할 것인지 아닌지 판단
+	
+	}else if($("#"+ chain_name).length == 0){// element 존재 하지 않을 때 point 사용 할 것인지 아닌지 판단 ()
 		var chain_nameNum = "chain_name[" + chain_nameIndex + "]";// chain_name[0]이런식으로 하는 이유는 스프링의 object에서 chain_name[1]이런식으로 받아드리기 때문이다. 
 		var useOrNotNum = "useOrNot[" +chain_nameIndex +"]";
 		var pointNum = "point[" +chain_nameIndex +"]";
@@ -249,10 +258,20 @@ function userPoint(point, chain_name, point_id,useOrNot){
 				$('#buyProductId').append("<input type=\"hidden\" value=\"" +callQuantity+"\" name = \"" + productQuantityNum +"\"  id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
 			});
  */			
+ 
+			if(chain_total_price > point){// 체인의 토탈 가격이 포인트보다 높을 때  
+				$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);
+	 			$("#myPoint").text(0);//포인트 총액
+				//포인트 = 0
+			}else{//체인 토탈 가격이 포인트 보다 낮을 때  체인 토탈 가격 0으로 설정
+				//포인트 = 포인트 - 체인토탈 가격 
+				$("#myPoint").html(point- parseInt($('#strongTotalId').html()));
+				$('#strongTotalId').html('0');
+			}
+ 			$("#myPoint").html(0);//포인트 총액
+ 			
+ 			
 			
-			
-			
-			$('#strongTotalId').html(parseInt($('#strongTotalId').html())-point);//원래 값으로 돌리기 
 		}
 		else{//미사용하기  value=\"yes&"+chain_name+"\"    th:value=\"*{" +chain_name+"}\"
 			$('#buyProductId').append("<input type=\"hidden\" value=\"" +useOrNot+"\" name = \"" + useOrNotNum +"\" id=\""+chain_name +"\"></input>");//포인트 쓸거다라고 하는 것 
@@ -335,7 +354,7 @@ function checkOutCart(){
                 <span>포인트  : </span>	
                 <strong th:th:text = "${data.getChain_name()}" >$20</strong>
 			  	<strong th:text = "${data.getPoint()}"  th:id="|myPoint${iterStat.index}|" >$20</strong>
-			    <button class="btn btn-primary" th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',1, )|" >사용</button>
+			    <button class="btn btn-primary" th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',1)|" >사용</button>
 			    <button class="btn btn-primary" th:attr="onclick=|userPoint(${data.getPoint()}, '${data.getChain_name()}', '${data.getPoint_id()}',0)|" >미사용</button>
               </div>
             </li>

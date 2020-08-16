@@ -120,6 +120,13 @@ $(function() {
 
 });
 
+
+//webSession에 저장된 lat과 longti 즉 위도 경도 삭제하기 
+function removeWebSession(){
+	sessionStorage.removeItem("lat");
+	sessionStorage.removeItem("longti");
+}
+
 //현재 gps 위치 보여주기 
 function getLocation() {
 	  if (navigator.geolocation) {
@@ -223,7 +230,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 				<div id="navbar-menu">
 				
 					<!-- gps는 main에서만 출력  -->
-					<ul th:if = "${order != null}" class="nav navbar-nav navbar-left"  style ="  margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
+					<ul id = "gpsLatLongId" th:if = "${order != null}" class="nav navbar-nav navbar-left"  style ="  margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						
 					</ul>
 					
@@ -246,7 +253,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 							  <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu" style= "background-color:#FFFFFF !important;"> 
 								<li><a href="/profile.html"><i class="lnr lnr-user"></i> <span>나의 정보</span></a></li>
-								<li><a href="/logout.html"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
+								<li><a href="/logout.html" onclick="return removeWebSession();"><i class="lnr lnr-exit"></i> <span>로그아웃</span></a></li>
 							</ul>
 						</li>
 						<!-- <li>

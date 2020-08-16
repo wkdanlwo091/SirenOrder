@@ -90,7 +90,6 @@ public class OrderController {
 			System.out.println("success");
 			return "success";
 		}
- 
 	 
 	// 가게 거리를 기준으로 정렬 하고 본인의 gps 거리를 나타낸다. 
 	@RequestMapping(value = "searchStore", method = RequestMethod.POST) // 가게 이름을 return 한다.
@@ -98,7 +97,6 @@ public class OrderController {
 	public Object searchStore(HttpServletRequest request) throws Exception {
 		String chain = request.getParameter("chain").trim();// 검색 했을 때 뒤에 오는 스페이스를 자르기
 		String option = request.getParameter("option");// 정렬 선택
-		
 		//위도 경도
 		String latitude = request.getParameter("latitude");
 		String longtitude = request.getParameter("longtitude");
@@ -111,7 +109,6 @@ public class OrderController {
 			arrList.get(i).
 			setLimit((int)distFrom((float)arrList.get(i).getGps_latitude(),
 					(float)arrList.get(i).getGps_longtitude(), (float)latitudeDouble, (float)longtitudeDouble));
-			
 		}
 		
 		if(option.equals("location")) {
