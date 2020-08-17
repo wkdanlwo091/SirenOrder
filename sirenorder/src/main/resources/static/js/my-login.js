@@ -82,9 +82,11 @@ $(function() {
 		if(invalid_feedback.length) {
 			$this.after(invalid_feedback.clone());
 		}
+		
 		$this.on("keyup paste", function() {
 			$("#passeye-"+i).val($(this).val());
 		});
+		
 		$("#passeye-toggle-"+i).on("click", function() {
 			if($this.hasClass("show")) {
 				$this.attr('type', 'password');
@@ -98,9 +100,6 @@ $(function() {
 			}
 		});
 	});
-	
-	
-	
 	//비밀번호와 비밀번호 확인이 같은지 다른지를 체크해준다. 
     $('.password-check').focusout(function () {
         var pwd1 = $("#password1").val();
@@ -125,6 +124,18 @@ $(function() {
             	$('form').submit(false);//form을 submit 불가능하게 만든다. 
             }
         }
+        //길이 측정 
+        
+        if ( pwd1.length> 15 || pwd2.length > 15 ) {
+        	alert("비밃번호는 최대 15자리입니다. ")
+        	password_different = 1;
+        	$("#passwordDifferent").html($("#passwordDifferent").html()+ "비밀번호는 최대 15자리 입니다.");
+        	$("#passwordDifferent").css("color", "red");
+        	//div로 뿌려준다. 
+        	$('form').submit(false);//form을 submit 불가능하게 만든다. 
+        } 
+
+        
     });
     
 	$(".my-login-validation").submit(function() {

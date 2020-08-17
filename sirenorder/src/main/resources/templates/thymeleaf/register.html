@@ -30,7 +30,7 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="id" style = "width:10%;	display:inline-block">ID</label>
+									<label for="id"  >ID(핸드폰 11자리 -없이 )</label>
 									
 									<input onfocusout="idOverlap()" id="id" pattern="[0-9]{11}" class="form-control" name="users_id" required>
 									<div id = "wrongOrNot"></div>
@@ -40,14 +40,14 @@
 								</div>
 								<div class = "password-check">
 									<div class="form-group">
-										<label for="password">비밀번호 </label>
+										<label for="password">비밀번호(15자리 이내) </label>
 										<input id="password1" type="password" class="form-control" name="users_password" required data-eye>
 										<div class="invalid-feedback">
 											비밀번호를 입력하세요
 										</div>
 									</div>
 									<div class="form-group">
-										<label for="password">비밀번호 확인</label>
+										<label for="password">비밀번호 확인(15자리 이내)</label>
 										<input id="password2" type="password" class="form-control" name="password" required data-eye>
 										<div class="invalid-feedback">
 											비밀번호를 입력하세요
@@ -55,16 +55,16 @@
 									</div>
 									<div id="passwordDifferent"></div>
 								</div>
-								<div class="form-group">
-								  <label for="male" style = "width:15% !important;text-align:right;" >Male</label>
-								  <input type="radio" id="male" name="sex" value="male" checked="checked">
- 								  <label for="female" style = "width:15% !important;text-align:right;" >Female</label>
-								  <input type="radio" id="female" name="sex" value="female">
+								<div class="form-group" style = "text-align: left"  >
+								  <label for="male" style = "width:20% !important; " >Male</label>
+								  <input  type="radio" id="male" name="sex" value="male" checked="checked" >
+ 								  <label for="female" style = "width:20% !important; " >Female</label>
+								  <input type="radio" id="female" name="sex" value="female" style = "text-align: left">
 								</div>
-								<div class="form-group">
-								  <label for="owner" style = "width:15% !important;text-align:right;">owner</label>
+								<div class="form-group" style = "text-align: left">
+								  <label for="owner" style = "width:20% !important; ">owner</label>
 								  <input type="radio" id="owner" name="role" value="owner"   >
-  								  <label for="user" style = "width:15% !important;text-align:right;">user</label>
+  								  <label for="user" style = "width:20% !important; ">user</label>
 								  <input type="radio" id="user" name="role" value="user" checked = "checked"  >
 								</div>
 								<div class="form-group">
