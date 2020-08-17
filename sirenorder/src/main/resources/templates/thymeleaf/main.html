@@ -49,23 +49,28 @@ $(function() {
 			}else{
 				//alert("visible")
 			}
-			
-			var array = JSON.parse(result);
-			var number = array[0]["number"];
-			var numOfArrays = array.length;
-			var totalPrice = 0;
-			var totalIndex = 0;
-		  	var cartHistory = document.getElementById("cartList");
-		  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
-			for(var i in array){//iteration을 한다. 
-			  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-				tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
-			  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
-			  	totalPrice += array[i]["price"] * array[i]["number"];
-			  	totalIndex += array[i]["number"];
+			var array = null;
+			if(result == "noData"){
+				
+			}else{
+				array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				var totalIndex = 0;
+			  	var cartHistory = document.getElementById("cartList");
+			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+				for(var i in array){//iteration을 한다. 
+				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+					tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+				  	totalPrice += array[i]["price"] * array[i]["number"];
+				  	totalIndex += array[i]["number"];
+				}
+				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+			  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
+
 			}
-			cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
-		  	document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
 		  },
           error: function(result){
             	alert("error 는" + result);

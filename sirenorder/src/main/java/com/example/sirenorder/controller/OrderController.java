@@ -242,34 +242,32 @@ public class OrderController {
 		}
 	}
 	
-	public void makePoint_store(PointList pointlist, String users_id) throws Exception {
+	public void makePoint_store(PointList pointlist, String users_id, int i) throws Exception {
 		// 두 지점 사용 했을 때 banapresso 홍대, banapresso 신촌 중 처음 나오는 것에서 포인트 사용 했다고 저장
 		if (pointlist.getChain_name() == null) {// point를 쓰는 것이 없으면 return ;
 			return;
 		}
-		for (int i = 0; i < pointlist.getChain_name().length; i++) {
-			String chain_name = pointlist.getChain_name()[i];
+			String chain_name = pointlist.getChain_name()[i];//포인트를 사용한 것중 i 번째 
 			int point = pointlist.getPoint()[i];
 			int useOrNot = pointlist.getUseOrNot()[i];// 1이면 point 사용 0이면 사용 안함
+			System.out.println("i is "+ i);
 			if (useOrNot == 1) {// 포인트 사용
 				Point_storeVO point_storeVO = new Point_storeVO();
 				PointVO temp = pointbiz.getByChain_nameWithusers_id(chain_name, users_id);
 				point_storeVO.setPoint_store_id("point_store_id");
 				point_storeVO.setPoint_id(temp.getPoint_id());
+				System.out.println("store_name is " + pointlist.getStore_name()[i]);
 				StoreVO storeVO = storebiz.get(pointlist.getStore_name()[i]);// store_name 으로 store_id 얻기
-
+				
 				String store_id = storeVO.getStore_id();
 				point_storeVO.setStore_id(store_id);
 				point_storeVO.setUsers_id(temp.getUsers_id());
 				point_storeVO.setChain_name(temp.getChain_name());
 				point_storeVO.setPoint_date(new java.sql.Date(System.currentTimeMillis()));// 자바 date to 오라클 date
 				point_storeVO.setUsed_point(point);
-
 				point_storebiz.register(point_storeVO);
 			} else {
-
 			}
-		}
 	}
 
 	public void makePoints(String users_id, int all_chain_price, String chain_name) throws Exception {
@@ -371,7 +369,7 @@ public class OrderController {
 				//System.out.println("point 존재" + pointList.getAll_chain_name()[i]);
 				usePoint(pointList, users_id);// 포인트 사용
 				addPoint(pointList, users_id);							// 포인트 쌓기
-				makePoint_store(pointList, users_id);
+				makePoint_store(pointList, users_id, i);
 			} else {
 				//System.out.println("point 무존재" + pointList.getAll_chain_name()[i]);
 				makePoints(users_id, pointList.getAll_chain_price()[i], pointList.getAll_chain_name()[i]);
