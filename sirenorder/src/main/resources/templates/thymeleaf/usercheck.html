@@ -19,7 +19,7 @@
 	function assignOwner(value){
 		var x = document.getElementById(value);
 		
-		if(x  == null )return;//이거 붙였더니 uncaught TypeError : cannot read property 잡았다. 
+		if(x == null)return;
 		
 		if(x.style.visibility == "visible"){
 			document.getElementById(value).style.visibility = "hidden";
@@ -29,19 +29,7 @@
 		}
 	}
 	
-	//코드를 초기화 하고 chain_name, store_name을 기입할 수 있는 input 테이블을 만든다. table안에 form이 있다. 
-	//이를 서버로 전송한다.
-	function setChain_nameStore_name(users_id){
-		$('.input-group').html("");
-		var addedText = "<table class=\"table\">";
-		addedText += "<thead><tr><th scope=\"col\">users_id</th><th scope=\"col\">chain_name</th><th scope=\"col\">store_name</th>";
-		addedText += "</tr></thead><tbody><div><td>";
-		addedText += "<form id =\"form1\" action=\"updateownerinfo\">";
-		addedText += "<input type=\"hidden\" name = \"users_id\" value =\"" + users_id + "\"></form>"+ users_id+ "</td>";
-		addedText += "<td><input form=\"form1\" type=\"text\" name=\"chain_name\" value=\"chain_name\" /></td>";
-		addedText += "<td><input form=\"form1\" type=\"text\" name=\"store_name\" value=\"store_name\" /></td>";
-		addedText += "</div></tr></tbody></table><p>click if store_name is null</p>";
-	}
+	
 	function showOwnerInfo(users_id, store_name){
 		//input 그룹의 element의 content 지우고 owner의 chain_name, store_name을 가져오고 없으면 할당한다. 
 		//이 것은 ajax를 통해서 한다.
@@ -72,13 +60,16 @@
 		
 	}
 	
+	//chain_name ,store_name 서버에 등록하기 
 	function sendToServer(users_id){
 		var chain_name = document.querySelector("#chain_nameId > input").value;
 		var store_name = document.querySelector("#store_nameId > input").value;
-		var patt = /^\S+_\S+$/gi;
+		var patt = /^\S+_\S+$/gi;//store_name regex 규칙 할당 ---> 행신감자탕_행신 이런식으로 해야 한다. 
 		var result = patt.test(store_name);
 		if(result == true){}
-		else{alert("잘못된 형식입니다.")}
+		else{alert("잘못된 형식입니다.");
+		return;}
+		
 		$.ajax({
 		    type: 'POST',
 		    url: 'updateownerinfo',
@@ -142,7 +133,7 @@
 								  	<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.users_id}">Onions</td>
 									<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|"  th:text="*{userVO.users_name}">2.41</td>
 									<td style="color:blue;" th:attr="onclick=|assignOwner('id*{iterStat.index}')|" th:text="*{userVO.role}">yes</td>
-									<td style="color:blue; visibility:hidden;"  th:attr="onclick=|assignOwner('id*{iterStat.index}')|"    th:id="'id'+*{iterStat.index}">
+									<td style="color:blue; visibility:hidden;"  th:attr="onclick=|assignOwner('id*{iterStat.index}')|"    th:id="'id'+*{iterStat.index}"><!-- 여기 왜 th:id 가 필요하지?? -->                   
 										<button th:attr="onclick=|showOwnerInfo('${userVO.users_id}', '${userVO.store_name}')|">
 										상세정보
 										</button>
