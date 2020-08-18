@@ -5,8 +5,7 @@
 <title>Insert title here</title>
 </head>
 <!-- admin이 회원을 체크하는 컨트롤러 회원 검색 ,회원 정보 파악, owner 수정하기 -->
-<script >
-
+<script>
 	function userIdCheck(){
 		var userId = document.getElementById("searchUserId").value;
 		if(userId == '' || userId.length < 11){
@@ -16,10 +15,12 @@
 			document.getElementById("myForm").submit();
 		}
 	}
-	
 	//owner에 chain_name, store_name 할당하기 
 	function assignOwner(value){
 		var x = document.getElementById(value);
+		
+		if(x  == null )return;//이거 붙였더니 uncaught TypeError : cannot read property 잡았다. 
+		
 		if(x.style.visibility == "visible"){
 			document.getElementById(value).style.visibility = "hidden";
 		}
@@ -41,15 +42,17 @@
 		addedText += "<td><input form=\"form1\" type=\"text\" name=\"store_name\" value=\"store_name\" /></td>";
 		addedText += "</div></tr></tbody></table><p>click if store_name is null</p>";
 	}
-	
 	function showOwnerInfo(users_id, store_name){
 		//input 그룹의 element의 content 지우고 owner의 chain_name, store_name을 가져오고 없으면 할당한다. 
 		//이 것은 ajax를 통해서 한다.
 		//usercheck 코드 초기화
-		$('#input-group').html("");
+
+		$('#input-group').empty();
+
+		// stop for sometime if needed
+
 		//아래의 텍스트는 users_id와 store_name을 표시하는 테이블을 나타낸다. 
 		//만약 store_name이 null 이면 버튼을 눌러 chain_name과 store_name을 지정한다. 
-		
 		if(store_name == 'null'){//store_name 미정일 때 
 			//ajax로 서버로 store_name, chain_name 전송하기 
 			var addedText = "<div><table class=\"table\">";
@@ -66,6 +69,7 @@
 			addedText +=  "<td id=\"store_nameId\">" + store_name + "</td></div></tr></tbody></table>";
 		}
 		$('#input-group').html(addedText);
+		
 	}
 	
 	function sendToServer(users_id){
@@ -158,8 +162,6 @@
 			<div th:unless = "${ userVOs != null and !userVOs.empty}">
 				<div th:if = "${search == null}">찾으시는 회원이 존재하지 않습니다.</div>
 			</div>
-			
-			
 		</div>
 	</div>
 	
