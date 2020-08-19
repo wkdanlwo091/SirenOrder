@@ -133,14 +133,20 @@ function removeWebSession(){
 
 //현재 gps 위치 보여주기 
 function getLocation() {
+
 	  if (navigator.geolocation) {
+		  alert("1");
 	    navigator.geolocation.getCurrentPosition(showPosition);
+	    alert("3");
 	  } else { 
 		  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
 	  }
 }
 
 function showPosition(position) {
+	alert("yes");
+	alert(position.coords.latitude);
+	alert("2");
 	sessionStorage.lat = position.coords.latitude; 
 	sessionStorage.longti = position.coords.longitude;
 	//위도 경도 설정

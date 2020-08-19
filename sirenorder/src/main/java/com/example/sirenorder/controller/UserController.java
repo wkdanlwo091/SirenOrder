@@ -31,9 +31,9 @@ public class UserController {
 	public String login(HttpServletRequest request) {
 		HttpSession temp = request.getSession();
 		if (temp.getAttribute("userId") == null) {
-			System.out.println("session null");
+			//System.out.println("session null");
 		} else {
-			System.out.println("session not null");
+			//System.out.println("session not null");
 			if (temp.getAttribute("owner") != null) {
 				return "redirect:ownermain.html";
 			}else if(temp.getAttribute("admin") != null) {
@@ -56,7 +56,7 @@ public class UserController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("yes " + request.getParameter("token")  + " " + request.getParameter("password") + " " + request.getParameter("id"));
+		//System.out.println("yes " + request.getParameter("token")  + " " + request.getParameter("password") + " " + request.getParameter("id"));
 		return "thymeleaf/main.html";// 로그인 첫 페이지로 /index.html
 	}
 	
@@ -64,9 +64,9 @@ public class UserController {
 	public String loginIndex(HttpServletRequest request) {	
 		HttpSession temp = request.getSession();
 		if (temp.getAttribute("userId") == null) {
-			System.out.println("session null");
+			//System.out.println("session null");
 		} else {
-			System.out.println("session not null");
+			//System.out.println("session not null");
 			if (temp.getAttribute("owner") != null) {
 				return "redirect:ownermain.html";
 			}
@@ -78,14 +78,14 @@ public class UserController {
 	@RequestMapping(value = "/", method = RequestMethod.POST) // 로그인 관련 메소드 
 	public ModelAndView loginFail(UserVO user, HttpServletRequest request) {//
 		String users_id = user.getUsers_id();
-		System.out.println("id의 값은 " + users_id);
+		//System.out.println("id의 값은 " + users_id);
 		UserVO result = userbiz.get(users_id);// 디비에서 사용자 이름 가져오기
 		ModelAndView model = new ModelAndView();
 		if (result == null) {
 		} else if (result != null) {// 세션에 아이디 비밀번호 저장 후 메인 페이지로 이동한다.
 			// 아이디는 있는데 비밀번호 틀린경우
 			if (user.getUsers_password().equals(result.getUsers_password())) {
-				System.out.println("비번 맞습니다.");
+				//System.out.println("비번 맞습니다.");
 				// 아래 값은 계속 유지된다.
 				HttpSession httpSession = request.getSession();
 				httpSession.setAttribute("userId", result.getUsers_id());
@@ -107,8 +107,8 @@ public class UserController {
 				}
 				return model;
 			} else {
-				System.out.println("비번이 틀립니다.");
-				System.out.println(result.getUsers_password());
+				//System.out.println("비번이 틀립니다.");
+				//System.out.println(result.getUsers_password());
 			}
 		}
 		model.setViewName("thymeleaf/index");
@@ -177,15 +177,15 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/idCheck", method = RequestMethod.POST)
 	public int idCheck(@RequestBody UserVO user) {
-		System.out.println("하하 들어왔따");
+		//System.out.println("하하 들어왔따");
 		// 아이디 중복 체크 검사하고 정상이면 넣는다.
-		System.out.println(user.getUsers_id());
+		//System.out.println(user.getUsers_id());
 		UserVO result = userbiz.get(user.getUsers_id());// 디비에서 사용자 이름 가져오기
 		if (result == null) {
-			System.out.println("중복아니다.");
+			//System.out.println("중복아니다.");
 			return 1;
 		} else {
-			System.out.println("중복이다");
+			//System.out.println("중복이다");
 		}
 		return 0;// 0을 돌려주면 중복이 아니다.
 	}
@@ -193,7 +193,7 @@ public class UserController {
 	@RequestMapping(value = "/register.html", method = RequestMethod.POST) // 가입 신청 했을 때
 	public String register(UserVO user) throws Exception {
 		UserVO m = new UserVO();
-		System.out.println(user);
+		//System.out.println(user);
 		m.setUsers_id(user.getUsers_id());
 		m.setUsers_name(user.getUsers_name());
 		m.setUsers_password(user.getUsers_password());
@@ -215,7 +215,7 @@ public class UserController {
 
 	@RequestMapping("/logout.html") // 별 문제 없다.
 	public String logout(HttpServletRequest request) {
-		System.out.println("entered login.top");
+		//System.out.println("entered login.top");
 		HttpSession session = request.getSession();
 		session.invalidate();// 로그인 정보 , 장바구니 세션 정보 등 모든 정보 없앤다
 		return "redirect:/";
@@ -273,7 +273,7 @@ public class UserController {
 	public String getProfile(HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		// 필요한 로직 처리
-		System.out.println("getting profile");
+		//System.out.println("getting profile");
 		HttpSession session = request.getSession();
 		String users_id = (String) session.getAttribute("userId");
 	
@@ -294,13 +294,12 @@ public class UserController {
 		String users_id = (String) httpSession.getAttribute("userId");
 		UserVO userVO = userbiz.get(users_id);
 		
-		System.out.println("update profile :  users_password : " + users_password + " userId :" + users_id 
-				+ " database password :" + userVO.getUsers_password());
+		//System.out.println("update profile :  users_password : " + users_password + " userId :" + users_id + " database password :" + userVO.getUsers_password());
 		
 		if (userVO.getUsers_password().equals(users_password)) {
 			// update한다.
 			String users_new_address = request.getParameter("users_adderss");
-			System.out.println(users_new_address);
+			//System.out.println(users_new_address);
 			String users_new_name = request.getParameter("users_name");
 			String users_new_password = request.getParameter("users_new_password");
 
@@ -324,11 +323,11 @@ public class UserController {
 	public String changeLatLong(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		
-		System.out.println("changeLatLong");
+		//System.out.println("changeLatLong");
 		String latitude = (String) request.getParameter("latitude");
 		String longtitude = (String) request.getParameter("longtitude");
 		StoreVO storeVO = new StoreVO();
-		System.out.println(latitude + " "+ longtitude);
+		//System.out.println(latitude + " "+ longtitude);
 		storeVO.setGps_latitude(Double.parseDouble(latitude));
 		storeVO.setGps_longtitude(Double.parseDouble(longtitude));
 		storeVO.setStore_name((String) httpSession.getAttribute("store_name"));
@@ -356,7 +355,7 @@ public class UserController {
 	public String quitProfile(HttpServletRequest request) throws Exception {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
-		System.out.println("hello QuitProfile" +  users_id);
+		//System.out.println("hello QuitProfile" +  users_id);
 		if (users_id == null) {
 			return "redirect:profile.html";
 		} else {
@@ -375,7 +374,7 @@ public class UserController {
 		HttpSession httpSession = request.getSession();
 		String users_id = (String) httpSession.getAttribute("userId");
 		String password = (String) request.getParameter("password");
-		System.out.println(userbiz.get(users_id).getUsers_password()  +"  "  + password);
+		//System.out.println(userbiz.get(users_id).getUsers_password()  +"  "  + password);
 		if(userbiz.get(users_id).getUsers_password().equals(password)) {
 			return "success";
 		} 
