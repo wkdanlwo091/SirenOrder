@@ -105,6 +105,7 @@ $(function() {
 	//websession 설정
 	
 	if(typeof(Storage) !== "undefined") {
+		alert("yes");
 	    if (sessionStorage.lat) {
 			//sessionStorage에 위도 경도가 있으면 출력 
 			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
@@ -141,6 +142,17 @@ function getLocation() {
 	  } else { 
 		  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
 	  }
+}
+function getLocationTest() {
+		  if (navigator.geolocation) {
+		    navigator.geolocation.getCurrentPosition(showPosition);
+		  } else { 
+		    x.innerHTML = "Geolocation is not supported by this browser.";
+		  }
+}
+
+function showPositionTest(position) {
+	alert(position.coords.latitude);
 }
 
 function showPosition(position) {
@@ -246,6 +258,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 					
 					<ul th:if = "${order != null}" class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 						<button class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
+						<button class = "btn btn-primary" onclick= "getLocationTest()"> gps reset test </button>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
