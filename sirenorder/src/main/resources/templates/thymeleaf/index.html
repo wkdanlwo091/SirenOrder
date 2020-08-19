@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
   xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
 <head>
+	<!-- static의 index.html은 backup file이고 이게 진짜 로그인 페이지 -->
 	<!-- cookie 구현 완성되었다.  -->
+	<!-- 버튼 클릭하면 ok.perform에서 안드로이드로 id, password 데이터 넘겨 -->
 	<meta charset="utf-8">
 	<meta name="author" content="Kodinger">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,6 +25,7 @@
 		//쿠키를 가져와서 id에 기입한다. 
 	});
 	
+	//쿠키 관련한 것 , 웹 브라우저의 저장소에 id를 저장한다. 
 	function getCookie(cname) {
 		  var name = cname + "=";
 		  var decodedCookie = decodeURIComponent(document.cookie);
@@ -39,6 +42,8 @@
 		  return "";
 		}
 
+	
+	//일정 기간 동안 쿠키를 저장한다. 
 	function setCookie(cname, cvalue, exdays) {
 		  var d = new Date();
 		  d.setTime(d.getTime() + (exdays*24*60*60*1000));// 몇일동안 존재하는지 기입 
@@ -53,8 +58,15 @@
 			var users_id = document.getElementById("users_id").value;
 			setCookie("users_id",users_id,3);
 		}
+		
+		//안드로이드에서 읽는 부분
+		var strl = document.getElementById("password").value + "&" + document.getElementById("users_id").value;
+		ok.performClick(strl);		
+		
+		
 		document.getElementById("formId").submit();//post를 submit한다. 
 	}
+
 
 </script>
 <body class="my-login-page">
@@ -106,6 +118,7 @@
 									</button>
 								</div>
 								
+								
 								<div class="mt-4 text-center">
 									회원가입 : <a href="/register.html">회원가입 </a>
 								</div>
@@ -113,6 +126,7 @@
 									안드로이드 apk 파일 다운로드 <a href="/download.html">다운로드</a>
 								</div>
 							</form>
+							
 						</div>
 					</div>
 					<div class="footer">

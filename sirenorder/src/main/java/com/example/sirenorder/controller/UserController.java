@@ -18,12 +18,10 @@ import com.example.sirenorder.vo.UserVO;
 
 @Controller
 public class UserController {
-
 	@Resource(name = "userbiz")
 	Biz<String, UserVO> userbiz;
 	@Resource(name = "storebiz")
 	Biz<String, StoreVO> storebiz;
-
 //아래거 작동한다. 	
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
 //	public String login() {
