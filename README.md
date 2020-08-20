@@ -2,6 +2,12 @@
 
 모바일,웹으로 소규모 가게나 체인점의 물건 혹은 음식 주문하는 서비스
 
+
+
+자세한 description notion을 봐주세요 
+
+ --> https://www.notion.so/SirenOrder-3584efe365a9419baa2ea68318dddc1a
+
 ## description
 
 정규화된 발표용 ERD

@@ -341,33 +341,6 @@ public class UserController {
 		return "success";
 	}
 
-	// gps 값을 세션으로 저장한다
-	@RequestMapping(value = "putGpsFromAndroid", method = RequestMethod.POST)
-	public void putGpsFromAndroid(HttpServletRequest request) throws Exception {
-		HttpSession httpSession = request.getSession();
-
-		Double latitude = Double.parseDouble(request.getParameter("latitude"));
-		Double longtitude = Double.parseDouble(request.getParameter("longtitude"));
-		HashMap<String, Double> hashMap = new HashMap<String, Double>();
-		hashMap.put("latitude", latitude);
-		hashMap.put("longtitude", longtitude);
-		
-		httpSession.setAttribute("gpsMap", hashMap);
-	}
-	
-	// gps 값을 세션으로 저장한다
-	@RequestMapping(value = "getGpsFromAndroid", method = RequestMethod.POST)
-	public void getGpsFromAndroid(HttpServletRequest request) throws Exception {
-		HttpSession httpSession = request.getSession();
-
-		Double latitude = Double.parseDouble(request.getParameter("latitude"));
-		Double longtitude = Double.parseDouble(request.getParameter("longtitude"));
-		HashMap<String, Double> hashMap = new HashMap<String, Double>();
-		hashMap.put("latitude", latitude);
-		hashMap.put("longtitude", longtitude);
-		
-		httpSession.setAttribute("gpsMap", hashMap);
-	}
 
 	@RequestMapping(value = "changeDistanceLimit", method = RequestMethod.POST)
 	@ResponseBody

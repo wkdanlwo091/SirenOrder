@@ -128,14 +128,34 @@ function minusToCart(product_name,store_name, chain_name,price){
 	});
 }
 
-$(function() {
+//안드로이드에서 latitude와 longtitude를 세팅한다. 세션에도 저장한다. 
+function setAndroidGps(latitude, longtitude){
+		alert("haha");
+		sessionStorage.lat = position.coords.latitude; 
+		sessionStorage.longti = position.coords.longitude;
 	
-	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. 
+		alert("sessionStorage" + sessionStorage.lat);
+ 	if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
+
+	    if (sessionStorage.lat) {
+			//sessionStorage에 위도 경도가 있으면 출력 
+			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
+	    } 
+	} else {
+		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
+	  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+	}
+}
+
+$(function() {
+	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. ---> 일단 놔둬봐 사용 안할것 같은데 
 	var isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
 
+	
+	/*
 	if(isMobileCheck == true){//안드로이드에서 들어온 경우 
 		document.getElementById("gpsId").remove();
-	}
+	}*/
 	
 	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
 	//장바구니 정보 refresh한다. 
@@ -209,22 +229,26 @@ $(function() {
 	//websession 설정
 	
 	
-	if(typeof(Storage) !== "undefined" && isMobileCheck == false ) {//웹에서만 작동한다. 
-	    if (sessionStorage.lat) {
-			//sessionStorage에 위도 경도가 있으면 출력 
-			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
-	    } else {
-	    	//gps로 내 위치 설정하기 
-	    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
-	    	//gps 설정
-	    		getLocation();
-	    	} else {
-	    		// Do nothing!
-	    	}
-	    }
-	} else {
-		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
-	  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+	//윈도우일 때 
+	if(isMobileCheck == false){
+		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
+		    if (sessionStorage.lat) {
+				//sessionStorage에 위도 경도가 있으면 출력 
+				$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
+		    } else {
+		    	//gps로 내 위치 설정하기 
+		    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
+		    	//gps 설정
+		    		getLocation();
+		    	} else {
+		    		// Do nothing!
+		    	}
+		    }
+		} else {
+			$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
+		  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+		}
+
 	}
 
 });
