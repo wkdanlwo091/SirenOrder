@@ -32,99 +32,6 @@ var myProduct= 5;
 var lat;
 var longti;
 
-$(function() {
-	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
-	//장바구니 정보 refresh한다. 
-	$.ajax({//세션 만들어서 return 한다. 
-		  url: "cartProductBring",
-		  method: "POST", 
-		  success: function(result){
-			if(result == "noCart"){
-				//alert("noCart");
-				return;
-			}
-			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
-				//alert("hidden");
-				return;
-			}else{
-				//alert("visible")
-			}
-			var array = null;
-			if(result == "noData"){
-				
-			}else{
-				array = JSON.parse(result);
-				var number = array[0]["number"];
-				var numOfArrays = array.length;
-				var totalPrice = 0;
-				var totalIndex = 0;
-			  	var cartHistory = document.getElementById("cartList");
-			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
-				for(var i in array){//iteration을 한다. 
-				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
-					tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
-				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
-				  	totalPrice += array[i]["price"] * array[i]["number"];
-				  	totalIndex += array[i]["number"];
-				}
-				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
-			  	//document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
-			}
-		  },
-          error: function(result){
-            	alert("error 는" + result);
-          }
-	});
-	
-	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
-	var order = /*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
-	var product = /*[[${product}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
-	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
-	var pointHistory= /*[[${pointHistory}]]*/ 'default';
-	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
-	
-	if(order == "clicked" || product == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
-	
-	if(currentOrderStatus == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
-		}
-	if(orderHistory == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
-	}
-	if(pointHistory == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
-	}
-	
-	
-	
-     
-	//gps 및 session  설정
-	//websession 설정
-	
-	if(typeof(Storage) !== "undefined") {
-		alert("yes");
-	    if (sessionStorage.lat) {
-			//sessionStorage에 위도 경도가 있으면 출력 
-			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
-	    } else {
-	    	//gps로 내 위치 설정하기 
-	    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
-	    	//gps 설정
-	    		getLocation();
-	    	} else {
-	    		// Do nothing!
-	    	}
-	    }
-	} else {
-		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
-	  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
-	}
-
-});
-
 
 //webSession에 저장된 lat과 longti 즉 위도 경도 삭제하기 
 function removeWebSession(){
@@ -136,29 +43,13 @@ function removeWebSession(){
 function getLocation() {
 
 	  if (navigator.geolocation) {
-		  alert("1");
 	    navigator.geolocation.getCurrentPosition(showPosition);
-	    alert("3");
 	  } else { 
 		  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
 	  }
 }
-function getLocationTest() {
-		  if (navigator.geolocation) {
-		    navigator.geolocation.getCurrentPosition(showPosition);
-		  } else { 
-		    x.innerHTML = "Geolocation is not supported by this browser.";
-		  }
-}
-
-function showPositionTest(position) {
-	alert(position.coords.latitude);
-}
 
 function showPosition(position) {
-	alert("yes");
-	alert(position.coords.latitude);
-	alert("2");
 	sessionStorage.lat = position.coords.latitude; 
 	sessionStorage.longti = position.coords.longitude;
 	//위도 경도 설정
@@ -237,6 +128,109 @@ function minusToCart(product_name,store_name, chain_name,price){
 	});
 }
 
+$(function() {
+	
+	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. 
+	var isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
+
+	if(isMobileCheck == true){//안드로이드에서 들어온 경우 
+		document.getElementById("gpsId").remove();
+	}
+	
+	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
+	//장바구니 정보 refresh한다. 
+	$.ajax({//세션 만들어서 return 한다. 
+		  url: "cartProductBring",
+		  method: "POST", 
+		  success: function(result){
+			if(result == "noCart"){
+				//alert("noCart");
+				return;
+			}
+			if(document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility == "hidden"){
+				//alert("hidden");
+				return;
+			}else{
+				//alert("visible")
+			}
+			var array = null;
+			if(result == "noData"){
+				
+			}else{
+				array = JSON.parse(result);
+				var number = array[0]["number"];
+				var numOfArrays = array.length;
+				var totalPrice = 0;
+				var totalIndex = 0;
+			  	var cartHistory = document.getElementById("cartList");
+			  	document.getElementById("cartList").innerHTML = '';//먼저 있던 내용을 다 지운다 
+				for(var i in array){//iteration을 한다. 
+				  	var tmp = "<li><a href=\"#\" class=\"notification-item\">";
+					tmp += array[i]["store_name"] + " " + array[i]["product_name"] + " "+ array[i]["number"] + "개 "+ array[i]["price"]*array[i]["number"] + "원 " +"<button class = \"btn btn-primary\" type = \"button\" onclick=\"addToCart('"+  array[i]["product_name"] + "','"+ array[i]["store_name"] +"','" + array[i]["chain_name"] + "'," + array[i]["price"] +")\">+</button><button class = \"btn btn-primary\" type = \"button\" onclick=\"minusToCart('" +array[i]["product_name"] + "','"+ array[i]["store_name"] +"','"+ array[i]["chain_name"] + "'," +array[i]["price"] +")\">-</button></a></li>";
+				  	cartHistory.insertAdjacentHTML('afterbegin', tmp);
+				  	totalPrice += array[i]["price"] * array[i]["number"];
+				  	totalIndex += array[i]["number"];
+				}
+				cartHistory.insertAdjacentHTML('afterbegin', "<li><a href=\"/checkOut.html\" class=\"more\">총가격 : " + totalPrice + " 장바구니 계산하기</a></li>");
+			  	//document.querySelector("#checkOutCartId > li:nth-child(3) > strong").innerHTML = totalIndex;//여기 에러나느데 
+			}
+		  },
+          error: function(result){
+            	alert("error 는" + result);
+          }
+	});
+	
+	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
+	var order = /*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var product = /*[[${product}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
+	var pointHistory= /*[[${pointHistory}]]*/ 'default';
+	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
+	
+	if(order == "clicked" || product == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
+	
+	if(currentOrderStatus == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
+		}
+	if(orderHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
+	}
+	if(pointHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
+	}
+	
+	
+	
+     
+	//gps 및 session  설정
+	//websession 설정
+	
+	
+	if(typeof(Storage) !== "undefined" && isMobileCheck == false ) {//웹에서만 작동한다. 
+	    if (sessionStorage.lat) {
+			//sessionStorage에 위도 경도가 있으면 출력 
+			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
+	    } else {
+	    	//gps로 내 위치 설정하기 
+	    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
+	    	//gps 설정
+	    		getLocation();
+	    	} else {
+	    		// Do nothing!
+	    	}
+	    }
+	} else {
+		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
+	  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+	}
+
+});
+
+
+
 </script>
 	<!-- WRAPPER -->
 	<div id="wrapper">
@@ -257,8 +251,7 @@ function minusToCart(product_name,store_name, chain_name,price){
 					</ul>
 					
 					<ul th:if = "${order != null}" class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
-						<button class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
-						<button class = "btn btn-primary" onclick= "getLocationTest()"> gps reset test </button>
+						<button id = "gpsId" class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
