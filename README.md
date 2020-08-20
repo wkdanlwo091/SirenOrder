@@ -8,15 +8,25 @@
 
 웹 url: 
 
+
+
 Admin 페이지, Owner 페이지, User 페이지로 나누어진 서비스
 
-Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신한다. 
+Admin 페이지는 안드로이드 apk 파일을 배포하고 Owner에게 chain과 store를 할당한다. 
+
+Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신하면서 들어온 주문을 확인하고 
+
+주문이 완료되면 주문 완료 status를 websocket으로 전달한다. 
+
+User 페이지는 특정 store에 들어가서 주문을 한다. 
+
+작업중입니다. 
 
 
 
 
 
- 자세한 description notion: 
+  자세한 description notion: 
 
  --> https://www.notion.so/SirenOrder-3584efe365a9419baa2ea68318dddc1a
 
@@ -32,7 +42,7 @@ Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신�
 
 ##  개발환경 및 기술
 
-react, spring boot , android (web view) ,  aws , oracle db , web socket, Thymeleaf 
+react, spring boot , android (web view) ,  aws , oracle db , web socket, Thymeleaf , Firebase notification
 
 
 
