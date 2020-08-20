@@ -4,7 +4,19 @@
 
 
 
-자세한 description notion을 봐주세요 
+안드로이드 (웹뷰) APK 파일 url : 
+
+웹 url: 
+
+Admin 페이지, Owner 페이지, User 페이지로 나누어진 서비스
+
+Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신한다. 
+
+
+
+
+
+ 자세한 description notion: 
 
  --> https://www.notion.so/SirenOrder-3584efe365a9419baa2ea68318dddc1a
 
@@ -20,7 +32,7 @@
 
 ##  개발환경 및 기술
 
-react, spring boot , android (web view) ,  aws , oracle db , web socket등 
+react, spring boot , android (web view) ,  aws , oracle db , web socket, Thymeleaf 
 
 
 
