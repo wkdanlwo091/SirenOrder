@@ -73,10 +73,20 @@ store와 나의 거리가 표시되고 store마다 제한 거리가 존재한다
 	<script>
 	$("#searchId").on("click", function(){
 		
-		//위도 경도가 설정 안된 경우 주문 안된다. 
-		if($("#gpsLatLongId").length == 0){
-			alert("gps 설정을 하세요");
-			return;
+		if(isMobileCheck == true){//안드로이드 인경우 
+			//위도 경도가 설정 안된 경우 주문 안된다. 
+			
+			if($("#gpsLatLongId3").text() == ''){//위도 경도가 설정이 안된경우 
+				alert("gps 설정을 하세요");
+				return;
+			}
+
+		}else{//pc 웹일경우 
+			//위도 경도가 설정 안된 경우 주문 안된다. 
+			if($("#gpsLatLongId").length == 0){
+				alert("gps 설정을 하세요");
+				return;
+			}	
 		}
 			
 			
