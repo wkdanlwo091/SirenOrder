@@ -6,7 +6,7 @@
 
 안드로이드 (웹뷰) APK 파일 url : 
 
-웹 url: 
+웹 url: 54.193.173.207( AWS 서버입니다.  미완입니다 )
 
 
 
@@ -16,9 +16,13 @@ Admin 페이지는 안드로이드 apk 파일을 배포하고 Owner에게 chain�
 
 Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신하면서 들어온 주문을 확인하고 
 
-주문이 완료되면 주문 완료 status를 websocket으로 전달한다. 
+주문이 완료되면 주문 완료 status를 websocket으로 전달한다.  스프링 서버에서는 주문이 완료되면 이를 
+
+파이어베이스 notification을 이용해서 user의 안드로이드 어플에게 알려준다. 
 
 User 페이지는 특정 store에 들어가서 주문을 한다. 
+
+
 
 작업중입니다. 
 
