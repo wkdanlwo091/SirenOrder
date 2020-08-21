@@ -28,7 +28,6 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        alert("yes connected");
         stompClient.subscribe('/topic/greetings', function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
         	alert(greeting);
         	console.log(greeting);
@@ -40,7 +39,6 @@ function connect() {
 
 function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 subscribe 한다. 
 
-	alert(store_name);
 	$.ajax({ 
 		type : "GET",
 		url : "makeConnectSession",

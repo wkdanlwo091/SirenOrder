@@ -99,7 +99,6 @@ public interface Dao<Id, Model> {
 		return null;
 	}
 	
-	
 	default public int selectOrders_detailCnt( ){
 		return (Integer) null;
 	}

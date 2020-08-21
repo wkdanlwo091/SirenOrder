@@ -31,7 +31,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id = "selectOrdersStatus"  parameterType="com.example.common.Pagination" resultMap="product">
 		select * from 
 		(
-			select A.orders_detail_id, A.quantity, A.orders_id, A.status,A.store_name, rownum r, B.*
+			select A.orders_detail_id, A.quantity,  A.orders_id, A.status,A.store_name, rownum r, B.*
 			from orders_detail A, product B
 			where A.status = 'not_done' and A.product_id = B.product_id
 		)
@@ -46,7 +46,7 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	<select id = "selectOrders_detailJoinProductByStore_name"  parameterType="paginationowner" resultMap="product">
 		select * from 
 		(
-			select A.orders_detail_id, A.quantity, A.orders_id, A.status,A.store_name, rownum r, B.*
+			select A.orders_detail_id, A.quantity, A.orders_id, A.orders_date, A.status,A.store_name, rownum r, B.*
 			from orders_detail A, product B
 			where A.status = 'not_done' and A.product_id = B.product_id and store_name = #{store_name}
 		)
