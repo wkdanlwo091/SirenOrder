@@ -28,9 +28,6 @@
 <script th:inline="javascript">//script for product list 
 var myProduct= 5;
 
-//위도 경도 
-var lat;
-var longti;
 
 var isMobileCheck;//모바일 인지 아닌지 체크한다. 
 
@@ -129,9 +126,13 @@ function minusToCart(product_name,store_name, chain_name,price){
 	});
 }
 
-//안드로이드에서 latitude와 longtitude를 세팅한다. 세션에도 저장한다. 
+//안드로이드에서 latitude와 longtitude를 세팅한다. 세션이 안된다. 
 function setAndroidGps(latitude, longtitude){
-		$("#gpsLatLongId3").text("위도" + latitude + " 경도" + longtitude);
+	alert(sessionStorage);
+	sessionStorage.lat =  latitude; 
+
+	sessionStorage.longti = longtitude;
+		$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
 }
 
 $(function() {
@@ -235,6 +236,13 @@ $(function() {
 		  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
 		}
 
+	}else if(isMobileCheck == true){//
+		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
+		    if (sessionStorage.lat) {
+				//sessionStorage에 위도 경도가 있으면 출력 
+				$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
+		    } 
+		}
 	}
 
 });
