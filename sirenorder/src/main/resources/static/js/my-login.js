@@ -46,7 +46,6 @@ function idOverlap() {
 }
 
 $(function() {
-
 	var password_different = 1;
 	// author badge :)	
 	$("input[type='password'][data-eye]").each(function(i) {

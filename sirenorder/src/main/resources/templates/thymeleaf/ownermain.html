@@ -39,6 +39,21 @@
 
 	//좌측 바를 눌렀을 때 ui 변경 
 	$(function(){
+		
+		
+		//안드로이드로 들어왔을 때 좌측 sidebar ui 변경 하기 위해서 
+		
+		isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
+
+		if(isMobileCheck == true){//안드로이드에서 들어온 경우 ---> 이 것이 있어야지 안드로이드 웹뷰 css가 안 깨진다. 
+			var temp = "<li><a href=\"ownerOrderStatus.html\"><i class=\"lnr lnr-home\"></i> <span> </span></a></li>";
+			temp += "<li><a href=\"incomeChart.html\" class=\"\"><i class=\"lnr lnr-code\"></i> <span> </span></a></li>";
+			temp += "<li><a href=\"addItemAndDelete.html\" class=\"\"><i  ></i> <span> </span></a></li>";
+			$( "#mobileId" ).before( temp);
+		}
+
+		
+		
 		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
 		var incomeChart = /*[[${incomeChart}]]*/ 'default';
 		var addItemAndDelete= /*[[${addItemAndDelete}]]*/ 'default';
@@ -54,6 +69,11 @@
 	});
 	
 	$(function(){
+		
+		
+		
+		
+		
 		if(connectSession == "connect"){// connection이 있는 상태라면 connect button 을 disabled 시킨다. 
 			$("#customConnect").prop("disabled", true);
 			 $("#disconnect").removeAttr('disabled');
@@ -151,7 +171,12 @@
 				<nav>
 					<ul class="nav" th:if = "${session.store_name != null}">
 						<!-- admin이 chain과 store를 할당 해 주었을 때 -->
-							<li><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황</span></a></li>
+						
+						
+							
+							
+							<!-- jquery before를 사용하기 위해 mobileId를 사용  -->
+							<li id = "mobileId"><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황</span></a></li>
 							<li><a href="incomeChart.html" class=""><i class="lnr lnr-code"></i> <span>매출액보기</span></a></li>
 							<li><a href="addItemAndDelete.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Item 추가 및 포인트 관리</span></a></li>
 					</ul>

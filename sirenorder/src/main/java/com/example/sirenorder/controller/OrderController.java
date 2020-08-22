@@ -326,19 +326,21 @@ public class OrderController {
 			//hashmap으로 다른 상점 갯수를 받는다.
 			if(message.get(myStore_name) != null) {
 			}else {
-				message.put(myStore_name, orders_id);// (banapresso_sinchon , orders_id )
+				message.put(myStore_name, orders_id);// orders_id 여러개를 넣어야 한다. ex) 신촌 녹차, 신촌 커피
 			}
 			orders_detailVO.setStore_name(myStore_name);
 			orders_detailbiz.register(orders_detailVO);
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
 		}
+		
+		//여기서 메시징을 처리한다. 
 		//상점 갯수 별로 조회
 		Iterator<String> itr2 = message.keySet().iterator();
 		while(itr2.hasNext()) {
 		    Thread.sleep(100); // simulated delay 0.1초 100ms 
 		    //System.out.println("hahah sent from server with user ");
 		    //from client to server by websocket;
-		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id);// /topic/store_name  , orders_id
+		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id);// /topic/store_name  , orders_id, product_name, date, store_name을 넣어야 한다. 
 		}
 		//hashmap에 있는 상점들에게 
 	}

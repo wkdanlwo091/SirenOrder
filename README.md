@@ -34,7 +34,39 @@ User 페이지는 특정 store에 들어가서 주문을 한다.
 
  --> https://www.notion.so/SirenOrder-3584efe365a9419baa2ea68318dddc1a
 
-## description
+
+
+
+
+***
+
+이미지 예시
+
+<img width="960" alt="orders_status" src="https://user-images.githubusercontent.com/12855243/90954291-25edb800-e4ae-11ea-9c7f-377e757668fe.PNG">
+<img width="960" alt="pagination" src="https://user-images.githubusercontent.com/12855243/90954292-271ee500-e4ae-11ea-988c-1b01bc548b29.PNG">
+<img width="960" alt="profile" src="https://user-images.githubusercontent.com/12855243/90954293-27b77b80-e4ae-11ea-8ccb-8ce96f09e676.PNG">
+<img width="960" alt="profile_change" src="https://user-images.githubusercontent.com/12855243/90954294-28501200-e4ae-11ea-8285-62535b6fdd87.PNG">
+<img width="960" alt="store_search" src="https://user-images.githubusercontent.com/12855243/90954296-28501200-e4ae-11ea-85ba-c2e14e17bdeb.PNG">
+
+<img width="960" alt="usage_history" src="https://user-images.githubusercontent.com/12855243/90954299-29813f00-e4ae-11ea-940f-35ee8aa68da3.PNG">
+<img width="960" alt="cart" src="https://user-images.githubusercontent.com/12855243/90954300-29813f00-e4ae-11ea-9f78-3e5f3ab59d50.png">
+<img width="960" alt="cart_and_page" src="https://user-images.githubusercontent.com/12855243/90954302-2a19d580-e4ae-11ea-8827-52159a0f6f8b.png">
+<img width="960" alt="cart2" src="https://user-images.githubusercontent.com/12855243/90954303-2ab26c00-e4ae-11ea-81ad-728bc3b39753.png">
+<img width="960" alt="checkout" src="https://user-images.githubusercontent.com/12855243/90954304-2ab26c00-e4ae-11ea-91d3-c64dcfa116fb.PNG">
+<img width="584" alt="develope ERD" src="https://user-images.githubusercontent.com/12855243/90954306-2b4b0280-e4ae-11ea-9ebc-36c4d582c856.PNG">
+<img width="576" alt="erd_pic" src="https://user-images.githubusercontent.com/12855243/90954307-2be39900-e4ae-11ea-84f6-7507dd45e619.PNG">
+<img width="960" alt="login" src="https://user-images.githubusercontent.com/12855243/90954308-2be39900-e4ae-11ea-9c71-12fb0916f136.png">
+
+<img width="960" alt="main" src="https://user-images.githubusercontent.com/12855243/90954310-2d14c600-e4ae-11ea-9971-2b95707e0bd5.PNG">
+<img width="960" alt="orderpage" src="https://user-images.githubusercontent.com/12855243/90954311-2d14c600-e4ae-11ea-8082-776a5df4222d.PNG">
+
+
+
+---
+
+
+
+description
 
 정규화된 발표용 ERD
 

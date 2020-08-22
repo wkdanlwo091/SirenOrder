@@ -138,7 +138,7 @@ $(function() {
 	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. ---> 일단 놔둬봐 사용 안할것 같은데 
 	isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
 
-	if(isMobileCheck == true){//안드로이드에서 들어온 경우 
+	if(isMobileCheck == true){//안드로이드에서 들어온 경우 ---> 이 것이 있어야지 안드로이드 웹뷰 css가 안 깨진다. 
 		if($("#gpsLatLongId").length){
 			document.getElementById("gpsLatLongId").remove();
 			document.getElementById("gpsLatLongId2").remove();
