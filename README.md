@@ -38,9 +38,90 @@ User 페이지는 특정 store에 들어가서 주문을 한다.
 
 
 
-***
 
-이미지 예시
+
+
+
+
+
+
+
+
+
+
+
+
+## 로그인 페이지 :
+
+ 
+
+![Screenshot_20200821-000047_SirenOrder](https://user-images.githubusercontent.com/12855243/90955371-08255080-e4b8-11ea-863b-b2753fcf8685.jpg)
+
+<img width="960" alt="login" src="https://user-images.githubusercontent.com/12855243/90954536-fd66bd80-e4af-11ea-9360-1461515a360c.png">
+
+apk 배포 페이지 : 
+
+<img width="960" alt="배포페이지" src="https://user-images.githubusercontent.com/12855243/90954723-e3c67580-e4b1-11ea-9e4b-8ff62ff99fc7.PNG">
+
+
+
+## 유저페이지 
+
+* gps 설정하기 
+
+![Screenshot_20200819-183049_SirenOrder](https://user-images.githubusercontent.com/12855243/90955368-06f42380-e4b8-11ea-9668-30c9edba700e.jpg)
+
+
+
+
+
+* 검색창 페이지 
+
+![Screenshot_20200821-153126_SirenOrder](https://user-images.githubusercontent.com/12855243/90955374-09567d80-e4b8-11ea-864f-70de72970c44.jpg)
+
+
+
+
+
+* 주문 페이지 
+
+![Screenshot_20200821-153140_SirenOrder](https://user-images.githubusercontent.com/12855243/90955376-0a87aa80-e4b8-11ea-8af7-369cf6df99ae.jpg)
+
+
+
+
+
+* 장바구니 페이지 
+
+![Screenshot_20200821-153152_SirenOrder](https://user-images.githubusercontent.com/12855243/90955377-0a87aa80-e4b8-11ea-9f1d-355b7fae6e33.jpg)
+
+
+
+* 메인페이지에서 장바구니 보기 
+
+![Screenshot_20200821-153200_SirenOrder](https://user-images.githubusercontent.com/12855243/90955378-0b204100-e4b8-11ea-8a6f-b0788316aec1.jpg)
+
+
+
+* 파이어베이스 notification 
+
+  ![Screenshot_20200821-174901_SirenOrder](https://user-images.githubusercontent.com/12855243/90955383-0bb8d780-e4b8-11ea-8afb-8bfe87741d43.jpg)
+
+![Screenshot_20200821-154254_SirenOrder](https://user-images.githubusercontent.com/12855243/90955380-0b204100-e4b8-11ea-8902-699c7717ce2e.jpg)
+
+
+
+
+
+
+
+<img width="960" alt="main" src="https://user-images.githubusercontent.com/12855243/90954310-2d14c600-e4ae-11ea-9971-2b95707e0bd5.PNG">
+
+
+
+
+
+<img width="960" alt="orderpage" src="https://user-images.githubusercontent.com/12855243/90954311-2d14c600-e4ae-11ea-8082-776a5df4222d.PNG">
 
 <img width="960" alt="orders_status" src="https://user-images.githubusercontent.com/12855243/90954291-25edb800-e4ae-11ea-9c7f-377e757668fe.PNG">
 <img width="960" alt="pagination" src="https://user-images.githubusercontent.com/12855243/90954292-271ee500-e4ae-11ea-988c-1b01bc548b29.PNG">
@@ -53,16 +134,18 @@ User 페이지는 특정 store에 들어가서 주문을 한다.
 <img width="960" alt="cart_and_page" src="https://user-images.githubusercontent.com/12855243/90954302-2a19d580-e4ae-11ea-8827-52159a0f6f8b.png">
 <img width="960" alt="cart2" src="https://user-images.githubusercontent.com/12855243/90954303-2ab26c00-e4ae-11ea-81ad-728bc3b39753.png">
 <img width="960" alt="checkout" src="https://user-images.githubusercontent.com/12855243/90954304-2ab26c00-e4ae-11ea-91d3-c64dcfa116fb.PNG">
-<img width="584" alt="develope ERD" src="https://user-images.githubusercontent.com/12855243/90954306-2b4b0280-e4ae-11ea-9ebc-36c4d582c856.PNG">
-<img width="576" alt="erd_pic" src="https://user-images.githubusercontent.com/12855243/90954307-2be39900-e4ae-11ea-84f6-7507dd45e619.PNG">
-<img width="960" alt="login" src="https://user-images.githubusercontent.com/12855243/90954308-2be39900-e4ae-11ea-9c71-12fb0916f136.png">
-
-<img width="960" alt="main" src="https://user-images.githubusercontent.com/12855243/90954310-2d14c600-e4ae-11ea-9971-2b95707e0bd5.PNG">
-<img width="960" alt="orderpage" src="https://user-images.githubusercontent.com/12855243/90954311-2d14c600-e4ae-11ea-8082-776a5df4222d.PNG">
 
 
 
----
+## 점주 페이지
+
+
+
+* 웹소켓 커넥션 페이지
+
+![Screenshot_20200821-170902_SirenOrder](https://user-images.githubusercontent.com/12855243/90955381-0bb8d780-e4b8-11ea-9561-a3fb7eaef21e.jpg) 
+
+
 
 
 
