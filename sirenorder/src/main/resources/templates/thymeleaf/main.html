@@ -37,6 +37,11 @@ function removeWebSession(){
 	sessionStorage.removeItem("longti");
 }
 
+function showPopup(){
+	
+	window.open("gpsMap.html", "a", "width=400, height=300, left=100, top=50"); 
+}
+
 //현재 gps 위치 보여주기 
 function getLocation() {
 
@@ -219,6 +224,12 @@ $(function() {
 	
 	//윈도우일 때 
 	if(isMobileCheck == false){
+		
+		//팝업을 만들어준다
+		
+		showPopup();
+		
+		
 		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
 		    if (sessionStorage.lat) {
 				//sessionStorage에 위도 경도가 있으면 출력 
