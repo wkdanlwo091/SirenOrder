@@ -67,7 +67,15 @@ apk 배포 페이지 :
 
 ## 유저페이지 
 
-* gps 설정하기 
+* gps 설정하기 ( pc의 웹 브라우져 )
+
+<img width="960" alt="kakaomap" src="https://user-images.githubusercontent.com/12855243/91044792-d2679f80-e650-11ea-9c77-54415d71cfb5.PNG">
+
+
+
+
+
+* gps 설정하기 (안드로이드 )
 
 ![Screenshot_20200819-183049_SirenOrder](https://user-images.githubusercontent.com/12855243/90955368-06f42380-e4b8-11ea-9668-30c9edba700e.jpg)
 
