@@ -47,7 +47,6 @@ public class FileUploadDownloadService {
             //여기서 db에다가 파일 저장 
             file.getSize();//이게 데이터를 db에다가 넣는다. 
             
-            
             //files에 넣을 시간 구하기 
             long millis=System.currentTimeMillis();  
             java.sql.Date regDate=new java.sql.Date(millis);  
