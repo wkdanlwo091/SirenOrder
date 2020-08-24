@@ -12,9 +12,9 @@
 	
 		//opener란 popup기준 parent의 변수나 document에 접근 가능하게 하는 변수 
 		function setGps(latitude, longtitude){
-			opener.sessionStorage.lat = latitude;
-			opener.sessionStorage.longti = longtitude;
-			opener.document.getElementById("gpsLatLongId").innerHTML();
+			sessionStorage.lat = latitude;
+			sessionStorage.longti = longtitude;
+			opener.document.getElementById("gpsLatLongId").innerHTML("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
 			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
 		}
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
