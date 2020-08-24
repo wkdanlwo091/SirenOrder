@@ -38,17 +38,21 @@ function removeWebSession(){
 }
 
 function showPopup(){
-	window.open("gpsMap.html", "a", "width=500, height=450, left=100, top=50"); 
+	window.open("gpsMap.html", "a", "width=500, height=700, left=100, top=50"); 
 }
 
 //현재 gps 위치 보여주기 
 function getLocation() {
-
+	
+	showPopup();
+	
+	/*아래 코드는 https에서만 동작한다. 
 	  if (navigator.geolocation) {
 	    navigator.geolocation.getCurrentPosition(showPosition);
 	  } else { 
 		  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
 	  }
+	*/
 }
 
 function showPosition(position) {

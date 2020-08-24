@@ -59,9 +59,17 @@
 			setCookie("users_id",users_id,3);
 		}
 		
-		//안드로이드에서 읽는 부분
-		var strl = document.getElementById("password").value + "&" + document.getElementById("users_id").value;
-		ok.performClick(strl);		
+		
+		var isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
+
+		if(isMobileCheck == true){//안드로이드에서 들어온 경우 ---> 이 것이 있어야지 안드로이드 웹뷰 css가 안 깨진다. 
+			//안드로이드에서 읽는 부분
+			var strl = document.getElementById("password").value + "&" + document.getElementById("users_id").value;
+			ok.performClick(strl);		
+		}else{
+			//pc에서 들어온 부분 
+		}
+	
 		
 		
 		document.getElementById("formId").submit();//post를 submit한다. 
