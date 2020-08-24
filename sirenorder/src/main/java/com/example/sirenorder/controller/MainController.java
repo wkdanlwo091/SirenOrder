@@ -42,4 +42,9 @@ public class MainController {
 	public String table_index() {
 		return "/table_index.html";
 	}
+	
+	@RequestMapping(value = "gpsMap.html", method = RequestMethod.GET)
+	public String gpsMap() {
+		return "thymeleaf/gpsMap";//로그인 첫 페이지로 /index.html
+	}
 }

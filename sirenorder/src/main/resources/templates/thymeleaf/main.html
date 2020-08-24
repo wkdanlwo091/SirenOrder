@@ -38,8 +38,7 @@ function removeWebSession(){
 }
 
 function showPopup(){
-	
-	window.open("gpsMap.html", "a", "width=400, height=300, left=100, top=50"); 
+	window.open("gpsMap.html", "a", "width=500, height=450, left=100, top=50"); 
 }
 
 //현재 gps 위치 보여주기 
@@ -226,9 +225,12 @@ $(function() {
 	if(isMobileCheck == false){
 		
 		//팝업을 만들어준다
-		
-		showPopup();
-		
+		if(sessionStorage.lat){
+			//위도 경도가 세팅 되어있을 때
+		}else{//세팅 안된 경우 
+			showPopup();
+
+		}
 		
 		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
 		    if (sessionStorage.lat) {
@@ -333,6 +335,8 @@ $(function() {
 		<div th:if = "${ordersHistory != null}"><div th:replace="/thymeleaf/ordersHistory"></div></div>
 		<div th:if = "${checkout != null}"><div th:replace="/thymeleaf/checkout"></div></div>
 		<div th:if = "${pointHistory != null}"><div th:replace="/thymeleaf/pointHistory"></div></div>
+		
+		
 		
 		</div>
 		<!-- END MAIN -->
