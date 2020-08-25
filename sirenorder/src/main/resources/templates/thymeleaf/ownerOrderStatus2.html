@@ -27,7 +27,7 @@
 <!-- style CSS -->
 
 <style>
-	ul li:hover {
+	.list-group-item:hover {
 	  background-color: CornflowerBlue;
 	}
 </style>
@@ -50,7 +50,7 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<ul class="list-group" th:each="list,iter : ${List}"><!-- thymeleaf로 데이터를 먼저 받아온다. li를 클릭하면 ajax로 넘긴다., th:id에 정보를 담는다. ex) id = 가격:1000,주문번호:100,날짜:08/25/2020 이런식으로 -->
-						<li class="list-group-item" th:inline="text" th:value="${list.orders_detail_id}">상품명: [[${list.productVO.product_name}]], 가격: [[${list.price}]], 날짜: [[${list.orders_date}]], 가게이름: [[${store_name}]] </li>
+						<li class="list-group-item" th:inline="text" >주문번호: [[${list.orders_id}]], 가격: [[${list.total_price}]], 날짜: [[${list.orders_date}]], 주문자: [[${list.users_id}]] </li>
 					</ul>
 				</div>
 			</div>

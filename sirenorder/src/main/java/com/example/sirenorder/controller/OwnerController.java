@@ -380,7 +380,7 @@ public class OwnerController {
 		model.addObject("pagination", pagination);
 		model.addObject("store_name", store_name);
 
-		model.addObject("ownerOrderStatus", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
+		model.addObject("ownerOrderStatus", "clicked");//ownerOrderStatus 는 이미지 있는 것
 		model.setViewName("thymeleaf/ownermain");
 		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
 		if (List.size() == 0) {
@@ -406,8 +406,11 @@ public class OwnerController {
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
+		
 		//not done 인것 시간 순으로 가져오기 디비에서 sort하기
 		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id();
+		
+		//List 안에 List가 있다. 
 		
 		
 		model.addObject("ownerOrderStatus2", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
