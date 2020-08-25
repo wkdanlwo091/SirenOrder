@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.sirenorder.mapper.OrdersJoinOrders_detailMapper">
+
+	<!-- id : "JOIN 하는 POJO 클래스의 CamelCase명 또는, @Alias("키값")" -->
+	<!-- type : "FROM 대상인 POJO 클래스의 CamelCase명 또는, @Alias("키값")" -->
+	<!-- column : "DB 컬럼명" -->
+	<!-- property: "type에 적힌 POJO클래스의 속성명" -->
+	<resultMap id="orders_detail" type="OrdersJoinOrders_detailVO"><!-- id에 N이 되는 테이블  type에는 join한 객체 -->
+	    <result property="orders_id" column="ORDERS_ID" />
+	    <result property="orders_date" column="ORDERS_DATE" />
+	    <result property="payment_way" column="PAYMENT_WAY" />
+	    <result property="total_price" column="TOTAL_PRICE" />
+	    <result property="users_id" column="USERS_ID" />
+	    <result property="seq" column="SEQ" /><!-- seq 필요 없지만 일단 넣는다. -->
+	<!-- collection은 javaType이 아닌 ofType으로 받는다. -->
+	<!-- javaType : "객체를 속성으로 가지고있는 해당 객체의 CamelCase명 또는, @Alias("키값")" -->
+	<!-- property : "객체참조변수명" -->
+	<!-- javaType 붙여줘야 한다.  -->
+	    <collection property="orders_detailVO"    ofType="orders_detail">
+	         <id property="orders_detail_id" column="ORDERS_DETAIL_ID" />
+	         <result property="price" column="PRICE" />
+	         <result property="quantity" column="QUANTITY" />
+	         <result property="orders_date" column="ORDERS_DATE" />
+	         <result property="orders_id" column="ORDERS_ID" />
+	         <result property="product_id" column="PRODUCT_ID" />
+	         <result property="product_name" column="PRODUCT_NAME" />
+	         <result property="status" column="STATUS" />
+	         <result property="store_id" column="STORE_ID" />
+	         <result property="store_name" column="STORE_NAME" />
+	         <result property="seq" column="SEQ" />
+	    </collection>
+	</resultMap>
+	
+	
+	<select id="selectOrdersJoinOrders_detailByOrders_id" resultMap="orders_detail">
+		SELECT 
+			A.orders_id, A.orders_date, A.payment_way, A.total_price, A.users_id, 
+			B.orders_detail_id, B.price, B.quantity, B.orders_date, B.orders_id, B.product_id, B.product_name,
+			B.status, B.store_id, B.store_name
+		from orders A, orders_detail B
+		where A.orders_id = B.orders_id and B.status= 'not_done'
+		ORDER BY
+	    A.orders_id ASC 
+	</select>
+</mapper>

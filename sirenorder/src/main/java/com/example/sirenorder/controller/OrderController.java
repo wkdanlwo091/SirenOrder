@@ -322,7 +322,6 @@ public class OrderController {
 			orders_detailVO.setStatus("not_done");// 주문이 들어갔고 아직 주문완료 전이다.
 			String myStore_name = tmp.getStore_name();
 			
-			
 			//hashmap으로 다른 상점 갯수를 받는다.
 			if(message.get(myStore_name) != null) {
 			}else {
@@ -333,7 +332,7 @@ public class OrderController {
 			// orders의 last sequence num을 가지고와서 그를 기준으로 외래키 참조하고 orders_detail을 만든다.
 		}
 		
-		//여기서 메시징을 처리한다. 
+		//여기서 메시징을 처리한다. websocket
 		//상점 갯수 별로 조회
 		Iterator<String> itr2 = message.keySet().iterator();
 		while(itr2.hasNext()) {
@@ -341,8 +340,7 @@ public class OrderController {
 		    //System.out.println("hahah sent from server with user ");
 		    //from client to server by websocket;
 		    this.template.convertAndSend("/topic/" + itr2.next(), orders_id);// /topic/store_name  , orders_id, product_name, date, store_name을 넣어야 한다. 
-		}
-		//hashmap에 있는 상점들에게 
+		}//hashmap에 있는 상점들에게 
 	}
 	
 	@RequestMapping(value = "buyProduct", method = RequestMethod.GET) // 가게 이름을 return 한다.

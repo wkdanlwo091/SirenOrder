@@ -70,29 +70,6 @@ function resetOwnerOrderCss(){
 	    //한개 새로 만들고 1부터 5까지 붙인다 .
 	}
 	
-	
-	<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6">
-	<!-- from이 시간을 포함할 때 -->
-	<div class="single_product_item">
-		<img src="https://www.nespresso.com/ncp/res/uploads/recipes/nespresso-recipes-Cafe-Latte-Do-Brazil.jpg" alt="" width="100%" height="40%">
-		<!-- 이미지 사이지를 정해줘야지 안깨진다.  -->
-		<div class="single_product_text">
-			<h4 id="orders_detail_id223">주문번호 : orders_detail_id223 </h4>
-			<h4>상품명: greentea114 </h4>
-			<h4>가격: 3000 </h4>
-			<h4>날짜: 2020-08-18 </h4>
-			<h4>가게이름: banapresso_sinchon </h4>
-			<h4 hidden="">orders_id144</h4><!-- 이 것은 -->
-			<!-- not_done을 데이터베이스로 가서 done으로 바꾼다.  -->
-			<input hidden="" name="store_name[0]" value="banapresso_sinchon">
-			<input hidden="" name="orders_id[0]" value="orders_id144">
-			<input type="checkbox" id="checkBoxIdorders_detail_id223" name="orders_detail_id[0]" value="orders_detail_id223"> 
-			<label> 주문 완료 체크</label><br>
-		</div>
-		<!-- th:attr="onclick=|upload('${gallery}')|"  -->
-	</div>
-</div>
-
 }
 
 function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 subscribe 한다. 

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.common.Pagination;
 import com.example.sirenorder.vo.ChainVO;
+import com.example.sirenorder.vo.OrdersJoinOrders_detailVO;
 import com.example.sirenorder.vo.PaginationOwner;
 import com.example.sirenorder.vo.PointVO;
 import com.example.sirenorder.vo.Point_storeJoinStoreVO;
@@ -45,6 +46,10 @@ public interface Biz<Id, Model> {
 	}
 	@Transactional
 	default public void deleteMultiple(List<String> lists) throws Exception {
+	}
+	@Transactional
+	default public List<Model> getOrdersJoinOrders_detailByOrders_id(){
+		return null;
 	}
 
 	@Transactional 

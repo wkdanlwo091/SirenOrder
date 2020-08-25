@@ -121,7 +121,6 @@
 							</div>
 						</form>
 					</ul>
-					
 					<!-- 아래의 것은 owner가 chain대표일 때 사용한다.  session이다. -->
 					<ul th:if="${session.owner_first != null}" class="nav navbar-nav navbar-center" style = "padding-top: 0.3em">
 						<li class="dropdown">
@@ -144,7 +143,7 @@
 							</a>
 						</li>
 					</ul>
-
+					
 					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -171,12 +170,9 @@
 				<nav>
 					<ul class="nav" th:if = "${session.store_name != null}">
 						<!-- admin이 chain과 store를 할당 해 주었을 때 -->
-						
-						
-							
-							
-							<!-- jquery before를 사용하기 위해 mobileId를 사용  -->
-							<li id = "mobileId"><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황</span></a></li>
+							<!-- 모바일로 들어오면 side-nav가 위의 nav와 겹친다. jquery before를 사용하기 위해 mobileId를 사용  -->
+							<li id = "mobileId"><a href="ownerOrderStatus.html"><i class="lnr lnr-home"></i> <span>주문현황(이미지)</span></a></li>
+							<li><a href="ownerOrderStatus2.html"><i class="lnr lnr-home"></i> <span>주문현황(텍스트)</span></a></li>
 							<li><a href="incomeChart.html" class=""><i class="lnr lnr-code"></i> <span>매출액보기</span></a></li>
 							<li><a href="addItemAndDelete.html" class=""><i class="lnr lnr-chart-bars"></i> <span>Item 추가 및 포인트 관리</span></a></li>
 					</ul>
@@ -192,6 +188,7 @@
 		<div class="main">
 				<div th:if="${profile != null}"><div th:replace="/thymeleaf/profile :: profile"></div></div>
 				<div th:if="${ownerOrderStatus != null}"><div th:replace="/thymeleaf/ownerOrderStatus"></div></div>
+				<div th:if="${ownerOrderStatus2 != null}"><div th:replace="/thymeleaf/ownerOrderStatus2"></div></div>
 				<div th:if = "${incomeChart != null}"><div th:replace="/thymeleaf/incomeChart"></div></div>
 				<div th:if = "${addItemAndDelete != null}"><div th:replace="/thymeleaf/addItemAndDelete"></div></div>
 		</div>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<head>
+<!-- owner가 주문현황에서 not_done을 보는 것 not_done을 done으로 바꾼다.이를 디비에 저장  웹소켓으로 서버에 전달 후 fcm 메시지 푸시 -->
+<!-- ownerOrderStatus2는 ownerOrderStatus와 다르게 이미지가 없고 페이지네이션이 없고 한 페이지에 모든 주문을 실시간으로 업데이트 한다. 위가 오래된 주문-->
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<title></title>
+
+<!-- animate CSS -->
+<link rel="stylesheet" href="css/animate.css">
+<!-- owl carousel CSS -->
+<link rel="stylesheet" href="css/owl.carousel.min.css">
+<!-- nice select CSS -->
+<link rel="stylesheet" href="css/nice-select.css">
+<!-- font awesome CSS -->
+<link rel="stylesheet" href="css/all.css">
+<!-- flaticon CSS -->
+<link rel="stylesheet" href="css/flaticon.css">
+<link rel="stylesheet" href="css/themify-icons.css">
+<!-- font awesome CSS -->
+<link rel="stylesheet" href="css/magnific-popup.css">
+<!-- swiper CSS -->
+<link rel="stylesheet" href="css/slick.css">
+<!-- style CSS -->
+
+<style>
+	ul li:hover {
+	  background-color: CornflowerBlue;
+	}
+</style>
+
+<!-- date picker전용  -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script defer>
+	var elements = document.getElementsByClassName(names);
+	elements.addEventListener("click", function(){//list 클릭하면 서버로 보내고 ul, li 없앤다. ajax로 보낸다.
+		
+	});
+
+</script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-9">
+				<div class="row align-items-center latest_product_inner">
+					<ul class="list-group" th:each="list,iter : ${List}"><!-- thymeleaf로 데이터를 먼저 받아온다. li를 클릭하면 ajax로 넘긴다., th:id에 정보를 담는다. ex) id = 가격:1000,주문번호:100,날짜:08/25/2020 이런식으로 -->
+						<li class="list-group-item" th:inline="text" th:value="${list.orders_detail_id}">상품명: [[${list.productVO.product_name}]], 가격: [[${list.price}]], 날짜: [[${list.orders_date}]], 가게이름: [[${store_name}]] </li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- jquery plugins here-->
+<script src="js/jquery-1.12.1.min.js"></script>
+<!-- popper js -->
+<script src="js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="js/bootstrap.min.js"></script>
+<!-- easing js -->
+<script src="js/jquery.magnific-popup.js"></script>
+<!-- swiper js -->
+<script src="js/swiper.min.js"></script>
+<!-- swiper js -->
+<script src="js/masonry.pkgd.js"></script>
+<!-- particles js -->
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.nice-select.min.js"></script>
+<!-- slick js -->
+<script src="js/slick.min.js"></script>
+<script src="js/jquery.counterup.min.js"></script>
+<script src="js/waypoints.min.js"></script>
+<script src="js/jquery.ajaxchimp.min.js"></script>
+<script src="js/jquery.form.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="js/mail-script.js"></script>
+<script src="js/stellar.js"></script>
+<!-- custom js -->
+<script src="js/custom.js"></script>
+</html>

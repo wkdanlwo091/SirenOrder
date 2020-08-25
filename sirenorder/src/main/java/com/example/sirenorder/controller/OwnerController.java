@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +30,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.common.Pagination;
 import com.example.sirenorder.frame.Biz;
 import com.example.sirenorder.vo.ChainVO;
+import com.example.sirenorder.vo.OrdersJoinOrders_detailVO;
+import com.example.sirenorder.vo.OrdersVO;
 import com.example.sirenorder.vo.Orders_detailJoinProductVO;
 import com.example.sirenorder.vo.Orders_detailVO;
 import com.example.sirenorder.vo.Orders_detail_idList;
@@ -60,6 +60,12 @@ public class OwnerController {
 
 	@Resource(name = "orders_detailbiz")
 	Biz<String, Orders_detailVO> orders_detailbiz;
+	
+	@Resource(name = "ordersbiz")
+	Biz<String, OrdersVO> ordersbiz;
+	
+	@Resource(name = "ordersjoinorders_detailbiz")
+	Biz<String, OrdersJoinOrders_detailVO> ordersjoinorders_detailbiz;
 
 	@Resource(name = "productbiz")
 	Biz<String, ProductVO> productbiz;
@@ -341,6 +347,7 @@ public class OwnerController {
 		return model;
 	}
 
+	//이미지 있고 orders_detail로 전송하는 방식
 	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.GET) 
 	public ModelAndView ownerOrderStatus(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
@@ -373,7 +380,7 @@ public class OwnerController {
 		model.addObject("pagination", pagination);
 		model.addObject("store_name", store_name);
 
-		model.addObject("ownerOrderStatus", "clicked");
+		model.addObject("ownerOrderStatus", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
 		model.setViewName("thymeleaf/ownermain");
 		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
 		if (List.size() == 0) {
@@ -385,6 +392,37 @@ public class OwnerController {
 		}
 		return model;
 	}
+	
+	//이미지 없고 orders를 전송하는 방식, 페이지네이션 없다. 그냥 위부터 아래까지 스크롤로 모든 데이터 올린다.
+	@RequestMapping(value = "/ownerOrderStatus2.html", method = RequestMethod.GET) 
+	public ModelAndView ownerOrderStatus2(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range,
+			@RequestParam(required = false, defaultValue = "nothing") String orders_detail_id) throws Exception {
+		ModelAndView model = new ModelAndView();
+		HttpSession httpSession = request.getSession();
+		String store_name = (String) httpSession.getAttribute("store_name");
+		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		//not done 인것 시간 순으로 가져오기 디비에서 sort하기
+		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id();
+		
+		
+		model.addObject("ownerOrderStatus2", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
+		model.setViewName("thymeleaf/ownermain");
+		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
+		if (List.size() == 0) {
+			// System.out.println("가게에 물건이 없습니다.");
+			model.addObject("List", List);
+		} else {
+			// System.out.println("가게에 물건이 있습니다.");
+			model.addObject("List", List);
+		}
+		return model;
+	}
+
 	
 	//파이어베이스로 안드로이드 기기에 notification 보내기 
 	public void firebaseSend(Map<String, String> orders_id) throws IOException, FirebaseMessagingException {
@@ -419,7 +457,7 @@ public class OwnerController {
 		}
 	}
 	
-	//여기서 파이어베이스 전송함수를 호출한다. 
+	//여기서 파이어베이스 전송함수를 호출한다. 주문자 이미지 있는 방식 
 	@RequestMapping(value = "/ownerOrderStatus.html", method = RequestMethod.POST) //
 	public ModelAndView ownerOrderFinsh(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
@@ -484,6 +522,73 @@ public class OwnerController {
 		return model;
 	}
 
+	//ownerOrderStatus2.html은 이미지 없는 페이지, 텍스트로만 전달 받는다. orders_detail이 아닌 orders로 주문완료하는 방식
+	@RequestMapping(value = "/ownerOrderStatus2.html", method = RequestMethod.POST) //
+	public ModelAndView ownerOrderFinsh2(HttpServletRequest request,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "1") int range, 
+			Orders_detail_idList orders_detail_idList//여기서 RequestParam 쓰면 안되더라 
+	// 주문완료 되었다고 변경하는 정보를 담은 배열 클래스
+	) throws Exception {
+		ModelAndView model = new ModelAndView();
+		HttpSession httpSession = request.getSession();
+		String store_name = (String) httpSession.getAttribute("store_name");
+
+		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
+			model.setViewName("redirect:/index.html");
+			return model;
+		}
+		System.out.println("post came");
+		System.out.println(orders_detail_idList);
+		
+		// orders_id 중복되는 것 제거하고 기준으로 orders_id의 user 조회 후
+		Map<String, String> orders_id = new HashMap<String, String>();
+		for (int i = 0; i < orders_detail_idList.getOrders_detail_id().length; i++) {
+			if (orders_detail_idList.getOrders_detail_id()[i] != null) {
+				Orders_detailVO temp = new Orders_detailVO();
+				temp.setOrders_detail_id(orders_detail_idList.getOrders_detail_id()[i]);
+				//orders_detailbiz.update(temp);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
+				if (orders_id.get(orders_detail_idList.getOrders_id()[i]) == null) {
+					orders_id.put(orders_detail_idList.getOrders_id()[i], orders_detail_idList.getStore_name()[i]);//hashmap 에 orders_id를 넣는다. 
+				}
+			}
+		}
+		
+		//파이어베이스 메시지 보내기 
+		firebaseSend(orders_id);
+
+		int listCnt;
+		int startList;
+		int listSize;
+		listCnt = orders_detailbiz.getOrders_detailCntByStore_name(store_name);
+		Pagination pagination = new Pagination();
+		pagination.pageInfo(page, range, listCnt);
+		startList = pagination.getStartList();
+		listSize = pagination.getListSize();
+
+		PaginationOwner paginationOwner = new PaginationOwner();
+		paginationOwner.setStartList(startList);
+		paginationOwner.setStore_name(store_name);
+		List<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz
+				.getOrders_detailJoinProductByStore_name(paginationOwner);
+		model.addObject("pagination", pagination);
+		model.addObject("store_name", store_name);
+
+		model.addObject("ownerOrderStatus", "clicked");
+		model.setViewName("thymeleaf/ownermain");
+		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
+		if (List.size() == 0) {
+			// System.out.println("가게에 물건이 없습니다.");
+			model.addObject("List", List);
+		} else {
+			// System.out.println("가게에 물건이 있습니다.");
+			model.addObject("List", List);
+		}
+		return model;
+	}
+
+	
+	
 	// 매출액 보기
 	@RequestMapping(value = "/incomeChart.html", method = RequestMethod.GET) //
 	public ModelAndView ownerIncome(HttpServletRequest request,
