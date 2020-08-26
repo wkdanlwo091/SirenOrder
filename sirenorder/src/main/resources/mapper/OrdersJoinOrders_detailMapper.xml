@@ -37,13 +37,16 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 	
 	
 	<select id="selectOrdersJoinOrders_detailByOrders_id" resultMap="orders_detail">
+		<!-- 주문 번호 is like orders_id110 에서 뒤의 숫자를 SUBSTR로 뽑고 그것을 숫자로 변환 후  그것을 기준으로 ASC 한다.  
+			orders_detail을 뽑는데 특정 store_name을 가진 것에서 뽑는다.
+		-->
 		SELECT 
-			A.orders_id, A.orders_date, A.payment_way, A.total_price, A.users_id, 
-			B.orders_detail_id, B.price, B.quantity, B.orders_date, B.orders_id, B.product_id, B.product_name,
-			B.status, B.store_id, B.store_name
+		TO_NUMBER(SUBSTR(A.orders_id,10)), A.orders_date, A.payment_way, A.total_price, A.users_id, 
+		B.orders_detail_id, B.price, B.quantity, B.orders_date, B.orders_id, B.product_id, B.product_name,
+		B.status, B.store_id, B.store_name
 		from orders A, orders_detail B
-		where A.orders_id = B.orders_id and B.status= 'not_done'
+		where A.orders_id = B.orders_id and B.status= 'not_done' and B.store_name = #{store_name}
 		ORDER BY
-	    A.orders_id ASC 
+		 TO_NUMBER(SUBSTR(A.orders_id,10)) ASC 
 	</select>
 </mapper>

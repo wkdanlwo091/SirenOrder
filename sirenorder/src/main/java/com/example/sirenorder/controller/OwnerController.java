@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +46,7 @@ import com.example.sirenorder.vo.Store_productVO;
 import com.example.sirenorder.vo.SumAndOrders_date;
 import com.example.sirenorder.vo.UserVO;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auto.value.processor.escapevelocity.ParseException;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -393,7 +395,7 @@ public class OwnerController {
 		return model;
 	}
 	
-	//이미지 없고 orders를 전송하는 방식, 페이지네이션 없다. 그냥 위부터 아래까지 스크롤로 모든 데이터 올린다.
+	//이미지 없고 orders를 전송하는 방식, 페이지네이션 없다. 그냥 위부터 아래까지 스크롤로 모든 데이터 올린다. json파일을 읽어들여
 	@RequestMapping(value = "/ownerOrderStatus2.html", method = RequestMethod.GET) 
 	public ModelAndView ownerOrderStatus2(HttpServletRequest request,
 			@RequestParam(required = false, defaultValue = "1") int page,
@@ -408,7 +410,7 @@ public class OwnerController {
 		}
 		
 		//not done 인것 시간 순으로 가져오기 디비에서 sort하기
-		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id();
+		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id(store_name);
 		
 		//List 안에 List가 있다. 
 		
@@ -458,6 +460,41 @@ public class OwnerController {
 			System.out.println("Successfully sent message: " + response);
 			/// firebase token으로 데이터 전송
 		}
+	}
+	
+	//여기서 text 없는 html 파일인 ownerorderstatus2에서 들어온 데이터를 처리함 
+	//firebaseList 에는 product_name이 담겨있다. 
+	public void firebaseSend2(ArrayList<String> firebaseList,String orders_id, String store_name) throws IOException, FirebaseMessagingException {
+		//fcm 설정 관련 부분 fcm json파일의 절대 경로  ---> 상대경로로 처리해야한다. 
+		System.out.println(new File("").getAbsolutePath());
+		FileInputStream refreshToken  = new FileInputStream("src\\main\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		//FileInputStream refreshToken = new FileInputStream("..\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		 FirebaseOptions options = new FirebaseOptions.Builder()
+				 .setCredentials(GoogleCredentials.fromStream(refreshToken))
+				 .setDatabaseUrl("https://sirenorderclient.firebaseio.com")
+				 .build();
+				 //Firebase 처음 호출시에만 initializing 처리
+		if(FirebaseApp.getApps().isEmpty()) {
+				 FirebaseApp.initializeApp(options);
+		}
+		String myToken = userbiz.getToken(orders_id);// orders_id를 가지고 검색 --> orders와 users join 한다. 
+		
+		StringBuilder productNameConcat = new StringBuilder();
+		
+		for(int i =0;i < firebaseList.size();i++) {
+			productNameConcat.append(firebaseList.get(i)).append(",");
+		}
+		Message message = Message.builder().setNotification(new Notification( " +주문번호 : "+orders_id, "주문한 상품 완료"))
+				.setToken(myToken).build();
+
+		// Send a message to the device corresponding to the provided
+		// registration token.
+		String response = FirebaseMessaging.getInstance().send(message);
+		// Response is a message ID string.
+		System.out.println("Successfully sent message: " + response);
+		/// firebase token으로 데이터 전송
+
+			
 	}
 	
 	//여기서 파이어베이스 전송함수를 호출한다. 주문자 이미지 있는 방식 
@@ -526,58 +563,49 @@ public class OwnerController {
 	}
 
 	//ownerOrderStatus2.html은 이미지 없는 페이지, 텍스트로만 전달 받는다. orders_detail이 아닌 orders로 주문완료하는 방식
+	// 여기서 ajax로 전달  받는다. 
 	@RequestMapping(value = "/ownerOrderStatus2.html", method = RequestMethod.POST) //
-	public ModelAndView ownerOrderFinsh2(HttpServletRequest request,
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "1") int range, 
-			Orders_detail_idList orders_detail_idList//여기서 RequestParam 쓰면 안되더라 
-	// 주문완료 되었다고 변경하는 정보를 담은 배열 클래스
+	public ModelAndView ownerOrderFinsh2(HttpServletRequest request
 	) throws Exception {
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
-		String store_name = (String) httpSession.getAttribute("store_name");
-
 		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
 			model.setViewName("redirect:/index.html");
 			return model;
 		}
-		System.out.println("post came");
-		System.out.println(orders_detail_idList);
 		
-		// orders_id 중복되는 것 제거하고 기준으로 orders_id의 user 조회 후
-		Map<String, String> orders_id = new HashMap<String, String>();
-		for (int i = 0; i < orders_detail_idList.getOrders_detail_id().length; i++) {
-			if (orders_detail_idList.getOrders_detail_id()[i] != null) {
-				Orders_detailVO temp = new Orders_detailVO();
-				temp.setOrders_detail_id(orders_detail_idList.getOrders_detail_id()[i]);
-				//orders_detailbiz.update(temp);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
-				if (orders_id.get(orders_detail_idList.getOrders_id()[i]) == null) {
-					orders_id.put(orders_detail_idList.getOrders_id()[i], orders_detail_idList.getStore_name()[i]);//hashmap 에 orders_id를 넣는다. 
-				}
-			}
+
+		String store_name = (String) httpSession.getAttribute("store_name");
+		String orders_id = request.getParameter("orders_id");//orders_detail_id
+		String orders_detail_id = request.getParameter("orders_detail_id");//orders_detail_id
+		String product_name = request.getParameter("product_name");//product_name
+		JSONParser parser = new JSONParser();
+		JSONObject orders_detail_idObject = null;
+		JSONObject product_nameObject = null;
+		try {
+			orders_detail_idObject = (JSONObject) parser.parse(orders_detail_id);//orders_detail_id
+			product_nameObject = (JSONObject) parser.parse(product_name);//product_name
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		ArrayList<String> firebaseList = new ArrayList<String>();//  product_name들어간다. 
+		
+		for(int i = 0;i < product_nameObject.size();i++) {
+			firebaseList.add((String) product_nameObject.get(Integer.toString(i)));//product_name 더하기 
 		}
 		
 		//파이어베이스 메시지 보내기 
-		firebaseSend(orders_id);
+		firebaseSend2(firebaseList, orders_id, store_name );
 
-		int listCnt;
-		int startList;
-		int listSize;
-		listCnt = orders_detailbiz.getOrders_detailCntByStore_name(store_name);
-		Pagination pagination = new Pagination();
-		pagination.pageInfo(page, range, listCnt);
-		startList = pagination.getStartList();
-		listSize = pagination.getListSize();
-
-		PaginationOwner paginationOwner = new PaginationOwner();
-		paginationOwner.setStartList(startList);
-		paginationOwner.setStore_name(store_name);
-		List<Orders_detailJoinProductVO> List = orders_detailjoinproductbiz
-				.getOrders_detailJoinProductByStore_name(paginationOwner);
-		model.addObject("pagination", pagination);
-		model.addObject("store_name", store_name);
-
-		model.addObject("ownerOrderStatus", "clicked");
+		//not done 인것 시간 순으로 가져오기 디비에서 sort하기
+		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id(store_name);
+		
+		//List 안에 List가 있다. 
+		
+		
+		model.addObject("ownerOrderStatus2", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
 		model.setViewName("thymeleaf/ownermain");
 		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
 		if (List.size() == 0) {

@@ -27,7 +27,7 @@ public class OrdersJoinOrders_detailDao implements Dao<String, OrdersJoinOrders_
 		return null;
 	}
 	@Override
-	public List<OrdersJoinOrders_detailVO> selectOrdersJoinOrders_detailByOrders_id(){
-		return ordersJoinOrders_detailMapper.selectOrdersJoinOrders_detailByOrders_id();
+	public List<OrdersJoinOrders_detailVO> selectOrdersJoinOrders_detailByOrders_id(String store_name){
+		return ordersJoinOrders_detailMapper.selectOrdersJoinOrders_detailByOrders_id(store_name);
 	}
 }

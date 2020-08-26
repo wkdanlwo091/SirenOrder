@@ -39,32 +39,29 @@
 
 	//좌측 바를 눌렀을 때 ui 변경 
 	$(function(){
-		
-		
 		//안드로이드로 들어왔을 때 좌측 sidebar ui 변경 하기 위해서 
-		
 		isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
-
 		if(isMobileCheck == true){//안드로이드에서 들어온 경우 ---> 이 것이 있어야지 안드로이드 웹뷰 css가 안 깨진다. 
 			var temp = "<li><a href=\"ownerOrderStatus.html\"><i class=\"lnr lnr-home\"></i> <span> </span></a></li>";
 			temp += "<li><a href=\"incomeChart.html\" class=\"\"><i class=\"lnr lnr-code\"></i> <span> </span></a></li>";
 			temp += "<li><a href=\"addItemAndDelete.html\" class=\"\"><i  ></i> <span> </span></a></li>";
 			$( "#mobileId" ).before( temp);
 		}
-
-		
-		
 		var ownerOrderStatus = /*[[${ownerOrderStatus}]]*/ 'default'; 
+		var ownerOrderStatus2 = /*[[${ownerOrderStatus2}]]*/ 'default';
 		var incomeChart = /*[[${incomeChart}]]*/ 'default';
 		var addItemAndDelete= /*[[${addItemAndDelete}]]*/ 'default';
 		if(ownerOrderStatus == "clicked"){
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";
 		}
-		if(incomeChart == "clicked"){
+		if(ownerOrderStatus2 == "clicked"){
 			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
+		} 
+		if(incomeChart == "clicked"){
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
 		}
 		if(addItemAndDelete == "clicked"){
-			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
+			document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
 		} 
 	});
 	

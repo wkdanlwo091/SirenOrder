@@ -34,8 +34,8 @@ public class OrdersJoinOrders_detailBiz implements Biz<String, OrdersJoinOrders_
 	}
 	
 	@Override
-	public List<OrdersJoinOrders_detailVO> getOrdersJoinOrders_detailByOrders_id(){
-		return dao.selectOrdersJoinOrders_detailByOrders_id();
+	public List<OrdersJoinOrders_detailVO> getOrdersJoinOrders_detailByOrders_id(String store_name){
+		return dao.selectOrdersJoinOrders_detailByOrders_id(store_name);
 	}
 
 }

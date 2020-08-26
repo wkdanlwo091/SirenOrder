@@ -305,7 +305,6 @@ public class OrderController {
 		//System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();
-		
 		//websocket으로 들어갈 메시지 
 		HashMap<String, String> message = new HashMap<String, String>();
 		

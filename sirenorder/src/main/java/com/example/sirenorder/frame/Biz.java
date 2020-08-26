@@ -48,7 +48,7 @@ public interface Biz<Id, Model> {
 	default public void deleteMultiple(List<String> lists) throws Exception {
 	}
 	@Transactional
-	default public List<Model> getOrdersJoinOrders_detailByOrders_id(){
+	default public List<Model> getOrdersJoinOrders_detailByOrders_id(String store_name){
 		return null;
 	}
 

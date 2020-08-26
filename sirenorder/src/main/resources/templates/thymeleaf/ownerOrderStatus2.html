@@ -36,11 +36,45 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script defer>
-	var elements = document.getElementsByClassName(names);
-	elements.addEventListener("click", function(){//list 클릭하면 서버로 보내고 ul, li 없앤다. ajax로 보낸다.
-		
+	$(function(){
+	    var elements = document.querySelectorAll(".list-group-item");
+		for(var i = 0;i < elements.length; i++){
+			elements[i].addEventListener("click", function(e){
+		        if(e.target && e.target.nodeName == "LI") {
+		        	sendByAjaxToServer(e.target.id);
+		        }
+			}, false);
+		}
 	});
-
+    function sendByAjaxToServer(value ) {//orders_detail_id들을 여러개 보낸다.
+    	var orders_detail_id = {};
+    	var product_name = {};
+    	var index = 0;
+    	var index2 = 0;
+    	for(var i = 0 ;i< document.getElementById(value).children.length; i++){
+    		if(document.getElementById(value).children[i].tagName == 'SPAN' ){
+    			orders_detail_id[index++]= document.getElementById(value).children[i].innerHTML;
+    		}
+    		if(document.getElementById(value).children[i].tagName == 'P' ){
+    			product_name[index2++]= document.getElementById(value).children[i].innerHTML;
+    		}
+    	}
+    	$.ajax({
+    	    type: 'POST',
+    	    // make sure you respect the same origin policy with this url:
+    	    // http://en.wikipedia.org/wiki/Same_origin_policy
+    	    url: 'ownerOrderStatus2.html',
+    	    
+    	    data: {
+    	    		orders_id : value, 
+    	    		orders_detail_id: JSON.stringify(orders_detail_id)
+    	    		product_name: JSON.stringify(product_name)
+    	    	  },
+    	    success: function(msg){
+    	    }
+    	});
+	//my object ---> {0: "orders_detail_id271", 1: "orders_detail_id270"}
+   	}	
 </script>
 
 </head>
@@ -49,8 +83,18 @@
 		<div class="row">
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
-					<ul class="list-group" th:each="list,iter : ${List}"><!-- thymeleaf로 데이터를 먼저 받아온다. li를 클릭하면 ajax로 넘긴다., th:id에 정보를 담는다. ex) id = 가격:1000,주문번호:100,날짜:08/25/2020 이런식으로 -->
-						<li class="list-group-item" th:inline="text" >주문번호: [[${list.orders_id}]], 가격: [[${list.total_price}]], 날짜: [[${list.orders_date}]], 주문자: [[${list.users_id}]] </li>
+					<ul class="list-group" ><!-- thymeleaf로 데이터를 먼저 받아온다. li를 클릭하면 ajax로 넘긴다., th:id에 정보를 담는다. ex) id = 가격:1000,주문번호:100,날짜:08/25/2020 이런식으로 --> 
+						<li th:id="${list.orders_id}"  style = "width :100%; height: 100%;" class="list-group-item" th:each="list,iter : ${List}" th:inline="text" >
+								주문번호: [[${list.orders_id}]], 가격: [[${list.total_price}]], 
+								날짜: [[${list.orders_date}]], 주문자: [[${list.users_id}]]
+								<div th:each = "list2,iter2 : ${list.orders_detailVO}">
+									<p th:inline ="text">주문품목 : [[${list2.product_name}]]</p>
+								</div>
+								<span hidden th:each = "list2,iter2 : ${list.orders_detailVO}" th:text = "${list2.orders_detail_id}">
+								</span>
+								<p hidden th:each = "list2,iter2 : ${list.orders_detailVO}" th:text = "${list2.product_name}">
+								</p>
+						</li>
 					</ul>
 				</div>
 			</div>

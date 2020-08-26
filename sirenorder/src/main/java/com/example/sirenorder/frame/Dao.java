@@ -28,7 +28,7 @@ public interface Dao<Id, Model> {
 	default public void updateRole(Model m) {
 		
 	}
-	default public List<Model> selectOrdersJoinOrders_detailByOrders_id(){
+	default public List<Model> selectOrdersJoinOrders_detailByOrders_id(String store_name){
 		return null;
 	}
 
