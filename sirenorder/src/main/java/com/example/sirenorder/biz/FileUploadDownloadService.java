@@ -65,6 +65,9 @@ public class FileUploadDownloadService {
         }
     }
     
+    
+    
+    //파일 가져오기 
     public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileLocation.resolve(fileName).normalize();

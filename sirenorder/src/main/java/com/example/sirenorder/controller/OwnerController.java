@@ -482,9 +482,10 @@ public class OwnerController {
 		StringBuilder productNameConcat = new StringBuilder();
 		
 		for(int i =0;i < firebaseList.size();i++) {
-			productNameConcat.append(firebaseList.get(i)).append(",");
+			productNameConcat.append(firebaseList.get(i)).append(",");//product_name을 concat하였다.
 		}
-		Message message = Message.builder().setNotification(new Notification( " +주문번호 : "+orders_id, "주문한 상품 완료"))
+		
+		Message message = Message.builder().setNotification(new Notification(" +주문번호 : "+ orders_id + " " + productNameConcat.toString() , "주문한 상품 완료"))
 				.setToken(myToken).build();
 
 		// Send a message to the device corresponding to the provided
@@ -493,8 +494,6 @@ public class OwnerController {
 		// Response is a message ID string.
 		System.out.println("Successfully sent message: " + response);
 		/// firebase token으로 데이터 전송
-
-			
 	}
 	
 	//여기서 파이어베이스 전송함수를 호출한다. 주문자 이미지 있는 방식 
@@ -565,16 +564,15 @@ public class OwnerController {
 	//ownerOrderStatus2.html은 이미지 없는 페이지, 텍스트로만 전달 받는다. orders_detail이 아닌 orders로 주문완료하는 방식
 	// 여기서 ajax로 전달  받는다. 
 	@RequestMapping(value = "/ownerOrderStatus2.html", method = RequestMethod.POST) //
-	public ModelAndView ownerOrderFinsh2(HttpServletRequest request
+	@ResponseBody
+	public String ownerOrderFinsh2(HttpServletRequest request
 	) throws Exception {
 		ModelAndView model = new ModelAndView();
 		HttpSession httpSession = request.getSession();
 		if (httpSession.getAttribute("userId") == null) {// 아이디 로그인 안 했을 시 로그인 해라로 간다.
-			model.setViewName("redirect:/index.html");
-			return model;
+			return "redirect:/index.html";
 		}
 		
-
 		String store_name = (String) httpSession.getAttribute("store_name");
 		String orders_id = request.getParameter("orders_id");//orders_detail_id
 		String orders_detail_id = request.getParameter("orders_detail_id");//orders_detail_id
@@ -598,24 +596,16 @@ public class OwnerController {
 		
 		//파이어베이스 메시지 보내기 
 		firebaseSend2(firebaseList, orders_id, store_name );
-
-		//not done 인것 시간 순으로 가져오기 디비에서 sort하기
-		List<OrdersJoinOrders_detailVO> List = ordersjoinorders_detailbiz.getOrdersJoinOrders_detailByOrders_id(store_name);
 		
-		//List 안에 List가 있다. 
-		
-		
-		model.addObject("ownerOrderStatus2", "clicked");//ownerOrderStatus2는 이미지 없고 페이지네이션 없는 것 
-		model.setViewName("thymeleaf/ownermain");
-		model.addObject("store_name", store_name);// 체인점 중 가게를 구분하기 위한 변수
-		if (List.size() == 0) {
-			// System.out.println("가게에 물건이 없습니다.");
-			model.addObject("List", List);
-		} else {
-			// System.out.println("가게에 물건이 있습니다.");
-			model.addObject("List", List);
+		//orders_detail을 not_done state에서 done state로 바꾸기
+		Orders_detailVO orders_detailVO = new Orders_detailVO();
+		for(int i= 0 ;i< orders_detail_idObject.size();i++) {
+			orders_detailVO.setOrders_detail_id((String)orders_detail_idObject.get(Integer.toString(i)));
+			orders_detailbiz.update(orders_detailVO);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
 		}
-		return model;
+		System.out.println("yes");
+		
+		return "success";
 	}
 
 	

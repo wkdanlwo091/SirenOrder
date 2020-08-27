@@ -46,11 +46,13 @@
 			}, false);
 		}
 	});
+	
     function sendByAjaxToServer(value ) {//orders_detail_id들을 여러개 보낸다.
     	var orders_detail_id = {};
     	var product_name = {};
     	var index = 0;
     	var index2 = 0;
+    	
     	for(var i = 0 ;i< document.getElementById(value).children.length; i++){
     		if(document.getElementById(value).children[i].tagName == 'SPAN' ){
     			orders_detail_id[index++]= document.getElementById(value).children[i].innerHTML;
@@ -64,16 +66,22 @@
     	    // make sure you respect the same origin policy with this url:
     	    // http://en.wikipedia.org/wiki/Same_origin_policy
     	    url: 'ownerOrderStatus2.html',
-    	    
     	    data: {
     	    		orders_id : value, 
-    	    		orders_detail_id: JSON.stringify(orders_detail_id)
+    	    		orders_detail_id: JSON.stringify(orders_detail_id),
     	    		product_name: JSON.stringify(product_name)
     	    	  },
     	    success: function(msg){
+    	    	if(msg == "success"){//주문 완료된 데이터를 지운다. <li id = "orders_idxxx">
+    	    		document.getElementById(value).remove();
+    	    	}
+    	    },
+    	    error: function(msg){
+    	    	alert(msg);
+    	    	console.log(msg);
     	    }
     	});
-	//my object ---> {0: "orders_detail_id271", 1: "orders_detail_id270"}
+		//my object ---> {0: "orders_detail_id271", 1: "orders_detail_id270"}
    	}	
 </script>
 

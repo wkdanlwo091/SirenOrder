@@ -217,8 +217,10 @@ public class UserController {
 	@RequestMapping("/logout.html") // 별 문제 없다.
 	public String logout(HttpServletRequest request) {
 		// System.out.println("entered login.top");
+		
 		HttpSession session = request.getSession();
 		session.invalidate();// 로그인 정보 , 장바구니 세션 정보 등 모든 정보 없앤다
+		
 		return "redirect:/";
 	}
 

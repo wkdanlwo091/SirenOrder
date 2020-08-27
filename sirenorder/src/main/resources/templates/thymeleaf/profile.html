@@ -2684,7 +2684,7 @@ body {
 									<div class="longtitude">
 										<label for="longtitude">경도 : <span id = "longtitudeId"></span></label>
 									</div>
-									<button id = "longlatId" class="btn btn-primary mb-2">변경하기</button>
+									<button id = "longlatId" class="btn btn-primary mb-2">gps 세팅하기</button>
 								</div>
 								
 								<div th:if = "${session.owner != null}"  role="tabpanel" class="tab-pane" id="distance">
@@ -2701,23 +2701,19 @@ body {
 			</div>
 		</div>
 
-		<script>
+		<script th:inline="javascript">
 		
-			//위도 경도 변경 
+		
+		
+	      /*<![CDATA[*/
+	    
+        var owner = /*[[${session.owner}]]*/ 'default';
+
+      /*]]>*/
+
+      		//위도 경도 변경 by kakaomap을 통하여
 			$("#longlatId").on("click", function(){
-		        $.ajax({
-		            url: "changeLatLong",
-		            type: "POST",
-		            data : 'latitude='+ sessionStorage.lat  +  "&longtitude=" + sessionStorage.longti ,
-		            success: function(data){
-		            	if(data == "success"){
-		            		alert("gps 값 변경되었습니다. ");
-		            	}
-		            },
-		            error: function(){
-		                alert("simpleWithObject err");
-		            }
-		        });
+					window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
 			});
 
 			
