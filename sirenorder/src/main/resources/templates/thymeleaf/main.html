@@ -38,6 +38,7 @@ function removeWebSession(){
 }
 
 function showPopup(){
+	
 	window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
 }
 
@@ -137,9 +138,8 @@ function minusToCart(product_name,store_name, chain_name,price){
 //안드로이드에서 latitude와 longtitude를 세팅한다. 세션이 안된다. 
 function setAndroidGps(latitude, longtitude){
 	sessionStorage.lat =  latitude; 
-
 	sessionStorage.longti = longtitude;
-		$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
+	$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
 }
 
 $(function() {
@@ -148,8 +148,12 @@ $(function() {
 
 	if(isMobileCheck == true){//안드로이드에서 들어온 경우 ---> 이 것이 있어야지 안드로이드 웹뷰 css가 안 깨진다. 
 		if($("#gpsLatLongId").length){
+			//카카오맵 설정하거나 gps 버튼으로 설정하게 한다.
 			document.getElementById("gpsLatLongId").remove();
-			document.getElementById("gpsLatLongId2").remove();
+			
+			
+			
+			//document.getElementById("gpsLatLongId2").remove();
 		}
 	}
 	
@@ -227,13 +231,12 @@ $(function() {
 	
 	//윈도우일 때 
 	if(isMobileCheck == false){
-		
+		alert("hahah");
 		//팝업을 만들어준다
 		if(sessionStorage.lat){
 			//위도 경도가 세팅 되어있을 때
 		}else{//세팅 안된 경우 
 			showPopup();
-
 		}
 		
 		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
@@ -284,7 +287,7 @@ $(function() {
 					<ul id = "gpsLatLongId" th:if = "${order != null}" class="nav navbar-nav navbar-left"  style ="margin-top: 0.5em ;padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
 					</ul>
 					<ul id = "gpsLatLongId2" th:if = "${order != null}" class="nav navbar-nav navbar-center"  style =" padding-top : 1.8em" ><!-- 가운데다가 놓기 -->	
-						<button id = "gpsId" class = "btn btn-primary" onclick= "getLocation()"> gps reset </button>
+						<button id = "gpsId" class = "btn btn-primary" onclick= "getLocation()"> 카카오맵 gps</button>
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">

@@ -31,10 +31,17 @@
 	<script>
 	//opener란 popup기준 parent의 변수나 document에 접근 가능하게 하는 변수 
 	function setGPS(latitude, longtitude){
+		
+		var isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
+
 		opener.sessionStorage.lat = latitude;
 		opener.sessionStorage.longti = longtitude;
-		opener.document.getElementById("gpsLatLongId").innerHTML= "위도 : " + opener.sessionStorage.lat + " 경도 :" + opener.sessionStorage.longti;
-	    
+		
+		if(isMobileCheck == true)//안드로이드 
+			opener.document.getElementById("gpsLatLongId3").innerHTML= "위도 : " + opener.sessionStorage.lat + " 경도 :" + opener.sessionStorage.longti;
+		else//일반 pc	
+			opener.document.getElementById("gpsLatLongId").innerHTML= "위도 : " + opener.sessionStorage.lat + " 경도 :" + opener.sessionStorage.longti;
+
 		
 		//GPS 세팅 버튼 누르면 자동종료
 		self.close();
