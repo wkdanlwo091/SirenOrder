@@ -4,6 +4,7 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
 	<title>Kakao 지도 시작하기</title>
+	<script src="/webjars/jquery/jquery.min.js"></script>
 </head>
 <body>
 	<div class="map_wrap">
@@ -16,6 +17,7 @@
 	                    키워드 : <input type="text" value="광화문" id="keyword" size="15"> 
 	                    <button type="submit" class = "btn btn-primary">검색하기</button> 
 	                </form>
+	                
 	            </div>
 	        </div>
 	        <hr>
@@ -30,13 +32,11 @@
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b87eec04d56f6a244ec0349d8149deb0&libraries=services,clusterer,drawing"></script>
 	<script>
 	//opener란 popup기준 parent의 변수나 document에 접근 가능하게 하는 변수 
+	
 	function setGPS(latitude, longtitude){
-		opener.sessionStorage.lat = latitude;
-		opener.sessionStorage.longti = longtitude;
-
-		opener.document.querySelector("#gps > div.latitude > label").innerHTML = "위도 " + opener.sessionStorage.lat;
-		opener.document.querySelector("#gps > div.longtitude > label").innerHTML = "경도 " + opener.sessionStorage.longti;
-
+		opener.document.querySelector("#gps > div.latitude > label").innerHTML = "위도 " + latitude;
+		opener.document.querySelector("#gps > div.longtitude > label").innerHTML = "경도 " + longtitude;
+		
 		$.ajax({
             url: "changeLatLong",
             type: "POST",
@@ -46,13 +46,16 @@
             		alert("gps 값 변경되었습니다. ");
             	}
             },
-            error: function(){
-                alert("simpleWithObject err");
+            async:false,                    
+            error: function(msg){	
+            	alert(msg);
+            },
+            complete: function(){
+            	window.close();
             }
         });
 
 		//GPS 세팅 버튼 누르면 자동종료
-		self.close();
 	}
 	
 	

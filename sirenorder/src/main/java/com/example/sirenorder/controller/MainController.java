@@ -47,4 +47,8 @@ public class MainController {
 	public String gpsMap() {
 		return "thymeleaf/gpsMap";//로그인 첫 페이지로 /index.html
 	}
+	@RequestMapping(value = "gpsMapOwner.html", method = RequestMethod.GET)
+	public String gpsMapOwner() {
+		return "thymeleaf/gpsMapOwner";//로그인 첫 페이지로 /index.html
+	}
 }

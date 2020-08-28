@@ -2713,7 +2713,7 @@ body {
 
       		//위도 경도 변경 by kakaomap을 통하여
 			$("#longlatId").on("click", function(){
-					window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
+					window.open("gpsMapOwner.html", "a", "width=450, height=550, left=100, top=50"); 
 			});
 
 			
@@ -2736,28 +2736,9 @@ body {
 
 			
 			$(function (){
-				getLocation();
-				$("#latitudeId").text(sessionStorage.lat);
-				$("#longtitudeId").text(sessionStorage.longti);
+				
 			});
 			
-			//위도 경도 설정 
-			function getLocation() {
-				  if (navigator.geolocation) {
-				    navigator.geolocation.getCurrentPosition(showPosition);
-				  } else { 
-					  $(".nav.navbar-nav.navbar-left").text("현재 브라우저는 gps를 지원하지 않습니다.");
-				  }
-			}
-	
-			function showPosition(position) {
-				sessionStorage.lat = position.coords.latitude; 
-				sessionStorage.longti = position.coords.longitude;
-				//위도 경도 설정
-			}
-
-		
-		
 			function checkPassword(){
 				var txt;
 				var password = prompt("비밀번호를 입력하세요:");
