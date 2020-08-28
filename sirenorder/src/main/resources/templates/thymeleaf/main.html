@@ -36,12 +36,9 @@ function removeWebSession(){
 	sessionStorage.removeItem("lat");
 	sessionStorage.removeItem("longti");
 }
-
 function showPopup(){
-	
 	window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
 }
-
 //현재 gps 위치 보여주기 
 function getLocation() {
 	
@@ -55,14 +52,12 @@ function getLocation() {
 	  }
 	*/
 }
-
 function showPosition(position) {
 	sessionStorage.lat = position.coords.latitude; 
 	sessionStorage.longti = position.coords.longitude;
 	//위도 경도 설정
 	$(".nav.navbar-nav.navbar-left").text( "위도 : " + sessionStorage.lat + " 경도 : " + sessionStorage.longti);
 }
-
 function addToCart(product_name,store_name,chain_name,price){
 	data = "product_name=" + product_name + "&price=" + price + "&sign=plus" + "&store_name=" + store_name+ "&chain_name=" + chain_name;
 	$.ajax({//세션 만들어서 return 한다. 
@@ -142,6 +137,62 @@ function setAndroidGps(latitude, longtitude){
 	$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
 }
 
+function sidebarnavUi(androidOrNot){// androidOrNot == 1 pc,  androidOrNot == 2 안드로이드
+	//side-bar nav ui 처리 
+	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
+	
+	var order = /*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var product = /*[[${product}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
+	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
+	var pointHistory= /*[[${pointHistory}]]*/ 'default';
+	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
+	
+	if(order == "clicked" || product == "clicked"){//nth-child2 인것은 안드로이드 전용
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + androidOrNot + ") > a").className = "active";
+	}
+	if(currentOrderStatus == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + androidOrNot + ") > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + (androidOrNot + 1) + ") > a").className = "active";
+		}
+	if(orderHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + androidOrNot + ") > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + (androidOrNot + 2) + ") > a").className = "active";
+	}
+	if(pointHistory == "clicked"){
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + androidOrNot + ") > a").className = "";
+		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(" + (androidOrNot + 3) + ") > a").className = "active";
+	}
+}
+
+function setPcGps(){
+	//팝업을 만들어준다
+	if(sessionStorage.lat){
+		//위도 경도가 세팅 되어있을 때
+	}else{//세팅 안된 경우 
+		showPopup();
+	}
+	
+	if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
+	    if (sessionStorage.lat) {
+			//sessionStorage에 위도 경도가 있으면 출력 
+			$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
+	    } else {
+	    	//gps로 내 위치 설정하기 
+	    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
+	    	//gps 설정
+	    		getLocation();
+	    	} else {
+	    		// Do nothing!
+	    	}
+	    }
+	} else {
+		
+		$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
+	  	document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+	  
+	}
+}
+
 $(function() {
 	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. ---> 일단 놔둬봐 사용 안할것 같은데 
 	isMobileCheck = (/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Windows Phone/i.test(navigator.userAgent)) ? true : false;
@@ -150,11 +201,37 @@ $(function() {
 		if($("#gpsLatLongId").length){
 			//카카오맵 설정하거나 gps 버튼으로 설정하게 한다.
 			document.getElementById("gpsLatLongId").remove();
+			//안드로이드 일 때 side-bar nav 깨지는 것 방지 하기 위해서 한 list (안보이는 것) 추가한다. 
+			$("#firstListId").before("<li id><a href=\"main.html\" class=\"\" ><i class=\"lnr lnr-home\"></i> <span>xx</span></a></li>");
 			
+			sidebarnavUi(2);//nav-bar ui 설정 --> 안드로이드에서는 짤리니깐
 			
+			//android에서 main div에서 화면이 짤리는 것을 방지하기 위해 br 태그를 몇개 넣겠다.
+			var newItem = document.createElement("br");
+			var newItem1 = document.createElement("br");
+			var newItem2 = document.createElement("br");
+			  list = document.querySelector("#wrapper > div.main");
+			  list.insertBefore(newItem, list.firstElementChild);
+			  list.insertBefore(newItem1, list.firstElementChild);
+			  list.insertBefore(newItem2, list.firstElementChild);
+		
 			
-			//document.getElementById("gpsLatLongId2").remove();
+			//안드로이드 에서 gps 받아 온 것이 있을 경우
+			if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
+			    if (sessionStorage.lat) {
+					//sessionStorage에 위도 경도가 있으면 출력 
+					$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
+			    } 
+			}
+
 		}
+	}else{//윈도우 인경우 
+		sidebarnavUi(1);//nav-bar ui 설정
+		//gps 설정
+			
+			
+			setPcGps();
+		
 	}
 	
 	document.querySelector('#navbar-menu > ul > li:nth-child(1)').style.visibility = "visible";//장바구니 보여주기  --> checkout.html에서 hide 하였으므로 
@@ -199,72 +276,6 @@ $(function() {
             	alert("error 는" + result);
           }
 	});
-	
-	//좌측 상단 메뉴 class = "active"로(focus) css 변경 하는 코드 
-	var order = /*[[${order}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
-	var product = /*[[${product}]]*/ 'default';//thymeleaf 데이터를 javascript에서 사용 
-	var currentOrderStatus =/*[[${currentOrderStatus}]]*/ 'default';
-	var pointHistory= /*[[${pointHistory}]]*/ 'default';
-	var orderHistory = /*[[${ordersHistory}]]*/ 'default';
-	
-	if(order == "clicked" || product == "clicked"){document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "active";}
-	
-	if(currentOrderStatus == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(2) > a").className = "active";
-		}
-	if(orderHistory == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(3) > a").className = "active";
-	}
-	if(pointHistory == "clicked"){
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(1) > a").className = "";
-		document.querySelector("#sidebar-nav > div > div.sidebar-scroll > nav > ul > li:nth-child(4) > a").className = "active";
-	}
-	
-	
-	
-     
-	//gps 및 session  설정
-	//websession 설정
-	
-	
-	//윈도우일 때 
-	if(isMobileCheck == false){
-		alert("hahah");
-		//팝업을 만들어준다
-		if(sessionStorage.lat){
-			//위도 경도가 세팅 되어있을 때
-		}else{//세팅 안된 경우 
-			showPopup();
-		}
-		
-		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
-		    if (sessionStorage.lat) {
-				//sessionStorage에 위도 경도가 있으면 출력 
-				$(".nav.navbar-nav.navbar-left").text("위도 : " + sessionStorage.lat + " 경도 :" + sessionStorage.longti);
-		    } else {
-		    	//gps로 내 위치 설정하기 
-		    	if (confirm('gps로 현재 위치 설정 하시겠습니까?')) {
-		    	//gps 설정
-		    		getLocation();
-		    	} else {
-		    		// Do nothing!
-		    	}
-		    }
-		} else {
-			$(".nav.navbar-nav.navbar-left").text("현재 브라우저는 웹 세션을 지원하지 않습니다.");
-		  document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
-		}
-
-	}else if(isMobileCheck == true){//
-		if(typeof(Storage) !== "undefined") {//웹에서만 작동한다. 
-		    if (sessionStorage.lat) {
-				//sessionStorage에 위도 경도가 있으면 출력 
-				$("#gpsLatLongId3").text("위도" + sessionStorage.lat + " 경도" + sessionStorage.longti);
-		    } 
-		}
-	}
 
 });
 
@@ -320,8 +331,8 @@ $(function() {
 		<div id="sidebar-nav" class="sidebar">
 			<div class="sidebar-scroll">
 				<nav>
-					<ul class="nav">
-						<li><a href="main.html" class="" ><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
+					<ul class="nav"><!-- mobile이면 css가 깨진다. (따라서 li를 한개 더 넣어준다. 위의 script에서 ) -->
+						<li id = "firstListId"><a href="main.html" class="" ><i class="lnr lnr-home"></i> <span>주문하기</span></a></li>
 						<li><a href="currentOrderStatus.html" class="" ><i class="lnr lnr-code"></i> <span>주문현황</span></a></li>
 						<li><a href="ordersHistory.html" class=""  ><i class="lnr lnr-chart-bars"></i> <span>사용량</span></a></li>
 						<li><a href="pointHistory.html" class=""   ><i class="lnr lnr-cog"></i> <span>포인트 사용량</span></a></li>
@@ -342,8 +353,6 @@ $(function() {
 		<div th:if = "${ordersHistory != null}"><div th:replace="/thymeleaf/ordersHistory"></div></div>
 		<div th:if = "${checkout != null}"><div th:replace="/thymeleaf/checkout"></div></div>
 		<div th:if = "${pointHistory != null}"><div th:replace="/thymeleaf/pointHistory"></div></div>
-		
-		
 		
 		</div>
 		<!-- END MAIN -->
