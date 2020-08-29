@@ -29,25 +29,15 @@
 var myProduct= 5;
 
 
-//이것이 true이면 android 웹뷰에 들어온 브라우져는 true이고
-//이것이 false 이면 android 일반 브라우져(not webview)는 false이다. 
-const isWebView ;
-
-
 var isMobileCheck;//모바일 인지 아닌지 체크한다. 
-
-var popupVariable;
-
 //webSession에 저장된 lat과 longti 즉 위도 경도 삭제하기 
 function removeWebSession(){
 	sessionStorage.removeItem("lat");
 	sessionStorage.removeItem("longti");
 }
 function showPopup(){
-	popupVariable = window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
+	window.open("gpsMap.html", "a", "width=450, height=550, left=100, top=50"); 
 }
-
-
 //현재 gps 위치 보여주기 
 function getLocation() {
 	
@@ -205,10 +195,9 @@ function setPcGps(){
 $(function() {
 	
 	
-	
 	isWebView = navigator.userAgent.includes ('wv');
-	if(isWebView == true){//웹뷰가 맞으면 카카오맵 gps 없애기 
-		document.getElementById("gpsId").remove();
+	if(isWebView == true){//웹뷰가 맞으면 카카오맵 gps button을 hidden으로 만들기 
+		document.getElementById("gpsId").style.visibility = "hidden";
 	}
 	
 	//isMobileCheck이 true이면 android 에서 접근 했다는 뜻이고 false면 web에서 접근했다는 의미이다. ---> 일단 놔둬봐 사용 안할것 같은데 
