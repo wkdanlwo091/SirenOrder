@@ -24,11 +24,11 @@
 	    </div>
 	</div>
 	
-	
 	<!-- 카카오 api 뒤쪽에 libraries=servieces, clusterer, drawing 을 써줘야 특정 api를 사용가능하다.  -->
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b87eec04d56f6a244ec0349d8149deb0&libraries=services,clusterer,drawing"></script>
 	<script>
+	
 	//opener란 popup기준 parent의 변수나 document에 접근 가능하게 하는 변수 
 	function setGPS(latitude, longtitude){
 		
@@ -42,11 +42,11 @@
 		else//일반 pc	
 			opener.document.getElementById("gpsLatLongId").innerHTML= "위도 : " + opener.sessionStorage.lat + " 경도 :" + opener.sessionStorage.longti;
 
-		
+
 		//GPS 세팅 버튼 누르면 자동종료
-		self.close();
+		//opener.CallParentfunction();  //안드로이드 어플에서 작동안함 
+		self.close();//안드로이드 apple에서 작동안함 
 	}
-	
 	
 	var markers = [];//마커를 담는 곳 
 

@@ -125,7 +125,8 @@
 			<div class="col-lg-9">
 				<div class="row align-items-center latest_product_inner">
 					<!-- ELSE -->
-				
+					
+					<form action = "ownerOrderStatus.html" method = "get" id = "reloadFormId" hidden></form>
 					<form action="/ownerOrderStatus.html" method="post" id="form1">
 						<div style="height: 40%; width: 33%;" class="col-lg-4 col-sm-6"
 							th:each="list,iter : ${List}">

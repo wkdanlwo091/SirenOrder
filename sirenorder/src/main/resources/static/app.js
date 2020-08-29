@@ -36,6 +36,9 @@ function connect() {
     });
 }
 
+
+
+//이것은 owner화면에 상품 실시간 websocket으로 뿌리기 인데 아직 구현하지 못하였다. 
 function resetOwnerOrderCss(){
 	var currentNode = document.getElementById("form1").cloneNode(true);//owner의 화면에 있는 
 	var nodeLength = document.getElementById("form1").children.length;//owner의 화면에 있는 
@@ -89,16 +92,16 @@ function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 
         var topic_store_name = "/topic/"  + store_name;
         stompClient.subscribe(topic_store_name, function (greeting) {// subscription 한 메시지로 데이터를 받는다. 
         	
-        	//여기서 ownerOrderStatus의 주문품목 위치를 재배열 한다. 123456 에서 012345로  
-        	resetOwnerOrderCss();
+        	//여기서 ownerOrderStatus의 주문품목 위치를 재배열 한다. 123456 에서 012345로  아직 미구현
+        	//resetOwnerOrderCss();
+        	
         	alert(greeting);
         	document.getElementById("customConnect").remove();
            //이거 왜 안되는건지 몰라  showGreeting(JSON.parse(greeting.body).content); 
             //alert(JSON.parse(greeting.body).content);
-        	
-        	
-        	//페이지 reload하기 
-        	 location.reload(true)
+        	//페이지 reload하기 서버에 한번 다녀오자
+        	document.getElementById("reloadFormId").submit();
+
         });
     });
 }
