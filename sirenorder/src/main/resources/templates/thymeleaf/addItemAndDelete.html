@@ -69,7 +69,7 @@ $(function(){
 					    	<h3 th:text = "${session.store_name + ' 에 상품 추가'}" >지점 상품 추가</h3><!-- chain에 해당하는 product를 추가  이미 있는 것 추가하면 아무 것도 안 일어남 -->
 					    	<form action="/addItemToStore.html" method = "post"  >
 						    	<div class="form-group">
-								    <label for="product_names">다중 선택 </label>
+								    <label for="product_names">다중 선택 가능 </label>
 								    <select id = "productAdd" class="form-control" name = "product_names" multiple="multiple"  ><!-- products 는 ArrayList 에 들어간다  -->
 								      <option  th:each="prod : ${chain_product}" 
 								      	th:value = "${ prod.product_id + '-' + 

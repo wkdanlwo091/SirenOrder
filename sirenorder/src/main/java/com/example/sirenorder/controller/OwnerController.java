@@ -3,6 +3,8 @@ package com.example.sirenorder.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -433,7 +435,21 @@ public class OwnerController {
 	public void firebaseSend(Map<String, String> orders_id) throws IOException, FirebaseMessagingException {
 		//fcm 설정 관련 부분 fcm json파일의 절대 경로  ---> 상대경로로 처리해야한다. 
 		System.out.println(new File("").getAbsolutePath());
-		FileInputStream refreshToken  = new FileInputStream("src\\main\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+        String pathName = "src"+File.separator + "main" + File.separator + "resources" + File.separator + "fcm" + File.separator + "sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json";
+
+        
+		
+		Path currentRelativePath = Paths.get(""); 
+		String s = currentRelativePath.toAbsolutePath().toString();
+		 
+        
+        
+		//윈도우 경로
+		//FileInputStream refreshToken  = new FileInputStream("src\\main\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		
+		//리눅스 경로 
+		FileInputStream refreshToken  = new FileInputStream("/usr/local/apache-tomcat-8.5.57/webapps/sirenorder-0.0.1-SNAPSHOT/WEB-INF/classes/fcm/sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
+		
 		//FileInputStream refreshToken = new FileInputStream("..\\resources\\fcm\\sirenorderclient-firebase-adminsdk-dpxxu-0ee3d63b4f.json");//구글 파이어베이스에서 받아온 json 데이터의 위치 
 		 FirebaseOptions options = new FirebaseOptions.Builder()
 				 .setCredentials(GoogleCredentials.fromStream(refreshToken))
@@ -521,13 +537,12 @@ public class OwnerController {
 			if (orders_detail_idList.getOrders_detail_id()[i] != null) {
 				Orders_detailVO temp = new Orders_detailVO();
 				temp.setOrders_detail_id(orders_detail_idList.getOrders_detail_id()[i]);
-				//orders_detailbiz.update(temp);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
+				orders_detailbiz.update(temp);// 완료되었다고 orders_detail 변경 잠시 실험을 위해서 주석 
 				if (orders_id.get(orders_detail_idList.getOrders_id()[i]) == null) {
 					orders_id.put(orders_detail_idList.getOrders_id()[i], orders_detail_idList.getStore_name()[i]);//hashmap 에 orders_id를 넣는다. 
 				}
 			}
 		}
-		
 		//파이어베이스 메시지 보내기 
 		firebaseSend(orders_id);
 

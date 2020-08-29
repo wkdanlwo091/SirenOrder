@@ -10,23 +10,29 @@
 
 test 할 수 있는 계정 : admin : id : 01027994207  pwd: 1111
 
-​									 owner : id : 01012341234  pwd: 1111 
+​									 banapresso_hongdae, owner 점주, id : 01012341234  pwd: 1111 
+
+​									 banapresso_sinchon owner_first 체인점 대표 , id : 01027994208 pwd : 1111 
+
+​									  
 
 ​									 user: 계정을 한개 만들면 됩니다.  
+
+​					
 
 
 
 Admin 페이지, Owner 페이지, User 페이지로 나누어진 서비스
 
-Admin 페이지는 안드로이드 apk 파일을 배포하고 Owner에게 chain과 store를 할당한다. 
+Admin 페이지는 안드로이드 apk 파일을 배포하고 Owner에게 chain과 store를 할당합니다. 
 
 Owner 페이지가 Websocket으로 spring boot 서버와 실시간으로 통신하면서 들어온 주문을 확인하고 
 
-주문이 완료되면 주문 완료 status를 websocket으로 전달한다.  스프링 서버에서는 주문이 완료되면 이를 
+주문이 완료되면 주문 완료 status를 websocket으로 전달합니다.  스프링 서버에서는 주문이 완료되면 이를 
 
-파이어베이스 notification을 이용해서 user의 안드로이드 어플에게 알려준다. 
+파이어베이스 notification을 이용해서 user의 안드로이드 어플에게 알려줍니다. 
 
-User 페이지는 특정 store에 들어가서 주문을 한다. 
+User 페이지는 특정 store에 들어가서 주문을 한다. 한번에 여러 store에서 구매 가능합니다. 
 
 
 

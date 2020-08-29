@@ -301,7 +301,10 @@ public class OrderController {
 	
 	//orders_detail을 만든다. 
 	public void makeOrders_detail(HttpSession httpSession) throws Exception {// orders_detail 테이블에 insert
-		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된
+		
+		String orders_id = "orders_id" + Integer.toString(orders_detailbiz.getOrders_seq() - 1);// orders_list에 연결된 마지막 sequence 
+		//orders_id가 cache되어있으면 다음 sequence가 안 나오고 값이 엄청 크게 나오는데 이 것은 오라클이 캐시 해놓은 것이다.
+		//alter sequence seq1 nocache   ---> 
 		//System.out.println("orders_id 는 " + orders_id);
 		HashMap<CartVO, Integer> cartProduct = (HashMap<CartVO, Integer>) httpSession.getAttribute("cartProduct");
 		Iterator<CartVO> itr = cartProduct.keySet().iterator();

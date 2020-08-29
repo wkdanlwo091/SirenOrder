@@ -80,6 +80,7 @@ function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 
 			data1 : "connect"
 		}
 	});
+	
 	var socket = new SockJS('/gs-guide-websocket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -94,6 +95,10 @@ function customConnect(store_name) {// topic/banapresso_sinchon 이런식으로 
         	document.getElementById("customConnect").remove();
            //이거 왜 안되는건지 몰라  showGreeting(JSON.parse(greeting.body).content); 
             //alert(JSON.parse(greeting.body).content);
+        	
+        	
+        	//페이지 reload하기 
+        	 location.reload(true)
         });
     });
 }
