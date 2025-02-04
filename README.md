@@ -179,7 +179,7 @@ description
 
 ##  개발환경 및 기술
 
-react, spring boot , android (web view) ,  aws , oracle db , web socket, Thymeleaf , Firebase notification
+html,css,js, spring boot , android (web view) ,  aws , oracle db , web socket, Thymeleaf , Firebase notification
 
 
 
